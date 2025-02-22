@@ -6,6 +6,16 @@ import { useRouter } from 'next/navigation';
 import { GobackIcon } from '@/ui/icon/GoBackIcon';
 import signUp from './actions';
 
+const inputFields = [
+  { label: '이메일', type: 'email', name: 'email' },
+  { label: '이름', type: 'text', name: 'name' },
+  { label: '닉네임', type: 'text', name: 'nickname' },
+  { label: '비밀번호', type: 'password', name: 'password' },
+  { label: '비밀번호 확인', type: 'password', name: 'confirmPassword' },
+  { label: '휴대폰번호', type: 'text', name: 'phone' },
+  { label: '생년월일', type: 'text', name: 'birthdate' },
+] as const;
+
 const SignUpPage = () => {
   const [form, setForm] = useState({
     email: '',
@@ -51,64 +61,31 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex  w-[600px] h-[600px] bg-white">
-      <button onClick={goBack}>
-        <GobackIcon size={40} color="#000" />
-      </button>
+    <>
+      <div className="flex  w-[600px] h-[600px] justify-center bg-white">
+        <button onClick={goBack}>
+          <GobackIcon size={40} color="#000" />
+        </button>
 
-      <form>
-        <AuthInputField
-          label="이메일"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="이름"
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="닉네임"
-          type="text"
-          name="nickname"
-          value={form.nickname}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="비밀번호"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="비밀번호 확인"
-          type="password"
-          name="confirmPassword"
-          value={form.confirmPassword}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="휴대폰번호"
-          type="text"
-          name="phone"
-          value={form.phone}
-          onChange={handleInputFiledChange}
-        />
-        <AuthInputField
-          label="생년월일"
-          type="text"
-          name="birthdate"
-          value={form.birthdate}
-          onChange={handleInputFiledChange}
-        />
-        <button onClick={submitForm}>회원가입</button>
-      </form>
-    </div>
+        <form>
+          {inputFields.map((field) => (
+            <AuthInputField
+              key={field.name}
+              label={field.label}
+              type={field.type}
+              name={field.name}
+              value={form[field.name]}
+              onChange={handleInputFiledChange}
+            />
+          ))}
+          <button onClick={submitForm}>회원가입</button>
+        </form>
+      </div>
+      <div className="bg-white w-[600px] h-[100px] mt-3">
+        <p>이용약관</p>
+        <p>개인정보 보관</p>
+      </div>
+    </>
   );
 };
 
