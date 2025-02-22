@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${notoSerif.className} px-4 sm:px-8 md:px-12 lg:px-16 xl:px-60 2xl:px-80`}>
+      <body
+        className={`${notoSerif.className} px-4 sm:px-8 md:px-12 lg:px-16 xl:px-60 2xl:px-80 bg-[#1B1A17]`}
+      >
         {children}
       </body>
     </html>
