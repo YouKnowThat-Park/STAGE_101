@@ -1,38 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import AuthInputField from '../_components/AuthInputField';
 import { useRouter } from 'next/navigation';
 import { GobackIcon } from '@/ui/icon/GoBackIcon';
 import signUp from './actions';
 import SignUpForm from './_components/SignUpForm';
+import { SignUpFormData } from '../_components/SignUpSchema';
 
 const SignUpPage = () => {
-  const [form, setForm] = useState({
-    email: '',
-    name: '',
-    nickname: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    birthdate: '',
-  });
-
   const router = useRouter();
 
   const goBack = () => {
     router.push('/sign-in');
   };
 
-  const handleInputFiledChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const submitForm = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const submitForm = async (data: SignUpFormData) => {
     try {
-      const signUpResult = await signUp(form);
+      const signUpResult = await signUp(data);
 
       if (signUpResult.success) {
         await fetch('/api/logout', { method: 'GET' });
@@ -53,7 +36,7 @@ const SignUpPage = () => {
           <GobackIcon size={40} color="#000" />
         </button>
 
-        <SignUpForm form={form} onChange={handleInputFiledChange} onSubmit={submitForm} />
+        <SignUpForm onSubmit={submitForm} />
       </div>
       <div className="bg-white w-[600px] h-[100px] mt-3">
         <p>이용약관</p>
