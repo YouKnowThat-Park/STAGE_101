@@ -33,6 +33,12 @@ export default async function signUp({
     if (!EMAIL_REGEX.test(email)) {
       return { success: false, message: '이메일 형식이 올바르지 않습니다. 예시)stage@stage.com' };
     }
+    if (name.length < 2) {
+      return { success: false, message: '이름은 최소 2자리 이상이어야 합니다.' };
+    }
+    if (nickname.length < 2) {
+      return { success: false, message: '닉네임은 최소 2자리 이상이어야 합니다.' };
+    }
 
     const { data: existingEmail } = await supabase
       .from('users')
