@@ -30,7 +30,6 @@ const SignUpPage = () => {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('회원가입 요청 시작:', form);
 
     try {
       const signUpResult = await signUp(form);
