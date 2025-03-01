@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "genType": "npx supabase gen types typescript --project-id dsggwbvtcrwuopwelpxy --schema public > src/types/supabase-type.ts"
+    "genType": "npx supabase gen types typescript --project-id zxryfhnxexxyxmrctocl --schema public > src/types/supabase-type.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.2",
@@ -31,6 +31,7 @@
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "prettier": "^3.5.1",
+    "shadcn-ui": "^0.9.4",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
