@@ -3,7 +3,8 @@ import { Noto_Serif_KR } from 'next/font/google';
 import './globals.css';
 
 const notoSerif = Noto_Serif_KR({
-  weight: ['400', '700'],
+  subsets: ['latin'],
+  weight: ['600', '700'],
   display: 'swap',
 });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={notoSerif.className}>{children}</body>
+      <body className={`${notoSerif.className} px-4 sm:px-8 md:px-12 lg:px-16 xl:px-60 2xl:px-80`}>
+        {children}
+      </body>
     </html>
   );
 }
