@@ -1,4 +1,4 @@
-export const GobackIcon = ({ size = 30, color = '#232323' }: { size?: number; color?: string }) => {
+export const GoBackIcon = ({ size = 30, color = '#232323' }: { size?: number; color?: string }) => {
   return (
     <svg
       width={size}
