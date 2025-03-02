@@ -33,6 +33,12 @@ export default async function signUp({
     if (!EMAIL_REGEX.test(email)) {
       return { success: false, message: '이메일 형식이 올바르지 않습니다. 예시)stage@stage.com' };
     }
+    if (name.length < 2) {
+      return { success: false, message: '이름은 최소 2자리 이상이어야 합니다.' };
+    }
+    if (nickname.length < 2) {
+      return { success: false, message: '닉네임은 최소 2자리 이상이어야 합니다.' };
+    }
 
     const { data: existingEmail } = await supabase
       .from('users')
@@ -56,6 +62,12 @@ export default async function signUp({
 
     const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
     if (authError) return { success: false, message: '회원가입 실패: ' + authError.message };
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('로그아웃 실패', error);
+    }
 
     const userId = authData.user?.id;
     if (!userId) {

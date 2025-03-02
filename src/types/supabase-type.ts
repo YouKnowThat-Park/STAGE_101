@@ -9,6 +9,82 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+<<<<<<< HEAD
+      actor: {
+        Row: {
+          affiliation: string
+          created_at: string
+          id: string
+          name: string
+          theaters_id: number
+        }
+        Insert: {
+          affiliation: string
+          created_at?: string
+          id: string
+          name: string
+          theaters_id: number
+        }
+        Update: {
+          affiliation?: string
+          created_at?: string
+          id?: string
+          name?: string
+          theaters_id?: number
+        }
+        Relationships: []
+      }
+      admin: {
+        Row: {
+          created_at: string
+          id: string
+          theater_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          theater_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          theater_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      cart: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          name: string
+          point: number
+          quantity: number
+          shop_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          name: string
+          point: number
+          quantity: number
+          shop_id?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          name?: string
+          point?: number
+          quantity?: number
+          shop_id?: string
+=======
       answers: {
         Row: {
           contact_id: string
@@ -32,10 +108,23 @@ export type Database = {
           created_at?: string
           id?: string
           inquiry_id?: string
+>>>>>>> main
           user_id?: string
         }
         Relationships: [
           {
+<<<<<<< HEAD
+            foreignKeyName: "cart_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: true
+            referencedRelation: "shop"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cart_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+=======
             foreignKeyName: "answers_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
@@ -53,11 +142,20 @@ export type Database = {
             foreignKeyName: "answers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+>>>>>>> main
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
       }
+<<<<<<< HEAD
+      chatting: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          user_id: string
+=======
       bookings: {
         Row: {
           check_in_date: string
@@ -227,15 +325,195 @@ export type Database = {
           created_at: string
           id: string
           name: string
+>>>>>>> main
         }
         Insert: {
           created_at?: string
           id?: string
+<<<<<<< HEAD
+          message: string
+          user_id: string
+=======
+          name: string
+>>>>>>> main
+        }
+        Update: {
+          created_at?: string
+          id?: string
+<<<<<<< HEAD
+          message?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      concession_menu: {
+        Row: {
+          category: string
+          concession_id: number
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Insert: {
+          category: string
+          concession_id: number
+          created_at?: string
+          description?: string | null
+          id: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Update: {
+          category?: string
+          concession_id?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
+      concession_stand: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          image_url: string
           name: string
         }
         Update: {
           created_at?: string
           id?: string
+          image_url?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          theater_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          message: string
+          theater_id?: string | null
+          title: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          theater_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          cart_id: string
+          created_at: string
+          id: string
+          point_earned: number
+          reservation_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          cart_id: string
+          created_at?: string
+          id?: string
+          point_earned: number
+          reservation_id: string
+          status: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          cart_id?: string
+          created_at?: string
+          id?: string
+          point_earned?: number
+          reservation_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      qr_sessions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          qr_token: string
+          used: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          qr_token: string
+          used: boolean
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          qr_token?: string
+          used?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          created_at: string
+          id: string
+          seat_number: number
+          theater_id: string
+          total_price: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          seat_number: number
+          theater_id?: string
+          total_price: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          seat_number?: number
+          theater_id?: string
+          total_price?: number
+          user_id?: string
+        }
+        Relationships: []
+=======
           name?: string
         }
         Relationships: []
@@ -556,30 +834,167 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+>>>>>>> main
       }
       reviews: {
         Row: {
           comment: string
           created_at: string
           id: string
+<<<<<<< HEAD
+          theater_id: string
+=======
           rating: number
           review_img_url: Json | null
           room_id: string
+>>>>>>> main
           user_id: string
         }
         Insert: {
           comment: string
           created_at?: string
           id?: string
+<<<<<<< HEAD
+          theater_id: string
+          user_id: string
+=======
           rating: number
           review_img_url?: Json | null
           room_id?: string
           user_id?: string
+>>>>>>> main
         }
         Update: {
           comment?: string
           created_at?: string
           id?: string
+<<<<<<< HEAD
+          theater_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      rooftop_bar: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          image_url: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      rooftop_menu: {
+        Row: {
+          bar_id: number
+          category: string
+          created_at: string
+          id: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Insert: {
+          bar_id: number
+          category: string
+          created_at?: string
+          id: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Update: {
+          bar_id?: number
+          category?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
+      shop: {
+        Row: {
+          description: string
+          edition: boolean | null
+          id: string
+          image_url: string
+          name: string
+          point: number
+        }
+        Insert: {
+          description: string
+          edition?: boolean | null
+          id?: string
+          image_url: string
+          name: string
+          point: number
+        }
+        Update: {
+          description?: string
+          edition?: boolean | null
+          id?: string
+          image_url?: string
+          name?: string
+          point?: number
+        }
+        Relationships: []
+      }
+      theaters: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_url: Json
+          name: string
+          price: number
+          seats: Json
+          show_time: string
+          status: string
+          total_time: number
+          type: string
+          video_url: Json
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          image_url: Json
+          name: string
+          price: number
+          seats: Json
+          show_time: string
+          status: string
+          total_time: number
+          type: string
+          video_url: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: Json
+          name?: string
+          price?: number
+          seats?: Json
+          show_time?: string
+          status?: string
+          total_time?: number
+          type?: string
+          video_url?: Json
+=======
           rating?: number
           review_img_url?: Json | null
           room_id?: string
@@ -667,11 +1082,42 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+>>>>>>> main
         }
         Relationships: []
       }
       users: {
         Row: {
+<<<<<<< HEAD
+          created_at: string
+          email: string
+          id: string
+          name: string
+          nickname: string
+          phone: string
+          point: number | null
+          profile_img: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          nickname: string
+          phone: string
+          point?: number | null
+          profile_img?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          nickname?: string
+          phone?: string
+          point?: number | null
+          profile_img?: string | null
+=======
           business_number: string | null
           created_at: string
           email: string | null
@@ -706,6 +1152,7 @@ export type Database = {
           role?: string
           user_info?: Json | null
           user_name?: string | null
+>>>>>>> main
         }
         Relationships: []
       }
@@ -714,6 +1161,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+<<<<<<< HEAD
+      increment_cart_quantity: {
+        Args: {
+          p_user_id: string
+          p_shop_id: string
+        }
+        Returns: undefined
+=======
       get_reviews_with_user_and_room: {
         Args: {
           hotel_id: string
@@ -727,6 +1182,7 @@ export type Database = {
           profile_img: string
           room_type: string
         }[]
+>>>>>>> main
       }
     }
     Enums: {

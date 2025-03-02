@@ -1,4 +1,14 @@
 import { Database } from '@/types/supabase-type';
+<<<<<<< HEAD
+import { createBrowserClient } from '@supabase/ssr';
+
+export const browserSupabase = () => {
+  return createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ARON_KEY!,
+  );
+};
+=======
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
@@ -32,3 +42,4 @@ export async function serverSupabase() {
     },
   );
 }
+>>>>>>> main
