@@ -10,31 +10,39 @@ export async function POST(req: NextRequest) {
     if (!user_id || !shop_id || !quantity) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다.' }, { status: 400 });
     }
-    const { data: existingCart } = await supabase
+    const { data: existingCart, error: fetchError } = await supabase
       .from('cart')
       .select('quantity')
       .eq('user_id', user_id)
       .eq('shop_id', shop_id)
       .single();
-
-    if (existingCart) {
-      // ✅ 상품이 이미 존재하면 수량 증가 (RPC 실행)
-      const { error: rpcError } = await (supabase.rpc as any)('increment_cart_quantity', {
-        p_user_id: user_id,
-        p_shop_id: shop_id,
-      });
-
-      if (rpcError) throw rpcError;
-    } else {
-      // ✅ 존재하지 않으면 새로 추가
-      const { error } = await supabase
-        .from('cart')
-        .insert([{ user_id, shop_id, quantity, image_url, name, point }]);
-
-      if (error) throw error;
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      // 'PGRST116' = 데이터 없음
+      return NextResponse.json({ error: fetchError.message }, { status: 500 });
     }
 
-    return NextResponse.json({ message: '장바구니에 추가 되었습니다.' }, { status: 201 });
+    const newQuantity = existingCart ? existingCart.quantity + quantity : quantity; // ✅ 기존 수량 + 새로 추가된 수량
+    const { data, error } = await supabase.from('cart').upsert(
+      [
+        {
+          user_id,
+          shop_id,
+          quantity: newQuantity, // ✅ 기존 수량 + 추가 수량
+          image_url,
+          name,
+          point,
+        },
+      ],
+      {
+        onConflict: 'user_id, shop_id', // ✅ user_id & shop_id 기준으로 중복 방지
+      },
+    );
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: '장바구니에 추가 되었습니다.', data }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
