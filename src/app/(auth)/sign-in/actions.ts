@@ -25,9 +25,9 @@ export default async function signIn(email: string, password: string) {
   }
 
   const cookieOptions = {
-    httpOnly: true, // JavaScript에서 접근 불가 (XSS 방지)
-    secure: process.env.NODE_ENV === 'production', // HTTPS에서만 동작 (배포 환경)
-    sameSite: 'strict' as const, // CSRF 방지
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict' as const,
     path: '/',
   };
   cookies().set('user_id', userData.id || '', cookieOptions);
