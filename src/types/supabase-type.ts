@@ -89,14 +89,14 @@ export type Database = {
           {
             foreignKeyName: "cart_shop_id_fkey"
             columns: ["shop_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "shop"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "cart_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -476,7 +476,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_cart_quantity: {
+        Args: {
+          p_user_id: string
+          p_shop_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
