@@ -1,1292 +1,577 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
     Tables: {
-<<<<<<< HEAD
       actor: {
         Row: {
-          affiliation: string
-          created_at: string
-          id: string
-          name: string
-          theaters_id: number
-        }
+          affiliation: string;
+          created_at: string;
+          id: string;
+          name: string;
+          theaters_id: number;
+        };
         Insert: {
-          affiliation: string
-          created_at?: string
-          id: string
-          name: string
-          theaters_id: number
-        }
+          affiliation: string;
+          created_at?: string;
+          id: string;
+          name: string;
+          theaters_id: number;
+        };
         Update: {
-          affiliation?: string
-          created_at?: string
-          id?: string
-          name?: string
-          theaters_id?: number
-        }
-        Relationships: []
-      }
+          affiliation?: string;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          theaters_id?: number;
+        };
+        Relationships: [];
+      };
       admin: {
         Row: {
-          created_at: string
-          id: string
-          theater_id: string | null
-          user_id: string | null
-        }
+          created_at: string;
+          id: string;
+          theater_id: string | null;
+          user_id: string | null;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          theater_id?: string | null
-          user_id?: string | null
-        }
+          created_at?: string;
+          id?: string;
+          theater_id?: string | null;
+          user_id?: string | null;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          theater_id?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          theater_id?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       cart: {
         Row: {
-          created_at: string
-          id: string
-          image_url: string
-          name: string
-          point: number
-          quantity: number
-          shop_id: string
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          image_url: string;
+          name: string;
+          point: number;
+          quantity: number;
+          shop_id: string;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          image_url: string
-          name: string
-          point: number
-          quantity: number
-          shop_id?: string
-          user_id?: string
-        }
+          created_at?: string;
+          id?: string;
+          image_url: string;
+          name: string;
+          point: number;
+          quantity: number;
+          shop_id?: string;
+          user_id?: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          image_url?: string
-          name?: string
-          point?: number
-          quantity?: number
-          shop_id?: string
-=======
-      answers: {
-        Row: {
-          contact_id: string
-          content: string
-          created_at: string
-          id: string
-          inquiry_id: string
-          user_id: string
-        }
-        Insert: {
-          contact_id?: string
-          content: string
-          created_at?: string
-          id?: string
-          inquiry_id?: string
-          user_id?: string
-        }
-        Update: {
-          contact_id?: string
-          content?: string
-          created_at?: string
-          id?: string
-          inquiry_id?: string
->>>>>>> main
-          user_id?: string
-        }
+          created_at?: string;
+          id?: string;
+          image_url?: string;
+          name?: string;
+          point?: number;
+          quantity?: number;
+          shop_id?: string;
+          user_id?: string;
+        };
         Relationships: [
           {
-<<<<<<< HEAD
-            foreignKeyName: "cart_shop_id_fkey"
-            columns: ["shop_id"]
-            isOneToOne: true
-            referencedRelation: "shop"
-            referencedColumns: ["id"]
+            foreignKeyName: 'cart_shop_id_fkey';
+            columns: ['shop_id'];
+            isOneToOne: true;
+            referencedRelation: 'shop';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "cart_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-=======
-            foreignKeyName: "answers_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
-            referencedColumns: ["id"]
+            foreignKeyName: 'cart_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
           },
-          {
-            foreignKeyName: "answers_inquiry_id_fkey"
-            columns: ["inquiry_id"]
-            isOneToOne: false
-            referencedRelation: "inquiries"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "answers_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
->>>>>>> main
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-<<<<<<< HEAD
+        ];
+      };
       chatting: {
         Row: {
-          created_at: string
-          id: string
-          message: string
-          user_id: string
-=======
-      bookings: {
-        Row: {
-          check_in_date: string
-          check_out_date: string
-          created_at: string
-          hotel_id: string
-          id: string
-          request: string[] | null
-          room_id: string
-          status: string
-          total_amount: number
-          user_first_name: string
-          user_id: string
-          user_last_name: string
-        }
+          created_at: string;
+          id: string;
+          message: string;
+          user_id: string;
+        };
         Insert: {
-          check_in_date: string
-          check_out_date: string
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          request?: string[] | null
-          room_id?: string
-          status: string
-          total_amount: number
-          user_first_name: string
-          user_id?: string
-          user_last_name: string
-        }
+          created_at?: string;
+          id?: string;
+          message: string;
+          user_id: string;
+        };
         Update: {
-          check_in_date?: string
-          check_out_date?: string
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          request?: string[] | null
-          room_id?: string
-          status?: string
-          total_amount?: number
-          user_first_name?: string
-          user_id?: string
-          user_last_name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bookings_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "bookings_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "rooms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "bookings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      contacts: {
-        Row: {
-          booking_id: string | null
-          content: string
-          created_at: string
-          hotel_id: string | null
-          id: string
-          room_id: string | null
-          title: string
-          user_id: string | null
-        }
-        Insert: {
-          booking_id?: string | null
-          content: string
-          created_at: string
-          hotel_id?: string | null
-          id?: string
-          room_id?: string | null
-          title: string
-          user_id?: string | null
-        }
-        Update: {
-          booking_id?: string | null
-          content?: string
-          created_at?: string
-          hotel_id?: string | null
-          id?: string
-          room_id?: string | null
-          title?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "contacts_booking_id_fkey"
-            columns: ["booking_id"]
-            isOneToOne: false
-            referencedRelation: "bookings"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contacts_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contacts_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "rooms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contacts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      credit_cards: {
-        Row: {
-          card_number: string
-          created_at: string
-          cvv: string
-          expiry_date: string
-          id: string
-          user_id: string
-        }
-        Insert: {
-          card_number: string
-          created_at?: string
-          cvv: string
-          expiry_date: string
-          id?: string
-          user_id: string
-        }
-        Update: {
-          card_number?: string
-          created_at?: string
-          cvv?: string
-          expiry_date?: string
-          id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "credit_cards_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      facilities: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
->>>>>>> main
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-<<<<<<< HEAD
-          message: string
-          user_id: string
-=======
-          name: string
->>>>>>> main
-        }
-        Update: {
-          created_at?: string
-          id?: string
-<<<<<<< HEAD
-          message?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          message?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       concession_menu: {
         Row: {
-          category: string
-          concession_id: number
-          created_at: string
-          description: string | null
-          id: string
-          image_url: string
-          name: string
-          price: number
-        }
+          category: string;
+          concession_id: number;
+          created_at: string;
+          description: string | null;
+          id: string;
+          image_url: string;
+          name: string;
+          price: number;
+        };
         Insert: {
-          category: string
-          concession_id: number
-          created_at?: string
-          description?: string | null
-          id: string
-          image_url: string
-          name: string
-          price: number
-        }
+          category: string;
+          concession_id: number;
+          created_at?: string;
+          description?: string | null;
+          id: string;
+          image_url: string;
+          name: string;
+          price: number;
+        };
         Update: {
-          category?: string
-          concession_id?: number
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string
-          name?: string
-          price?: number
-        }
-        Relationships: []
-      }
+          category?: string;
+          concession_id?: number;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          image_url?: string;
+          name?: string;
+          price?: number;
+        };
+        Relationships: [];
+      };
       concession_stand: {
         Row: {
-          created_at: string
-          id: string
-          image_url: string
-          name: string
-        }
+          created_at: string;
+          id: string;
+          image_url: string;
+          name: string;
+        };
         Insert: {
-          created_at?: string
-          id: string
-          image_url: string
-          name: string
-        }
+          created_at?: string;
+          id: string;
+          image_url: string;
+          name: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          image_url?: string
-          name?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          image_url?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
       notifications: {
         Row: {
-          created_at: string
-          id: string
-          message: string
-          theater_id: string | null
-          title: string
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          message: string;
+          theater_id: string | null;
+          title: string;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id: string
-          message: string
-          theater_id?: string | null
-          title: string
-          user_id?: string
-        }
+          created_at?: string;
+          id: string;
+          message: string;
+          theater_id?: string | null;
+          title: string;
+          user_id?: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          message?: string
-          theater_id?: string | null
-          title?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          message?: string;
+          theater_id?: string | null;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       payments: {
         Row: {
-          amount: number
-          cart_id: string
-          created_at: string
-          id: string
-          point_earned: number
-          reservation_id: string
-          status: string
-          user_id: string
-        }
+          amount: number;
+          cart_id: string;
+          created_at: string;
+          id: string;
+          point_earned: number;
+          reservation_id: string;
+          status: string;
+          user_id: string;
+        };
         Insert: {
-          amount: number
-          cart_id: string
-          created_at?: string
-          id?: string
-          point_earned: number
-          reservation_id: string
-          status: string
-          user_id: string
-        }
+          amount: number;
+          cart_id: string;
+          created_at?: string;
+          id?: string;
+          point_earned: number;
+          reservation_id: string;
+          status: string;
+          user_id: string;
+        };
         Update: {
-          amount?: number
-          cart_id?: string
-          created_at?: string
-          id?: string
-          point_earned?: number
-          reservation_id?: string
-          status?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+          amount?: number;
+          cart_id?: string;
+          created_at?: string;
+          id?: string;
+          point_earned?: number;
+          reservation_id?: string;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       qr_sessions: {
         Row: {
-          created_at: string
-          expires_at: string | null
-          id: string
-          qr_token: string
-          used: boolean
-          user_id: string
-        }
+          created_at: string;
+          expires_at: string | null;
+          id: string;
+          qr_token: string;
+          used: boolean;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          qr_token: string
-          used: boolean
-          user_id?: string
-        }
+          created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          qr_token: string;
+          used: boolean;
+          user_id?: string;
+        };
         Update: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          qr_token?: string
-          used?: boolean
-          user_id?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          expires_at?: string | null;
+          id?: string;
+          qr_token?: string;
+          used?: boolean;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       reservations: {
         Row: {
-          created_at: string
-          id: string
-          seat_number: number
-          theater_id: string
-          total_price: number
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          seat_number: number;
+          theater_id: string;
+          total_price: number;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id: string
-          seat_number: number
-          theater_id?: string
-          total_price: number
-          user_id?: string
-        }
+          created_at?: string;
+          id: string;
+          seat_number: number;
+          theater_id?: string;
+          total_price: number;
+          user_id?: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          seat_number?: number
-          theater_id?: string
-          total_price?: number
-          user_id?: string
-        }
-        Relationships: []
-=======
-          name?: string
-        }
-        Relationships: []
-      }
-      favorites: {
-        Row: {
-          created_at: string
-          hotel_id: string
-          id: string
-          is_favorite: boolean | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          is_favorite?: boolean | null
-          user_id?: string
-        }
-        Update: {
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          is_favorite?: boolean | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "farvorites_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "farvorites_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      hotel_facility: {
-        Row: {
-          created_at: string
-          facility_id: string
-          hotel_id: string
-          id: string
-        }
-        Insert: {
-          created_at?: string
-          facility_id: string
-          hotel_id: string
-          id?: string
-        }
-        Update: {
-          created_at?: string
-          facility_id?: string
-          hotel_id?: string
-          id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Hotel_facilitiy_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "hotel_facility_facility_id_fkey"
-            columns: ["facility_id"]
-            isOneToOne: false
-            referencedRelation: "facilities"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      hotel_service: {
-        Row: {
-          created_at: string
-          hotel_id: string
-          id: string
-          service_id: string
-        }
-        Insert: {
-          created_at?: string
-          hotel_id: string
-          id?: string
-          service_id: string
-        }
-        Update: {
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          service_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Hotel_service_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "hotel_service_service_id_fkey"
-            columns: ["service_id"]
-            isOneToOne: false
-            referencedRelation: "services"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      hotels: {
-        Row: {
-          address: string
-          check_in: string
-          check_out: string
-          description: string
-          facility_ids: string[] | null
-          hotel_img_urls: Json | null
-          id: string
-          location: string
-          main_img_url: string
-          name: string
-          service_ids: string[] | null
-          stars: number
-          user_id: string
-        }
-        Insert: {
-          address: string
-          check_in: string
-          check_out: string
-          description: string
-          facility_ids?: string[] | null
-          hotel_img_urls?: Json | null
-          id?: string
-          location: string
-          main_img_url: string
-          name: string
-          service_ids?: string[] | null
-          stars: number
-          user_id?: string
-        }
-        Update: {
-          address?: string
-          check_in?: string
-          check_out?: string
-          description?: string
-          facility_ids?: string[] | null
-          hotel_img_urls?: Json | null
-          id?: string
-          location?: string
-          main_img_url?: string
-          name?: string
-          service_ids?: string[] | null
-          stars?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "hotels_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      inquiries: {
-        Row: {
-          assigned_to: string
-          business_reply: string | null
-          category: string
-          content: string
-          created_at: string
-          id: string
-          reply_created_at: string | null
-          status: string
-          title: string
-          user_id: string
-        }
-        Insert: {
-          assigned_to: string
-          business_reply?: string | null
-          category: string
-          content: string
-          created_at?: string
-          id?: string
-          reply_created_at?: string | null
-          status?: string
-          title: string
-          user_id: string
-        }
-        Update: {
-          assigned_to?: string
-          business_reply?: string | null
-          category?: string
-          content?: string
-          created_at?: string
-          id?: string
-          reply_created_at?: string | null
-          status?: string
-          title?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_rooms_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      messages: {
-        Row: {
-          chat_room_id: string
-          created_at: string
-          id: number
-          read: boolean
-          sender_id: string
-        }
-        Insert: {
-          chat_room_id?: string
-          created_at?: string
-          id?: number
-          read: boolean
-          sender_id?: string
-        }
-        Update: {
-          chat_room_id?: string
-          created_at?: string
-          id?: number
-          read?: boolean
-          sender_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "messages_chat_room_id_fkey"
-            columns: ["chat_room_id"]
-            isOneToOne: false
-            referencedRelation: "inquiries"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      password_reset_requests: {
-        Row: {
-          created_at: string
-          expires_at: string
-          id: string
-          otp: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          expires_at?: string
-          id?: string
-          otp: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          expires_at?: string
-          id?: string
-          otp?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "password_reset_requests_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      policies: {
-        Row: {
-          created_at: string
-          description: string | null
-          hotel_id: string | null
-          id: string
-          policy_name: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          hotel_id?: string | null
-          id?: string
-          policy_name: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          hotel_id?: string | null
-          id?: string
-          policy_name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "policies_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-        ]
->>>>>>> main
-      }
+          created_at?: string;
+          id?: string;
+          seat_number?: number;
+          theater_id?: string;
+          total_price?: number;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       reviews: {
         Row: {
-          comment: string
-          created_at: string
-          id: string
-<<<<<<< HEAD
-          theater_id: string
-=======
-          rating: number
-          review_img_url: Json | null
-          room_id: string
->>>>>>> main
-          user_id: string
-        }
+          comment: string;
+          created_at: string;
+          id: string;
+          theater_id: string;
+          user_id: string;
+        };
         Insert: {
-          comment: string
-          created_at?: string
-          id?: string
-<<<<<<< HEAD
-          theater_id: string
-          user_id: string
-=======
-          rating: number
-          review_img_url?: Json | null
-          room_id?: string
-          user_id?: string
->>>>>>> main
-        }
+          comment: string;
+          created_at?: string;
+          id?: string;
+          theater_id: string;
+          user_id: string;
+        };
         Update: {
-          comment?: string
-          created_at?: string
-          id?: string
-<<<<<<< HEAD
-          theater_id?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+          comment?: string;
+          created_at?: string;
+          id?: string;
+          theater_id?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       rooftop_bar: {
         Row: {
-          created_at: string
-          id: string
-          image_url: string
-          name: string
-        }
+          created_at: string;
+          id: string;
+          image_url: string;
+          name: string;
+        };
         Insert: {
-          created_at?: string
-          id: string
-          image_url: string
-          name: string
-        }
+          created_at?: string;
+          id: string;
+          image_url: string;
+          name: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          image_url?: string
-          name?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: string;
+          image_url?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
       rooftop_menu: {
         Row: {
-          bar_id: number
-          category: string
-          created_at: string
-          id: string
-          image_url: string
-          name: string
-          price: number
-        }
+          bar_id: number;
+          category: string;
+          created_at: string;
+          id: string;
+          image_url: string;
+          name: string;
+          price: number;
+        };
         Insert: {
-          bar_id: number
-          category: string
-          created_at?: string
-          id: string
-          image_url: string
-          name: string
-          price: number
-        }
+          bar_id: number;
+          category: string;
+          created_at?: string;
+          id: string;
+          image_url: string;
+          name: string;
+          price: number;
+        };
         Update: {
-          bar_id?: number
-          category?: string
-          created_at?: string
-          id?: string
-          image_url?: string
-          name?: string
-          price?: number
-        }
-        Relationships: []
-      }
+          bar_id?: number;
+          category?: string;
+          created_at?: string;
+          id?: string;
+          image_url?: string;
+          name?: string;
+          price?: number;
+        };
+        Relationships: [];
+      };
       shop: {
         Row: {
-          description: string
-          edition: boolean | null
-          id: string
-          image_url: string
-          name: string
-          point: number
-        }
+          description: string;
+          edition: boolean | null;
+          id: string;
+          image_url: string;
+          name: string;
+          point: number;
+        };
         Insert: {
-          description: string
-          edition?: boolean | null
-          id?: string
-          image_url: string
-          name: string
-          point: number
-        }
+          description: string;
+          edition?: boolean | null;
+          id?: string;
+          image_url: string;
+          name: string;
+          point: number;
+        };
         Update: {
-          description?: string
-          edition?: boolean | null
-          id?: string
-          image_url?: string
-          name?: string
-          point?: number
-        }
-        Relationships: []
-      }
+          description?: string;
+          edition?: boolean | null;
+          id?: string;
+          image_url?: string;
+          name?: string;
+          point?: number;
+        };
+        Relationships: [];
+      };
       theaters: {
         Row: {
-          created_at: string
-          description: string
-          id: string
-          image_url: Json
-          name: string
-          price: number
-          seats: Json
-          show_time: string
-          status: string
-          total_time: number
-          type: string
-          video_url: Json
-        }
+          created_at: string;
+          description: string;
+          id: string;
+          image_url: Json;
+          name: string;
+          price: number;
+          seats: Json;
+          show_time: string;
+          status: string;
+          total_time: number;
+          type: string;
+          video_url: Json;
+        };
         Insert: {
-          created_at?: string
-          description: string
-          id?: string
-          image_url: Json
-          name: string
-          price: number
-          seats: Json
-          show_time: string
-          status: string
-          total_time: number
-          type: string
-          video_url: Json
-        }
+          created_at?: string;
+          description: string;
+          id?: string;
+          image_url: Json;
+          name: string;
+          price: number;
+          seats: Json;
+          show_time: string;
+          status: string;
+          total_time: number;
+          type: string;
+          video_url: Json;
+        };
         Update: {
-          created_at?: string
-          description?: string
-          id?: string
-          image_url?: Json
-          name?: string
-          price?: number
-          seats?: Json
-          show_time?: string
-          status?: string
-          total_time?: number
-          type?: string
-          video_url?: Json
-=======
-          rating?: number
-          review_img_url?: Json | null
-          room_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "rooms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      rooms: {
-        Row: {
-          bed_type: string
-          created_at: string
-          hotel_id: string
-          id: string
-          is_breakfast_included: string
-          option: Json | null
-          price: number
-          room_img_url: Json | null
-          room_name: string
-          room_type: string
-          view: string
-        }
-        Insert: {
-          bed_type: string
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          is_breakfast_included: string
-          option?: Json | null
-          price: number
-          room_img_url?: Json | null
-          room_name: string
-          room_type: string
-          view: string
-        }
-        Update: {
-          bed_type?: string
-          created_at?: string
-          hotel_id?: string
-          id?: string
-          is_breakfast_included?: string
-          option?: Json | null
-          price?: number
-          room_img_url?: Json | null
-          room_name?: string
-          room_type?: string
-          view?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "rooms_hotel_id_fkey"
-            columns: ["hotel_id"]
-            isOneToOne: false
-            referencedRelation: "hotels"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      services: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string
->>>>>>> main
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          description?: string;
+          id?: string;
+          image_url?: Json;
+          name?: string;
+          price?: number;
+          seats?: Json;
+          show_time?: string;
+          status?: string;
+          total_time?: number;
+          type?: string;
+          video_url?: Json;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
-<<<<<<< HEAD
-          created_at: string
-          email: string
-          id: string
-          name: string
-          nickname: string
-          phone: string
-          point: number | null
-          profile_img: string | null
-        }
+          created_at: string;
+          email: string;
+          id: string;
+          name: string;
+          nickname: string;
+          phone: string;
+          point: number | null;
+          profile_img: string | null;
+        };
         Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          name: string
-          nickname: string
-          phone: string
-          point?: number | null
-          profile_img?: string | null
-        }
+          created_at?: string;
+          email: string;
+          id?: string;
+          name: string;
+          nickname: string;
+          phone: string;
+          point?: number | null;
+          profile_img?: string | null;
+        };
         Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          name?: string
-          nickname?: string
-          phone?: string
-          point?: number | null
-          profile_img?: string | null
-=======
-          business_number: string | null
-          created_at: string
-          email: string | null
-          id: string
-          nickname: string | null
-          phone_number: string | null
-          profile_img: string | null
-          role: string
-          user_info: Json | null
-          user_name: string | null
-        }
-        Insert: {
-          business_number?: string | null
-          created_at?: string
-          email?: string | null
-          id?: string
-          nickname?: string | null
-          phone_number?: string | null
-          profile_img?: string | null
-          role?: string
-          user_info?: Json | null
-          user_name?: string | null
-        }
-        Update: {
-          business_number?: string | null
-          created_at?: string
-          email?: string | null
-          id?: string
-          nickname?: string | null
-          phone_number?: string | null
-          profile_img?: string | null
-          role?: string
-          user_info?: Json | null
-          user_name?: string | null
->>>>>>> main
-        }
-        Relationships: []
-      }
-    }
+          created_at?: string;
+          email?: string;
+          id?: string;
+          name?: string;
+          nickname?: string;
+          phone?: string;
+          point?: number | null;
+          profile_img?: string | null;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-<<<<<<< HEAD
       increment_cart_quantity: {
         Args: {
-          p_user_id: string
-          p_shop_id: string
-        }
-        Returns: undefined
-=======
-      get_reviews_with_user_and_room: {
-        Args: {
-          hotel_id: string
-        }
-        Returns: {
-          review_id: string
-          user_id: string
-          content: string
-          created_at: string
-          nickname: string
-          profile_img: string
-          room_type: string
-        }[]
->>>>>>> main
-      }
-    }
+          p_user_id: string;
+          p_shop_id: string;
+        };
+        Returns: undefined;
+      };
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type PublicSchema = Database[Extract<keyof Database, 'public'>];
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+        Database[PublicTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
+  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+    ? (PublicSchema['Tables'] & PublicSchema['Views'])[PublicTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
+  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
+  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
+  PublicEnumNameOrOptions extends keyof PublicSchema['Enums'] | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
+    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
+    | keyof PublicSchema['CompositeTypes']
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
+    ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
