@@ -8,6 +8,10 @@ export async function GET() {
       if (name.startsWith('sb-')) {
         allCookies.delete(name);
       }
+
+      if (name.startsWith('user')) {
+        allCookies.delete(name);
+      }
     });
     return Response.json({ success: true, message: 'supabase 쿠키 삭제 완료' });
   } catch (error) {
