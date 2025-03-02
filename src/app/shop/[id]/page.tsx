@@ -64,7 +64,7 @@ const Page = () => {
 
       <div className="flex items-center space-x-2 my-4">
         <button onClick={decreaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
-          ➖
+          -
         </button>
         <input
           type="number"
@@ -74,7 +74,7 @@ const Page = () => {
           min={1}
         />
         <button onClick={increaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
-          ➕
+          +
         </button>
       </div>
 
