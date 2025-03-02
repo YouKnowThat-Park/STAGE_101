@@ -8,11 +8,7 @@ export const signupSchema = emailPasswordSchema
       .min(2, { message: '이름은 최소 2자 이상이어야 합니다.' })
       .trim()
       .regex(/^[A-Za-z가-힣]+$/, { message: '이름에는 공백,숫자를 포함할 수 없습니다.' }),
-    nickname: z
-      .string()
-      .min(2, { message: '닉네임은 최소 2자 이상이어야 합니다.' })
-      .trim()
-      .regex(/^[A-Za-z가-힣]+$/, { message: '닉네임에는 숫자를 포함할 수 없습니다.' }),
+    nickname: z.string().min(2, { message: '닉네임은 최소 2자 이상이어야 합니다.' }).trim(),
     phone: z
       .string()
       .length(11, '휴대폰 번호를 정확히 입력해주세요.')
