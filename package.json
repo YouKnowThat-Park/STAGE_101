@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+<<<<<<< HEAD
     "genType": "npx supabase gen types typescript --project-id zxryfhnxexxyxmrctocl --schema public > src/types/supabase-type.ts"
   },
   "dependencies": {
@@ -14,13 +15,23 @@
     "@radix-ui/react-dialog": "^1.1.6",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
+=======
+    "genType": "npx supabase gen types typescript --project-id dsggwbvtcrwuopwelpxy --schema public > src/types/supabase-type.ts"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@supabase/ssr": "^0.5.2",
+>>>>>>> main
     "@tanstack/react-query": "^5.66.4",
     "@tanstack/react-query-devtools": "^5.66.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
+<<<<<<< HEAD
     "react-hook-form": "^7.54.2",
     "zod": "^3.24.2",
+=======
+>>>>>>> main
     "zustand": "^5.0.3"
   },
   "devDependencies": {
@@ -31,7 +42,10 @@
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "prettier": "^3.5.1",
+<<<<<<< HEAD
     "shadcn-ui": "^0.9.4",
+=======
+>>>>>>> main
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
