@@ -17,7 +17,7 @@ const Page = () => {
   const shopId = Array.isArray(id) ? id[0] : id;
   const { item, error, loading } = useShopHook(shopId);
   const imageUrl = item?.image_url ? getValidImageUrl(item.image_url) : '/default-image.jpg';
-  const userId = useUserStore((state) => state.user?.id);
+  const userId = useUserStore((state) => state.id);
   const addToCart = useAddToCart();
 
   const handleAddToCart = async () => {
