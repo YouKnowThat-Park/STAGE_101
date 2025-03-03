@@ -8,7 +8,7 @@ const Logout = () => {
   const router = useRouter();
   const { clearUser } = useUserStore();
 
-  const TestHandleLogout = async () => {
+  const testHandleLogout = async () => {
     const res = await fetch('/api/logout', { method: 'GET' });
 
     if (res.ok) {
@@ -21,24 +21,29 @@ const Logout = () => {
     }
   };
 
-  const TestHandleLogin = () => {
+  const testHandleLogin = () => {
     router.push('/sign-in');
   };
 
-  const TestHandleShop = () => {
+  const testHandleShop = () => {
     router.push('/shop');
   };
 
-  const TestHandleCart = () => {
+  const testHandleCart = () => {
     router.push('/cart');
+  };
+
+  const testHandleMypage = () => {
+    router.push('/mypage');
   };
 
   return (
     <div className="flex justify-between">
-      <button onClick={TestHandleLogout}>로그아웃</button>
-      <button onClick={TestHandleLogin}>로그인</button>
-      <button onClick={TestHandleShop}>상점</button>
-      <button onClick={TestHandleCart}>장바구니</button>
+      <button onClick={testHandleLogout}>로그아웃</button>
+      <button onClick={testHandleLogin}>로그인</button>
+      <button onClick={testHandleShop}>상점</button>
+      <button onClick={testHandleCart}>장바구니</button>
+      <button onClick={testHandleMypage}>마이페이지</button>
     </div>
   );
 };
