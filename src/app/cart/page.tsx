@@ -9,7 +9,7 @@ import { deleteCartData } from '../api/cart/cart';
 import { useQueryClient } from '@tanstack/react-query';
 
 const CartPage = () => {
-  const userId = useUserStore((state) => state.user?.id) ?? null;
+  const userId = useUserStore((state) => state?.id) ?? null;
   const { data: cartItems, isLoading, error } = useFetchCartData(userId);
   const queryClient = useQueryClient();
   const router = useRouter();
