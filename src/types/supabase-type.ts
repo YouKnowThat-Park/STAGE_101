@@ -102,27 +102,6 @@ export type Database = {
           },
         ]
       }
-      chatting: {
-        Row: {
-          created_at: string
-          id: string
-          message: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          message: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          message?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       concession_menu: {
         Row: {
           category: string
@@ -237,6 +216,38 @@ export type Database = {
         }
         Relationships: []
       }
+      qna: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qna_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       qr_sessions: {
         Row: {
           created_at: string
@@ -295,21 +306,27 @@ export type Database = {
         Row: {
           comment: string
           created_at: string
+          dislike_count: number | null
           id: string
+          like_count: number | null
           theater_id: string
           user_id: string
         }
         Insert: {
           comment: string
           created_at?: string
+          dislike_count?: number | null
           id?: string
+          like_count?: number | null
           theater_id?: string
           user_id?: string
         }
         Update: {
           comment?: string
           created_at?: string
+          dislike_count?: number | null
           id?: string
+          like_count?: number | null
           theater_id?: string
           user_id?: string
         }
