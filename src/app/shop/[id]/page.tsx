@@ -39,7 +39,6 @@ const Page = () => {
       return;
     }
 
-    console.log('addcart', { userId, shopId, quantity, item });
     addToCart.mutate({
       userId,
       shopId,
