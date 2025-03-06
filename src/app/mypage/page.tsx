@@ -59,8 +59,6 @@ const MyPage = () => {
   const [selectedTab, setSelectedTab] = useState('ticket');
   const { name, point } = useUserHook(id);
 
-  console.log('data', name, point);
-
   return (
     <div className="w-[600px] h-full flex flex-col justify-end ml-auto mr-20">
       {/* 프로필 & 유저 정보 */}

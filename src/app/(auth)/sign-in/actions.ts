@@ -36,8 +36,6 @@ export default async function signIn(email: string, password: string) {
 
   const cleanedUserData = { ...userData, profile_img: cleanProfileImg };
 
-  console.log('📡 Supabase에서 가져온 정리된 유저 데이터:', cleanedUserData);
-
   // ✅ 로그인한 유저 ID를 쿠키에 저장
   const cookieOptions = {
     httpOnly: true, // JavaScript에서 접근 불가 (XSS 방지)

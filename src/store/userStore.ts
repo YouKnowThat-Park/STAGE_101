@@ -20,7 +20,6 @@ export const useUserStore = create<UserState>()(
       nickname: null,
       profile_img: null,
       setUser: (user) => {
-        console.log('✅ Zustand 상태 변경:', user);
         if (user) {
           set({
             id: user.id,
@@ -33,7 +32,6 @@ export const useUserStore = create<UserState>()(
         }
       },
       clearUser: () => {
-        console.log('🚀 사용자 정보 초기화');
         set({ id: null, email: null, nickname: null, profile_img: null });
       },
     }),
