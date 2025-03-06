@@ -186,9 +186,10 @@ export type Database = {
       payments: {
         Row: {
           amount: number
-          cart_id: string
           created_at: string
           id: string
+          payment_key: string
+          payment_method: string
           point_earned: number
           reservation_id: string
           status: string
@@ -196,25 +197,42 @@ export type Database = {
         }
         Insert: {
           amount: number
-          cart_id: string
           created_at?: string
           id?: string
+          payment_key: string
+          payment_method: string
           point_earned: number
-          reservation_id: string
+          reservation_id?: string
           status: string
-          user_id: string
+          user_id?: string
         }
         Update: {
           amount?: number
-          cart_id?: string
           created_at?: string
           id?: string
+          payment_key?: string
+          payment_method?: string
           point_earned?: number
           reservation_id?: string
           status?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "payments_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       qna: {
         Row: {
@@ -279,15 +297,17 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          seat_number: number
+          seat_number: string
+          status: string
           theater_id: string
           total_price: number
           user_id: string
         }
         Insert: {
           created_at?: string
-          id: string
-          seat_number: number
+          id?: string
+          seat_number: string
+          status: string
           theater_id?: string
           total_price: number
           user_id?: string
@@ -295,12 +315,28 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          seat_number?: number
+          seat_number?: string
+          status?: string
           theater_id?: string
           total_price?: number
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reservations_theater_id_fkey"
+            columns: ["theater_id"]
+            isOneToOne: false
+            referencedRelation: "theaters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
@@ -432,10 +468,10 @@ export type Database = {
           description: string
           id: string
           image_url: Json
+          main_img: string
           name: string
           price: number
           screening_date: string
-          seats: Json
           show_time: string
           status: boolean
           total_time: number
@@ -448,10 +484,10 @@ export type Database = {
           description: string
           id?: string
           image_url: Json
+          main_img: string
           name: string
           price: number
           screening_date: string
-          seats: Json
           show_time: string
           status: boolean
           total_time: number
@@ -464,10 +500,10 @@ export type Database = {
           description?: string
           id?: string
           image_url?: Json
+          main_img?: string
           name?: string
           price?: number
           screening_date?: string
-          seats?: Json
           show_time?: string
           status?: boolean
           total_time?: number
