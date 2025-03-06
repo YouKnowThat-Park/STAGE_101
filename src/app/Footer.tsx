@@ -6,7 +6,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <div className="border-t-2 border-t-black mt-20 ">
+    <div className="border-t-2 border-t-black py-20 ">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* 회사 정보 */}
         <div className="text-center md:text-left">
