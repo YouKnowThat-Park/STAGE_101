@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverSupabase } from '@/supabase/supabase-server';
+import { createClient } from '@supabase/supabase-js';
+
+// ✅ Supabase 클라이언트 설정
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 export async function GET(req: NextRequest) {
-  const supabase = serverSupabase();
-
   const url = new URL(req.url);
   const theaterId = url.searchParams.get('theaterId');
-  const seatIds = url.searchParams.get('seats')?.split(',') || [];
+  const seatIdsRaw = url.searchParams.get('seats');
+  const seatIds = seatIdsRaw ? seatIdsRaw.split(',') : [];
 
   console.log('🔍 요청된 theaterId:', theaterId);
   console.log('🔍 요청된 좌석 목록:', seatIds);
+  console.log('🛠️ seatIds 타입:', typeof seatIds, Array.isArray(seatIds) ? '배열' : '문자열');
 
   if (!theaterId) {
     return NextResponse.json({ error: 'theaterId is required' }, { status: 400 });
@@ -36,7 +42,7 @@ export async function GET(req: NextRequest) {
     .select('seat_number, total_price')
     .eq('theater_id', validTheaterId);
 
-  // ✅ 특정 좌석만 조회해야 할 경우 (seatIds가 존재하면 필터링)
+  // ✅ 특정 좌석만 조회해야 할 경우
   if (seatIds.length > 0) {
     console.log('🔍 특정 좌석 필터 적용:', seatIds);
     query = query.in('seat_number', seatIds);
