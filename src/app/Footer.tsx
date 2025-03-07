@@ -1,12 +1,18 @@
+'use client';
 import BlogIcon from '@/ui/icon/BlogIcon';
 import CvIcon from '@/ui/icon/CvIcon';
 import GitHubIcon from '@/ui/icon/GitHubIcon';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 const Footer = () => {
+  const pathname = usePathname();
+  const isMypage = pathname?.startsWith('/mypage'); // ✅ `/theater` 여부 체크
+  if (isMypage) return null; // ✅ `/theater`에서는 헤더 숨김
+
   return (
-    <div className="border-t-2 border-t-black py-20 ">
+    <div className="border-t-2 border-t-black py-32 ">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* 회사 정보 */}
         <div className="text-center md:text-left">
