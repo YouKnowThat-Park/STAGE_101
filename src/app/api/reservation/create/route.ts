@@ -13,14 +13,15 @@ export async function POST(req: NextRequest) {
 
     console.log('🎭 요청된 theaterId:', theaterId);
     console.log('🔍 요청된 좌석 목록:', seatIds);
-    console.log('🛠️ seatIds 타입:', typeof seatIds, Array.isArray(seatIds) ? '배열' : '문자열');
 
-    // ✅ 1. `theaters` 테이블에서 `UUID` 조회
+    // ✅ 1. `theaters` 테이블에서 `UUID` 및 `price` 조회
     const { data: theaterData, error: theaterError } = await supabase
       .from('theaters')
       .select('id, price')
-      .eq('type', theaterId)
+      .eq('type', theaterId) // 🔥 `type` 기준으로 `id(UUID)` 조회
       .single();
+
+    console.log('🎭 theaterData 전체 확인:', theaterData);
 
     if (theaterError || !theaterData) {
       console.error('🚨 상영관 조회 실패:', theaterError);
@@ -28,9 +29,11 @@ export async function POST(req: NextRequest) {
     }
 
     const actualTheaterId = theaterData.id;
-    const totalPrice = theaterData.price * seatIds.length; // ✅ 가격 계산
+    const pricePerSeat = theaterData.price; // ✅ 가격 가져오기
+    const totalPrice = pricePerSeat * seatIds.length; // ✅ 가격 계산
 
     console.log(`🎭 변환된 theater_id: ${actualTheaterId}`);
+    console.log(`💰 좌석당 가격: ${pricePerSeat}원`);
     console.log(`💰 총 결제 금액: ${totalPrice}원`);
 
     // ✅ 2. 예약 정보 저장 (좌석번호를 문자열로 저장)
@@ -41,17 +44,21 @@ export async function POST(req: NextRequest) {
           user_id: userId,
           theater_id: actualTheaterId,
           seat_number: seatIds.join(', '), // ✅ 문자열로 저장
-          total_price: totalPrice,
+          total_price: totalPrice, // ✅ 가격 저장
           status: 'pending',
         },
       ])
-      .select('id')
+      .select('id, total_price') // ✅ 저장된 가격도 확인
       .single();
 
     if (error) throw error;
 
     console.log('✅ 예약 성공:', data);
-    return NextResponse.json({ success: true, reservationId: data.id });
+    return NextResponse.json({
+      success: true,
+      reservationId: data.id,
+      totalPrice: data.total_price,
+    });
   } catch (error) {
     console.error('🚨 예약 생성 실패:', error);
     return NextResponse.json(
