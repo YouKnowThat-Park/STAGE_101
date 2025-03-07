@@ -2,7 +2,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   const { id } = params;
   const { data, error } = await supabase.from('shop').select('*').eq('id', id).single();
 

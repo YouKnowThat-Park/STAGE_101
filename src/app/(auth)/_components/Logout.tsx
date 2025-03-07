@@ -9,7 +9,7 @@ const Logout = () => {
   const { clearUser } = useUserStore();
 
   const testHandleLogout = async () => {
-    const res = await fetch('/api/logout', { method: 'GET' });
+    const res = await fetch('/api/auth/logout', { method: 'GET' });
 
     if (res.ok) {
       clearUser();

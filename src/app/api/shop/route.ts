@@ -2,7 +2,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   const { data, error } = await supabase.from('shop').select('*');
 
   if (error) {

@@ -2,7 +2,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   const {
     data: { user },

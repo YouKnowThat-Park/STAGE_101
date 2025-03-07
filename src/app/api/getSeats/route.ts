@@ -13,8 +13,8 @@ export async function GET(req: NextRequest) {
   const seatIdsRaw = url.searchParams.get('seats');
   const seatIds = seatIdsRaw ? seatIdsRaw.split(',') : [];
 
-  console.log('🔍 요청된 theaterId:', theaterId);
-  console.log('🔍 요청된 좌석 목록:', seatIds);
+  // console.log('🔍 요청된 theaterId:', theaterId);
+  // console.log('🔍 요청된 좌석 목록:', seatIds);
 
   if (!theaterId) {
     return NextResponse.json({ error: 'theaterId is required' }, { status: 400 });
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
   }
 
   const validTheaterId = theater.id;
-  console.log('🎭 변환된 theater_id:', validTheaterId);
+  // console.log('🎭 변환된 theater_id:', validTheaterId);
 
   // ✅ 2. reservations 테이블에서 해당 theater_id의 예약 좌석 조회
   let query = supabase
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
 
   // ✅ 특정 좌석만 조회해야 할 경우
   if (seatIds.length > 0) {
-    console.log('🔍 특정 좌석 필터 적용:', seatIds);
+    // console.log('🔍 특정 좌석 필터 적용:', seatIds);
     query = query.in('seat_number', seatIds);
   }
 
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Seats not found' }, { status: 404 });
   }
 
-  console.log('🎟️ 조회된 좌석 목록:', seats);
+  // console.log('🎟️ 조회된 좌석 목록:', seats);
 
   return NextResponse.json({
     reservations: seats,

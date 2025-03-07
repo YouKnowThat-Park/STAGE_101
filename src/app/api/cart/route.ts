@@ -2,7 +2,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   try {
     const { user_id, shop_id, quantity, image_url, name, point } = await req.json();
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get('user_id');
 
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   try {
     const { searchParams } = new URL(req.url);
     const user_id = searchParams.get('user_id');

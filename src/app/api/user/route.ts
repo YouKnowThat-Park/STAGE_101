@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'ID is required' }), { status: 400 });
   }
 
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   const { data, error } = await supabase
     .from('users')
     .select('id, name, phone, point')

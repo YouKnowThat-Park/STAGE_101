@@ -4,7 +4,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { cookies } from 'next/headers';
 
 export default async function signIn(email: string, password: string) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
