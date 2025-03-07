@@ -12,6 +12,7 @@ import InquiryIcon from '@/ui/icon/InquiryIcon';
 import MypageReview from './_components/MypageReview';
 import ReviewIcon from '@/ui/icon/ReviewIcon';
 import HistoryIcon from '@/ui/icon/HistoryIcon';
+import MypageFooter from './_components/MypageFooter';
 
 const defaultProfileImg = '/next.svg'; // ✅ public 폴더 이미지 경로
 
@@ -60,36 +61,42 @@ const MyPage = () => {
   const { name, point } = useUserHook(id);
 
   return (
-    <div className="w-[600px] h-full flex flex-col justify-end ml-auto mr-20">
-      {/* 프로필 & 유저 정보 */}
-      <MypageProfile
-        profile_img={profile_img || defaultProfileImg}
-        nickname={nickname}
-        name={name}
-        point={point}
-      />
+    <div className="flex gap-24">
+      <div>
+        <MypageFooter />
+      </div>
 
-      {/* 네비게이션 탭 */}
-      <div className="bg-white max-w-4xl p-2 ">
-        <nav className="flex justify-center items-center gap-20 border-b-2">
-          {buttonTabs.map((tab) => (
-            <MypageButton
-              key={tab.key}
-              label={tab.label}
-              onClick={() => setSelectedTab(tab.key)}
-              isActive={selectedTab === tab.key}
-            />
-          ))}
-        </nav>
-        {/* 선택된 탭에 따라 내용 변경 */}
-        <div className="mt-6 ">
-          {selectedTab === 'ticket' && <MypageTicket />}
+      <div className="w-[600px] h-[740px] bg-white flex flex-col justify-end ml-auto mt-20">
+        {/* 프로필 & 유저 정보 */}
+        <MypageProfile
+          profile_img={profile_img || defaultProfileImg}
+          nickname={nickname}
+          name={name}
+          point={point}
+        />
 
-          {selectedTab === 'review' && <MypageReview />}
+        {/* 네비게이션 탭 */}
+        <div className="bg-white max-w-4xl p-2 ">
+          <nav className="flex justify-center items-center gap-20 border-b-2">
+            {buttonTabs.map((tab) => (
+              <MypageButton
+                key={tab.key}
+                label={tab.label}
+                onClick={() => setSelectedTab(tab.key)}
+                isActive={selectedTab === tab.key}
+              />
+            ))}
+          </nav>
+          {/* 선택된 탭에 따라 내용 변경 */}
+          <div className="mt-6 ">
+            {selectedTab === 'ticket' && <MypageTicket />}
 
-          {selectedTab === 'history' && <MypageHistory />}
+            {selectedTab === 'review' && <MypageReview />}
 
-          {selectedTab === 'qna' && <MypageQna />}
+            {selectedTab === 'history' && <MypageHistory />}
+
+            {selectedTab === 'qna' && <MypageQna />}
+          </div>
         </div>
       </div>
     </div>

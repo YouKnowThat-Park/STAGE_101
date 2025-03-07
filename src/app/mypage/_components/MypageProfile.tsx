@@ -13,7 +13,7 @@ interface MypageProfileProps {
 
 const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProps) => {
   return (
-    <div className="bg-black w-full max-w-4xl h-[150px] p-6  flex items-center gap-6">
+    <div className="bg-[#272625] w-full max-w-4xl h-[150px] p-6  flex items-center gap-6">
       <div className="bg-white w-[100px] h-[100px] rounded-sm flex items-center justify-center">
         <Image src={profile_img} alt="profile_image" width={100} height={100} />
       </div>
