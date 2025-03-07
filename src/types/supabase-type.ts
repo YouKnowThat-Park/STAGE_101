@@ -190,7 +190,7 @@ export type Database = {
           id: string
           payment_key: string
           payment_method: string
-          point_earned: number
+          point_earned: number | null
           reservation_id: string
           status: string
           user_id: string
@@ -201,7 +201,7 @@ export type Database = {
           id?: string
           payment_key: string
           payment_method: string
-          point_earned: number
+          point_earned?: number | null
           reservation_id?: string
           status: string
           user_id?: string
@@ -212,7 +212,7 @@ export type Database = {
           id?: string
           payment_key?: string
           payment_method?: string
-          point_earned?: number
+          point_earned?: number | null
           reservation_id?: string
           status?: string
           user_id?: string
@@ -272,15 +272,15 @@ export type Database = {
           expires_at: string | null
           id: string
           qr_token: string
-          used: boolean
+          theater_id: string
           user_id: string
         }
         Insert: {
           created_at?: string
           expires_at?: string | null
           id?: string
-          qr_token: string
-          used: boolean
+          qr_token?: string
+          theater_id?: string
           user_id?: string
         }
         Update: {
@@ -288,10 +288,25 @@ export type Database = {
           expires_at?: string | null
           id?: string
           qr_token?: string
-          used?: boolean
+          theater_id?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "qr_sessions_theater_id_fkey"
+            columns: ["theater_id"]
+            isOneToOne: false
+            referencedRelation: "theaters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qr_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reservations: {
         Row: {

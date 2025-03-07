@@ -1,24 +1,26 @@
+'use server';
+
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-export function serverSupabase() {
+export async function serverSupabase() {
   const cookieStore = cookies();
 
-  return createServerClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get: (name: string) => cookieStore.get(name)?.value ?? null, // ✅ 쿠키 읽기
+        get: async (name: string) => cookieStore.get(name)?.value ?? null,
         set: async (name, value, options) => {
-          'use server';
-          cookieStore.set(name, value, { path: '/', ...options }); // ✅ 쿠키 저장
+          cookieStore.set(name, value, { path: '/', ...options });
         },
         remove: async (name: string) => {
-          'use server';
-          cookieStore.set(name, '', { path: '/', maxAge: -1 }); // ✅ 쿠키 삭제
+          cookieStore.set(name, '', { path: '/', maxAge: -1 });
         },
       },
     },
   );
+
+  return supabase;
 }

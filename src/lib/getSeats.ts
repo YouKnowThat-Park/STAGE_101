@@ -1,7 +1,7 @@
 import { serverSupabase } from '@/supabase/supabase-server';
 
 export async function getSeats(theaterId: string, seatIds?: string[]): Promise<string[]> {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   if (!theaterId) {
     throw new Error('🚨 theaterId가 없습니다.');

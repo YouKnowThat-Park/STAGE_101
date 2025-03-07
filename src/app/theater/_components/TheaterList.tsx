@@ -12,7 +12,7 @@ const TheaterList = () => {
   ];
 
   const handleGoBack = () => {
-    router.push('/');
+    router.push('/theater');
   };
 
   return (
