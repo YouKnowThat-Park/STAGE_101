@@ -4,6 +4,7 @@ import { loadTossPayments, TossPaymentsInstance } from '@tosspayments/payment-sd
 import { useEffect, useState } from 'react';
 import { useUserHook } from '@/hooks/useUserHook';
 import { v4 as uuidv4 } from 'uuid'; // ✅ UUID 생성 라이브러리 추가
+import { useTheaterData } from '@/hooks/useTheaterData';
 
 const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -22,6 +23,8 @@ export default function CheckoutClient({
   totalPrice,
 }: CheckoutClientProps) {
   const { name, phone, isLoading } = useUserHook(userId);
+  const { data: theaterData } = useTheaterData(theaterId);
+
   const [tossPayments, setTossPayments] = useState<TossPaymentsInstance | null>(null);
 
   useEffect(() => {
@@ -75,12 +78,15 @@ export default function CheckoutClient({
       }
 
       const orderId = uuidv4(); // ✅ UUID로 orderId 생성
+      const theaterName = theaterData?.name || '이름 없음';
+      const showTime = theaterData?.show_time || '시간대 없음';
+      const url = `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${encodeURIComponent(name)}&userPhone=${encodeURIComponent(phone)}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
 
       console.log('✅ 요청된 결제 정보:', {
         amount: totalPrice,
         orderId,
         orderName: `영화 티켓 (${seatIds.length}석)`,
-        successUrl: `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
+        successUrl: url, // ✅ paymentKey 제거
         failUrl: `${API_URL}/payment/fail`,
       });
 
@@ -88,7 +94,7 @@ export default function CheckoutClient({
         amount: totalPrice,
         orderId,
         orderName: `영화 티켓 (${seatIds.length}석)`,
-        successUrl: `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
+        successUrl: url, // ✅ paymentKey 제거
         failUrl: `${API_URL}/payment/fail`,
       });
     } catch (error) {
@@ -99,7 +105,9 @@ export default function CheckoutClient({
   return (
     <div className="text-white text-center p-6">
       <h1 className="text-2xl font-bold">결제 페이지</h1>
+      <p>{theaterData?.name}</p>
       <p className="mt-4">선택한 좌석: {seatIds.join(', ')}</p>
+      <p>상영 시간: {theaterData?.show_time}</p>
       <p className="mt-2">총 가격: {totalPrice.toLocaleString()}원</p>
 
       <button

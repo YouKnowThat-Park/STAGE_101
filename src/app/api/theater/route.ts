@@ -9,16 +9,20 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'theaterId가 필요합니다.' }, { status: 400 });
   }
 
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
-  const { data: seats, error } = await supabase
+  const { data: theater, error } = await supabase
     .from('theaters')
-    .select('seats')
-    .eq('id', theaterId);
+    .select('*') // ✅ 모든 필드 가져오기 (필요하면 'seats, price' 등으로 변경 가능)
+    .eq('type', theaterId) // ✅ `type`으로 검색해야 함!
+    .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error || !theater) {
+    return NextResponse.json(
+      { error: `극장 정보를 찾을 수 없습니다: ${theaterId}` },
+      { status: 404 },
+    );
   }
 
-  return NextResponse.json(seats);
+  return NextResponse.json(theater);
 }

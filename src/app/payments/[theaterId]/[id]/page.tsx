@@ -10,7 +10,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const seatIds = params.id.split('-');
 
   // ✅ Supabase에서 서버에서 직접 유저 정보 가져오기
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data?.user) {

@@ -1,108 +1,168 @@
 import { serverSupabase } from '@/supabase/supabase-server';
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { v4 as uuidv4 } from 'uuid'; // ✅ QR 토큰 생성용
 
+/** ✅ [GET] 결제 성공 정보 조회 */
 export async function GET(req: NextRequest) {
   const supabase = await serverSupabase();
   try {
     const { searchParams } = new URL(req.url);
     const reservationId = searchParams.get('reservationId');
     const userId = searchParams.get('userId');
-    const orderId = searchParams.get('orderId');
-    const paymentKey = searchParams.get('paymentKey');
-    const amount = searchParams.get('amount');
 
-    if (!reservationId || !userId || !orderId || !paymentKey || !amount) {
+    if (!reservationId || !userId) {
       return NextResponse.json({ success: false, message: '필수 데이터 누락' }, { status: 400 });
     }
 
-    console.log('✅ 결제 성공 데이터:', { reservationId, userId, orderId, paymentKey, amount });
+    console.log('✅ 결제 정보 조회:', { reservationId, userId });
 
-    // ✅ 1. `payments` 테이블에 결제 정보 저장
-    const { data: paymentData, error: paymentError } = await supabase
+    // ✅ 결제 및 예약 정보를 조인하여 조회
+    const { data, error } = await supabase
       .from('payments')
-      .insert([
-        {
-          id: orderId,
-          user_id: userId,
-          reservation_id: reservationId,
-          amount: parseInt(amount, 10),
-          status: 'paid',
-          payment_key: paymentKey,
-          payment_method: '카드',
-        },
-      ])
-      .select('id')
+      .select(
+        `
+        id, amount, payment_method, status, 
+        reservations (
+          seat_number, total_price, status,
+          theaters (name, show_time)
+        )
+      `,
+      )
+      .eq('user_id', userId)
+      .eq('reservation_id', reservationId)
       .single();
 
-    if (paymentError) {
-      console.error('🚨 결제 저장 오류:', paymentError);
-      throw new Error(`결제 저장 오류: ${JSON.stringify(paymentError)}`); // ✅ 오류 메시지를 JSON으로 변환
+    if (error) {
+      console.error('🚨 결제 정보 조회 오류:', error);
+      return NextResponse.json(
+        { success: false, message: '결제 정보 조회 실패', error },
+        { status: 500 },
+      );
     }
 
-    // ✅ 2. `reservations` 테이블의 상태를 'confirmed'로 변경
-    const { error: reservationError } = await supabase
-      .from('reservations')
-      .update({ status: 'confirmed' })
-      .eq('id', reservationId);
-
-    if (reservationError) {
-      console.error('🚨 예약 상태 업데이트 오류:', reservationError);
-      throw new Error(`예약 상태 업데이트 오류: ${JSON.stringify(reservationError)}`); // ✅ 오류 메시지를 JSON으로 변환
-    }
-
-    console.log('✅ 결제 성공 및 예약 확정 완료:', paymentData);
-    return NextResponse.json({ success: true, message: '결제 성공 및 예약 확정' });
-  } catch (error) {
-    console.error('🚨 결제 성공 처리 중 오류:', error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: '결제 성공 처리 실패',
-        error: error instanceof Error ? error.message : JSON.stringify(error), // ✅ JSON으로 변환해서 출력
-      },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: true, payment: data });
+  } catch (error: any) {
+    console.error('🚨 결제 정보 조회 중 오류:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-export async function POST(req: Request) {
+/** ✅ [POST] 결제 성공 처리 */
+export async function POST(req: NextRequest) {
   try {
-    // userId, paymentKey도 구조분해 할당
     const { orderId, reservationId, amount, userId, paymentKey } = await req.json();
-
     const supabase = await serverSupabase();
 
-    const { data: paymentData, error: paymentError } = await supabase
-      .from('payments')
-      .insert([
-        {
-          id: orderId,
-          reservation_id: reservationId,
-          amount: parseInt(amount, 10),
-          status: 'paid',
-          user_id: userId,
-          payment_method: '카드',
-          payment_key: paymentKey,
-        },
-      ])
-      .select('id')
+    console.log('✅ 결제 요청 데이터:', { orderId, reservationId, amount, userId, paymentKey });
+
+    // ✅ 1. 기존 예약 상태 확인 (중복 방지)
+    const { data: existingReservation } = await supabase
+      .from('reservations')
+      .select('id, status')
+      .eq('id', reservationId)
+      .eq('user_id', userId)
       .single();
+
+    if (!existingReservation) {
+      throw new Error('🚨 해당 예약을 찾을 수 없습니다.');
+    }
+
+    if (existingReservation.status === 'confirmed') {
+      console.warn('⚠️ 이미 결제 완료된 예약입니다.');
+      return NextResponse.json(
+        { success: false, message: '이미 결제된 예약입니다.' },
+        { status: 400 },
+      );
+    }
+
+    // ✅ 2. 기존 결제 내역 확인 (중복 결제 방지)
+    const { data: existingPayment } = await supabase
+      .from('payments')
+      .select('id')
+      .eq('reservation_id', reservationId)
+      .eq('user_id', userId)
+      .single();
+
+    if (existingPayment) {
+      console.warn('⚠️ 이미 결제된 예약입니다.');
+      return NextResponse.json({ success: true, message: '이미 결제됨' });
+    }
+
+    // ✅ 3. 결제 정보 저장 (이미 존재하는 orderId라면 새로운 UUID 생성)
+    let finalOrderId = orderId;
+    const { data: orderExists } = await supabase
+      .from('payments')
+      .select('id')
+      .eq('id', orderId)
+      .single();
+
+    if (orderExists) {
+      console.warn('⚠️ 중복된 orderId 발견, 새로운 UUID 생성');
+      finalOrderId = uuidv4();
+    }
+
+    const { error: paymentError } = await supabase.from('payments').insert([
+      {
+        id: finalOrderId,
+        user_id: userId,
+        reservation_id: reservationId,
+        amount: parseInt(amount, 10),
+        status: 'paid',
+        payment_key: paymentKey,
+        payment_method: '카드',
+      },
+    ]);
+
     if (paymentError) throw new Error(paymentError.message);
 
-    // 예약 상태 업데이트
-    const { data: updateData, error: reservationError } = await supabase
+    // ✅ 4. 예약 상태 업데이트 (pending → confirmed) - pending인 경우만 변경
+    const { error: reservationUpdateError } = await supabase
       .from('reservations')
       .update({ status: 'confirmed' })
       .eq('id', reservationId)
-      .eq('user_id', userId); // ✅ 사용자 ID 추가
+      .eq('user_id', userId)
+      .eq('status', 'pending'); // ✅ pending 상태인 것만 변경
 
-    if (reservationError) throw new Error(reservationError.message);
+    if (reservationUpdateError) throw new Error(reservationUpdateError.message);
 
-    return NextResponse.json({ success: true, payment: paymentData, reservation: updateData });
-  } catch (error) {
+    // ✅ 5. QR 코드 발급 (기존 데이터 확인)
+    const { data: reservationData } = await supabase
+      .from('reservations')
+      .select('theater_id')
+      .eq('id', reservationId)
+      .single();
+
+    const theaterId = reservationData?.theater_id;
+    if (!theaterId) throw new Error('🚨 theater_id 조회 실패');
+
+    // ✅ 기존 QR 존재 여부 확인
+    const { data: existingQr } = await supabase
+      .from('qr_sessions')
+      .select('qr_token')
+      .eq('user_id', userId)
+      .eq('theater_id', theaterId)
+      .single();
+
+    let qrToken = existingQr?.qr_token || uuidv4();
+
+    if (!existingQr) {
+      const { error: qrError } = await supabase.from('qr_sessions').insert([
+        {
+          id: uuidv4(),
+          user_id: userId,
+          theater_id: theaterId,
+          qr_token: qrToken,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ]);
+
+      if (qrError) throw new Error(qrError.message);
+    }
+
+    console.log('✅ 결제 성공 및 예약 확정 완료');
+    return NextResponse.json({ success: true, qr_token: qrToken });
+  } catch (error: any) {
     console.error('🚨 결제 확인 오류:', error);
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

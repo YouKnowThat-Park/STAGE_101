@@ -2,7 +2,7 @@ import { serverSupabase } from '@/supabase/supabase-server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   try {
     // ✅ 요청 바디에서 필드 추출

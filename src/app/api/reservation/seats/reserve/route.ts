@@ -3,7 +3,7 @@ import { ReserveType } from '@/types/reserve-type';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
   try {
     const body = await req.json();
 
