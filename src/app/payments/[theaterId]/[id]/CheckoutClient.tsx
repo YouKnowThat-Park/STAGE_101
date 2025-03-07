@@ -80,7 +80,7 @@ export default function CheckoutClient({
         amount: totalPrice,
         orderId,
         orderName: `영화 티켓 (${seatIds.length}석)`,
-        successUrl: `${API_URL}/api/payment/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
+        successUrl: `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
         failUrl: `${API_URL}/payment/fail`,
       });
 
@@ -88,7 +88,7 @@ export default function CheckoutClient({
         amount: totalPrice,
         orderId,
         orderName: `영화 티켓 (${seatIds.length}석)`,
-        successUrl: `${API_URL}/api/payment/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
+        successUrl: `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}`, // ✅ paymentKey 제거
         failUrl: `${API_URL}/payment/fail`,
       });
     } catch (error) {

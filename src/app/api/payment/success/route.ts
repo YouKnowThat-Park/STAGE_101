@@ -1,12 +1,9 @@
+import { serverSupabase } from '@/supabase/supabase-server';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
-
 export async function GET(req: NextRequest) {
+  const supabase = await serverSupabase();
   try {
     const { searchParams } = new URL(req.url);
     const reservationId = searchParams.get('reservationId');
@@ -67,5 +64,45 @@ export async function GET(req: NextRequest) {
       },
       { status: 500 },
     );
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    // userId, paymentKey도 구조분해 할당
+    const { orderId, reservationId, amount, userId, paymentKey } = await req.json();
+
+    const supabase = await serverSupabase();
+
+    const { data: paymentData, error: paymentError } = await supabase
+      .from('payments')
+      .insert([
+        {
+          id: orderId,
+          reservation_id: reservationId,
+          amount: parseInt(amount, 10),
+          status: 'paid',
+          user_id: userId,
+          payment_method: '카드',
+          payment_key: paymentKey,
+        },
+      ])
+      .select('id')
+      .single();
+    if (paymentError) throw new Error(paymentError.message);
+
+    // 예약 상태 업데이트
+    const { data: updateData, error: reservationError } = await supabase
+      .from('reservations')
+      .update({ status: 'confirmed' })
+      .eq('id', reservationId)
+      .eq('user_id', userId); // ✅ 사용자 ID 추가
+
+    if (reservationError) throw new Error(reservationError.message);
+
+    return NextResponse.json({ success: true, payment: paymentData, reservation: updateData });
+  } catch (error) {
+    console.error('🚨 결제 확인 오류:', error);
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
