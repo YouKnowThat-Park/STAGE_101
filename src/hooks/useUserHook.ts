@@ -1,11 +1,14 @@
-// hooks/useUserHook.ts
-import fetchUserData from '@/utils/api/fetchUserData';
 import { useQuery } from '@tanstack/react-query';
 
 export const useUserHook = (id: string | null) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['userData', id],
-    queryFn: () => (id ? fetchUserData(id) : Promise.reject('No ID provided')),
+    queryFn: async () => {
+      if (!id) throw new Error('No user ID provided');
+      const res = await fetch(`/api/user?id=${id}`);
+      if (!res.ok) throw new Error('Failed to fetch user data');
+      return res.json();
+    },
     enabled: !!id, // id가 있어야 실행됨
     staleTime: 1000 * 60 * 5, // 5분간 캐싱 유지
   });
