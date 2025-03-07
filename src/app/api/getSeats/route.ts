@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
 
   console.log('🔍 요청된 theaterId:', theaterId);
   console.log('🔍 요청된 좌석 목록:', seatIds);
-  console.log('🛠️ seatIds 타입:', typeof seatIds, Array.isArray(seatIds) ? '배열' : '문자열');
 
   if (!theaterId) {
     return NextResponse.json({ error: 'theaterId is required' }, { status: 400 });
@@ -39,7 +38,7 @@ export async function GET(req: NextRequest) {
   // ✅ 2. reservations 테이블에서 해당 theater_id의 예약 좌석 조회
   let query = supabase
     .from('reservations')
-    .select('seat_number, total_price')
+    .select('seat_number, total_price') // ✅ total_price 추가
     .eq('theater_id', validTheaterId);
 
   // ✅ 특정 좌석만 조회해야 할 경우
@@ -64,6 +63,6 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     reservations: seats,
-    totalPrice: seats.reduce((sum, s) => sum + s.total_price, 0),
+    totalPrice: seats.reduce((sum, s) => sum + s.total_price, 0), // ✅ 총 가격 계산
   });
 }
