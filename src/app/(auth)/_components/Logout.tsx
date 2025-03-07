@@ -37,6 +37,10 @@ const Logout = () => {
     router.push('/mypage');
   };
 
+  const testHandleMovie = () => {
+    router.push('theater');
+  };
+
   return (
     <div className="flex justify-between">
       <button onClick={testHandleLogout}>로그아웃</button>
@@ -44,6 +48,7 @@ const Logout = () => {
       <button onClick={testHandleShop}>상점</button>
       <button onClick={testHandleCart}>장바구니</button>
       <button onClick={testHandleMypage}>마이페이지</button>
+      <button onClick={testHandleMovie}>영화관</button>
     </div>
   );
 };
