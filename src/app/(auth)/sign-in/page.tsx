@@ -11,12 +11,11 @@ import { useUserStore } from '@/store/userStore';
 
 const page = () => {
   const router = useRouter();
-  const { setUser } = useUserStore();
 
   const handleSignIn = async (data: EmailPasswordFormData) => {
     try {
       const user = await signIn(data.email, data.password);
-      setUser(user);
+      useUserStore.getState().setUser(user); // ✅ Zustand 상태 업데이트
 
       router.push('/');
     } catch (error: any) {

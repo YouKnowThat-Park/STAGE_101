@@ -12,13 +12,22 @@ import useAddToCart from '@/hooks/useAddToCart';
 
 const Page = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   const { id } = useParams();
   const shopId = Array.isArray(id) ? id[0] : id;
   const { item, error, loading } = useShopHook(shopId);
   const imageUrl = item?.image_url ? getValidImageUrl(item.image_url) : '/default-image.jpg';
-  const userId = useUserStore((state) => state.user?.id);
+  const userId = useUserStore((state) => state.id);
   const addToCart = useAddToCart();
+
+  const increaseQuantity = () => setQuantity((prev) => prev + 1);
+  const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(1, Number(e.target.value) || 1);
+    setQuantity(value);
+  };
 
   const handleAddToCart = async () => {
     if (!userId) {
@@ -29,6 +38,7 @@ const Page = () => {
       alert('⚠️ 상품 정보를 불러올 수 없습니다.');
       return;
     }
+
     addToCart.mutate({
       userId,
       shopId,
@@ -36,7 +46,7 @@ const Page = () => {
         name: item.name ?? '고객센터 문의',
         point: item.point ?? 0,
         image_url: getValidImageUrl(item.image_url),
-        quantity: 1,
+        quantity,
       },
     });
   };
@@ -50,6 +60,23 @@ const Page = () => {
         width={200}
         unoptimized
       />
+
+      <div className="flex items-center space-x-2 my-4">
+        <button onClick={decreaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
+          ➖
+        </button>
+        <input
+          type="number"
+          value={quantity}
+          onChange={handleInputChange}
+          className="w-12 text-center border border-gray-300 rounded"
+          min={1}
+        />
+        <button onClick={increaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
+          ➕
+        </button>
+      </div>
+
       <div className="flex w-[200px] justify-between">
         <button>구매하기</button>
         <button onClick={handleAddToCart}>장바구니에 담기</button>

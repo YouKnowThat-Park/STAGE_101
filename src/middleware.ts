@@ -22,12 +22,8 @@ export async function middleware(req: NextRequest) {
     error,
   } = await supabase.auth.getUser();
 
-  // ✅ 로그 확인
-  console.log('🔍 미들웨어 실행: ', req.nextUrl.pathname, ' | 로그인 상태:', !!user);
-
   // ✅ 유저가 로그인된 상태라면 `/sign-in`, `/sign-up` 접근 차단 후 `/`로 리다이렉트
   if (user && (req.nextUrl.pathname === '/sign-in' || req.nextUrl.pathname === '/sign-up')) {
-    console.log('🚀 로그인된 유저가 접근 → 홈으로 강제 이동!');
     return NextResponse.redirect(new URL('/', req.url)); // ✅ `/`로 강제 이동
   }
 

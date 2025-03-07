@@ -63,12 +63,6 @@ export default async function signUp({
     const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
     if (authError) return { success: false, message: '회원가입 실패: ' + authError.message };
 
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error('로그아웃 실패', error);
-    }
-
     const userId = authData.user?.id;
     if (!userId) {
       return { success: false, message: '서버 오류: 사용자 ID 생성 실패' };
