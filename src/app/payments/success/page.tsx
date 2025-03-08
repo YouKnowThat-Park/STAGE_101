@@ -76,8 +76,6 @@ const PaymentSuccessPage = () => {
     confirmPayment();
   }, [orderId, reservationId, amount, isConfirmed]);
 
-  console.log(qrToken);
-
   return (
     <div className="flex justify-center items-center h-screen">
       {/* 🎟️ 가로형 티켓 */}

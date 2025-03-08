@@ -20,7 +20,6 @@ export async function POST(req: NextRequest) {
       .eq('theater_id', theater_id)
       .eq('status', 'pending'); // ✅ 기존 `pending` 예약이 있으면 막기
 
-    console.log('existingReservations:', existingReservations);
     if (existingReservations?.length) {
       return NextResponse.json({ error: '이미 예약된 좌석이 있습니다.' }, { status: 409 });
     }

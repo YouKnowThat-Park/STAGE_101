@@ -14,8 +14,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, message: '필수 데이터 누락' }, { status: 400 });
     }
 
-    console.log('✅ 결제 정보 조회:', { reservationId, userId });
-
     // ✅ 결제 및 예약 정보를 조인하여 조회
     const { data, error } = await supabase
       .from('payments')
@@ -52,8 +50,6 @@ export async function POST(req: NextRequest) {
   try {
     const { orderId, reservationId, amount, userId, paymentKey } = await req.json();
     const supabase = await serverSupabase();
-
-    console.log('✅ 결제 요청 데이터:', { orderId, reservationId, amount, userId, paymentKey });
 
     // ✅ 1. 기존 예약 상태 확인 (중복 방지)
     const { data: existingReservation } = await supabase
@@ -159,7 +155,6 @@ export async function POST(req: NextRequest) {
       if (qrError) throw new Error(qrError.message);
     }
 
-    console.log('✅ 결제 성공 및 예약 확정 완료');
     return NextResponse.json({ success: true, qr_token: qrToken });
   } catch (error: any) {
     console.error('🚨 결제 확인 오류:', error);
