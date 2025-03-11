@@ -82,13 +82,13 @@ export default function CheckoutClient({
       const showTime = theaterData?.show_time || '시간대 없음';
       const url = `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${encodeURIComponent(name)}&userPhone=${encodeURIComponent(phone)}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
 
-      // console.log('✅ 요청된 결제 정보:', {
-      //   amount: totalPrice,
-      //   orderId,
-      //   orderName: `영화 티켓 (${seatIds.length}석)`,
-      //   successUrl: url, // ✅ paymentKey 제거
-      //   failUrl: `${API_URL}/payment/fail`,
-      // });
+      console.log('✅ 요청된 결제 정보:', {
+        amount: totalPrice,
+        orderId,
+        orderName: `영화 티켓 (${seatIds.length}석)`,
+        successUrl: url, // ✅ paymentKey 제거
+        failUrl: `${API_URL}/payment/fail`,
+      });
 
       await tossPayments.requestPayment('카드', {
         amount: totalPrice,

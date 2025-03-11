@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { subscribeToSeats } from '@/supabase/supabaseSubscription';
+import { fetchSeats, subscribeToSeats } from '@/supabase/supabaseSubscription';
 import { useReserveSeats } from '@/hooks/useReserveSeats';
 import { browserSupabase } from '@/supabase/supabase-client';
 import { useTheaterData } from '@/hooks/useTheaterData';
@@ -14,7 +14,7 @@ interface ClientPaymentsPageProps {
 const supabase = browserSupabase();
 
 export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPaymentsPageProps) {
-  // 🚨 theaterId가 없으면 즉시 오류 반환 (필수값)
+  console.log(theaterId);
   if (!theaterId) {
     return <div className="text-white text-center p-6">🚨 극장 정보가 없습니다.</div>;
   }
@@ -22,50 +22,48 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
   const { data: theaterData, isLoading, error } = useTheaterData(theaterId);
   const [reservedSeats, setReservedSeats] = useState<string[]>(initialSeats);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [userId, setUserId] = useState<string | null>(null); // ✅ 유저 ID 상태 추가
+  const [userId, setUserId] = useState<string | null>(null);
   const { reserveSeats, loading, error: reserveError } = useReserveSeats();
   const router = useRouter();
 
-  // ✅ Supabase에서 유저 정보 가져오기 (최초 한 번 실행)
+  useEffect(() => {
+    console.log(`🔄 [useEffect] reservedSeats 변경됨:`, reservedSeats);
+  }, [reservedSeats]);
+
   useEffect(() => {
     async function fetchUser() {
-      const { data: session, error } = await supabase.auth.getSession(); // ✅ 세션 정보 가져오기
+      const { data: session, error } = await supabase.auth.getSession();
       if (error) {
         setUserId(null);
         return;
       }
-      setUserId(session.session?.user?.id || null); // ✅ 세션에서 유저 ID 가져오기
+      setUserId(session.session?.user?.id || null);
     }
 
     fetchUser();
   }, []);
 
-  // ✅ 좌석 실시간 구독 (최초 한 번 실행)
   useEffect(() => {
-    const unsubscribe = subscribeToSeats(setReservedSeats);
+    async function fetchData() {
+      console.log(`🎯 [useEffect] fetchSeats 실행: ${theaterId}`);
 
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe(); // ✅ 함수인지 확인한 후 실행
-      }
-    };
-  }, []);
+      const seats = await fetchSeats(theaterId);
+      console.log(`✅ [useEffect] fetchSeats 완료, 좌석:`, seats);
 
-  // ✅ 좌석 클릭 핸들러 (최대 4개까지만 선택 가능)
+      setReservedSeats(seats); // ✅ 직접 업데이트
+    }
+
+    fetchData();
+  }, [theaterId]);
+
   const handleSeatClick = (seat: string) => {
-    if (reservedSeats.includes(seat)) return; // 🚫 이미 예약된 좌석은 선택 불가
+    if (reservedSeats.includes(seat)) return;
 
-    setSelectedSeats((prev) => {
-      if (prev.includes(seat)) {
-        return prev.filter((s) => s !== seat); // ✅ 선택 해제
-      } else if (prev.length < 4) {
-        return [...prev, seat]; // ✅ 최대 4개까지만 선택 가능
-      }
-      return prev;
-    });
+    setSelectedSeats((prev) =>
+      prev.includes(seat) ? prev.filter((s) => s !== seat) : [...prev, seat].slice(0, 4),
+    );
   };
 
-  // ✅ 결제 버튼 클릭 핸들러 → 선택된 좌석과 함께 결제 페이지로 이동
   const handlePayment = async () => {
     if (selectedSeats.length === 0 || !userId || !theaterId) {
       alert('🚨 유저 정보 또는 극장 정보가 없습니다.');
@@ -78,13 +76,8 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
       return;
     }
 
-    const seatId = selectedSeats.join('-');
-    router.push(`/payments/${theaterId}/${seatId}`); // ✅ 극장 ID도 함께 전달
+    router.push(`/payments/${theaterId}/${selectedSeats.join('-')}`);
   };
-
-  if (isLoading) return <p className="text-white text-center p-6">🚀 극장 정보 불러오는 중...</p>;
-  if (error)
-    return <p className="text-red-500 text-center p-6">❌ 극장 정보를 불러올 수 없습니다.</p>;
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-900 text-white p-6">

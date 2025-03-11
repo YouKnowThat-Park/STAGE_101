@@ -7,11 +7,11 @@ export async function getSeats(theaterId: string, seatIds?: string[]): Promise<s
     throw new Error('🚨 theaterId가 없습니다.');
   }
 
-  // ✅ 1. theaterId를 UUID로 변환
+  // ✅ 1. theaterId를 UUID로 변환 (theaters 테이블에서 조회)
   const { data: theater, error: theaterError } = await supabase
     .from('theaters')
     .select('id')
-    .eq('type', theaterId)
+    .eq('type', theaterId) // 'musicalB' 같은 type을 기준으로 검색
     .single();
 
   if (theaterError || !theater) {
@@ -19,12 +19,11 @@ export async function getSeats(theaterId: string, seatIds?: string[]): Promise<s
     throw new Error(`🚨 유효하지 않은 theaterId입니다: ${theaterId}`);
   }
 
-  const validTheaterId = theater.id;
+  const validTheaterId = theater.id; // ✅ UUID 변환 완료
 
   // ✅ 2. reservations 테이블에서 해당 theater_id의 예약 좌석 조회
   let query = supabase.from('reservations').select('seat_number').eq('theater_id', validTheaterId);
 
-  // ✅ 특정 좌석만 조회해야 할 경우
   if (seatIds && seatIds.length > 0) {
     query = query.in('seat_number', seatIds);
   }
@@ -36,11 +35,5 @@ export async function getSeats(theaterId: string, seatIds?: string[]): Promise<s
     throw new Error(`🚨 좌석 정보를 불러오는 중 오류 발생: ${seatError.message}`);
   }
 
-  if (!seats || seats.length === 0) {
-    console.error('🚨 해당 좌석 없음:', seatIds);
-    throw new Error(`🚨 요청한 좌석을 찾을 수 없습니다: ${seatIds}`);
-  }
-
-  // ✅ seat_number만 추출하여 `string[]` 배열로 반환
   return seats.map((seat) => seat.seat_number);
 }
