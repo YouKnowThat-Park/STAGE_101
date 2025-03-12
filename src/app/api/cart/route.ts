@@ -83,3 +83,30 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { user_id, shop_id, quantity } = await req.json();
+
+    if (!user_id || !shop_id || quantity === undefined) {
+      return NextResponse.json({ error: '🚨 잘못된 요청입니다.' }, { status: 400 });
+    }
+
+    const supabase = await serverSupabase();
+    const { error } = await supabase
+      .from('cart')
+      .update({ quantity })
+      .eq('user_id', user_id)
+      .eq('shop_id', shop_id);
+
+    if (error) {
+      console.error('🚨 장바구니 수량 업데이트 실패:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return new Response(null, { status: 204 }); // ✅ 성공하면 204 No Content 반환
+  } catch (error) {
+    console.error('🚨 서버 오류:', error);
+    return NextResponse.json({ error: '🚨 서버 오류 발생' }, { status: 500 });
+  }
+}
