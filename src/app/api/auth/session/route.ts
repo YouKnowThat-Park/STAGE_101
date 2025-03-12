@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { serverSupabase } from '@/supabase/supabase-server';
 
 export async function GET() {
-  const supabase = serverSupabase();
+  const supabase = await serverSupabase();
 
   // ✅ Supabase의 세션을 가져와서 검증
   const { data: session } = await supabase.auth.getSession();

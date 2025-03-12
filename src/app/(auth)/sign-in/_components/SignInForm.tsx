@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthInputField from '../../_components/AuthInputField';
 import { Controller, useForm } from 'react-hook-form';
 import { EmailPasswordFormData, emailPasswordSchema } from '../../_components/CommonSchemas';
@@ -16,10 +16,17 @@ interface SingInFormProps {
 const SignInForm = ({ onSubmit }: SingInFormProps) => {
   const {
     control,
-    register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<EmailPasswordFormData>({ resolver: zodResolver(emailPasswordSchema) });
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('savedEmail');
+    if (savedEmail) {
+      setValue('email', savedEmail);
+    }
+  }, [setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -12,7 +12,7 @@ const AuthInputField = forwardRef<HTMLInputElement, AuthInputFieldProps>(
     return (
       <div>
         <label>{label}</label>
-        <input ref={ref} type={type} value={value} onChange={onChange} />
+        <input ref={ref} type={type} value={value} onChange={onChange} className=" w-full h-10" />
       </div>
     );
   },
