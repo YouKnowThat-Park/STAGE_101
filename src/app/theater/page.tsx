@@ -4,14 +4,14 @@ export default function TheaterPage() {
   return (
     <div className="relative h-[700px] bg-black text-white">
       {/* ✅ 배경 이미지 */}
-      <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20"></div>
+      <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20 md:bg-none"></div>
 
       {/* ✅ 메인 콘텐츠 */}
       <div className="relative z-10 flex flex-col items-center py-20">
         <h1 className="text-4xl font-bold mb-12">🎭 공연 예정 중인 작품</h1>
 
         {/* ✅ 공연 리스트 (그리드) */}
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-12">
           {/* 🎟️ 레미제라블 카드 */}
           <div className="relative w-[300px] h-[450px] bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105">
             <Image

@@ -22,7 +22,7 @@ const TheaterPage = () => {
     <div>
       {/* {data.type === 'cinemaA' && <CinemaA {...data} />}
       {data.type === 'cinemaB' && <CinemaB {...data} />} */}
-      {data.type === 'musicalA' && <MusicalA {...data} />}
+      {data.type === 'musicalA' && <MusicalA {...data} theaterId={theaterId} />}
       {data.type === 'musicalB' && <MusicalB {...data} theaterId={theaterId} />}
     </div>
   );
