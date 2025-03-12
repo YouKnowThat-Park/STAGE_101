@@ -6,6 +6,8 @@ import { useTheaterData } from '@/hooks/useTheaterData';
 // import CinemaB from '@/app/theater/_components/CinemaB';
 import MusicalA from '@/app/theater/_components/MusicalA';
 import MusicalB from '@/app/theater/_components/MusicalB';
+import CinemaA from '../_components/CinemaA';
+import CinemaB from '../_components/CinemaB';
 
 const TheaterPage = () => {
   const params = useParams();
@@ -20,8 +22,8 @@ const TheaterPage = () => {
 
   return (
     <div>
-      {/* {data.type === 'cinemaA' && <CinemaA {...data} />}
-      {data.type === 'cinemaB' && <CinemaB {...data} />} */}
+      {data.type === 'cinemaA' && <CinemaA {...data} theaterId={theaterId} />}
+      {data.type === 'cinemaB' && <CinemaB {...data} theaterId={theaterId} />}
       {data.type === 'musicalA' && <MusicalA {...data} theaterId={theaterId} />}
       {data.type === 'musicalB' && <MusicalB {...data} theaterId={theaterId} />}
     </div>

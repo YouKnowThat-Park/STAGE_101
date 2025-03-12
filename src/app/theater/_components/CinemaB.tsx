@@ -33,28 +33,29 @@ const CinemaB = ({
   const router = useRouter();
 
   const handleReservationGo = () => {
-    router.push(`/payments/${theaterId}`); // ✅ theaterId를 포함해서 전달
+    router.push(`/payments/${theaterId}`);
   };
 
   return (
-    <div className=" text-white min-h-screen p-6 flex flex-col items-center">
-      {/* 🎬 영화 포스터 & 정보 */}
-      <div className="flex gap-20 w-full max-w-4xl">
+    <div className="text-white min-h-screen p-6 flex flex-col items-center">
+      {/* 🎬 포스터 및 정보 */}
+      <div className="flex flex-col w-full max-w-4xl">
         <Image
           src={main_img}
-          alt="영화 포스터"
-          width={300}
+          alt="뮤지컬 포스터"
+          width={1000}
           height={500}
           className="rounded-lg shadow-lg"
         />
-        <div className="flex flex-col justify-center">
-          <p className="font-bold text-4xl">{name}</p>
-          <div className="flex justify-center items-center gap-2 text-gray-300">
-            <p className="text-xl">상영 시간: {show_time}</p>
-            <p>/</p>
-            <p className="text-lg">{total_time}분</p>
-          </div>
-          <p className="text-2xl font-semibold mt-4 text-yellow-400">
+      </div>
+
+      <div className="w-full max-w-4xl flex justify-between items-center mt-4">
+        <h2 className="text-4xl font-bold">{name}</h2>
+        <div className="text-right">
+          <p className="text-xl">
+            상영 시간: {show_time} / {total_time}분
+          </p>
+          <p className="text-lg font-semibold text-yellow-400 mt-1">
             가격: {price.toLocaleString()}원
           </p>
         </div>
@@ -69,7 +70,7 @@ const CinemaB = ({
       <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full max-w-4xl">
         <p className="text-center text-xl font-semibold mb-4">좌석 선택</p>
 
-        {/* 🎭 연극 무대 (가운데 정렬) */}
+        {/* 🎭 연극 무대 */}
         <div className="flex justify-center my-4">
           <div className="bg-[#494744] text-white text-center py-6 w-40 h-20 rounded-md text-xl font-bold">
             STAGE
@@ -90,10 +91,41 @@ const CinemaB = ({
               ))}
             </div>
           ))}
-          <button onClick={handleReservationGo} className="ml-[700px]">
+        </div>
+
+        {/* 🛒 예약 버튼 */}
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={handleReservationGo}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-md transition"
+          >
             좌석 예약
           </button>
         </div>
+      </div>
+
+      <div className="bg-[#3c3a37] p-6  mt-6 w-full max-w-4xl">
+        <h2 className="text-xl font-bold text-red-400 mb-3">⚠️ 관람 안내 및 유의 사항</h2>
+        <ul className="text-gray-300 space-y-2 list-disc pl-6">
+          <li>공연이 시작된 후에는 입장이 제한될 수 있습니다.</li>
+          <li>모든 좌석은 지정 좌석제로 운영되며, 임의로 좌석을 변경할 수 없습니다.</li>
+          <li>공연 중 사진 촬영, 녹음 및 영상 촬영은 금지됩니다.</li>
+          <li>음식물 반입이 제한될 수 있으며, 음료는 지정된 장소에서만 섭취 가능합니다.</li>
+          <li>티켓 취소 및 환불 규정은 공연 기획사 정책에 따라 다를 수 있습니다.</li>
+          <li>안전한 관람을 위해 어린이 및 노약자는 보호자의 동반이 필요합니다.</li>
+          <li>모든 공연은 주최 측 사정에 따라 변경 또는 취소될 수 있습니다.</li>
+        </ul>
+
+        <h2 className="text-xl font-bold text-red-400 mt-6">⚠️ 중요 공지</h2>
+        <p className="text-gray-300 mt-2">
+          이 페이지는 <span className="text-red-400 font-bold">실제 예매 페이지가 아닙니다.</span>
+          <br />
+          **모든 극장 위치, 연극 및 공연 정보는 임의로 만들어진 가상의 콘텐츠**이며, 예매 및 결제
+          기능은 테스트 용도로만 제공됩니다.
+          <br />
+          실제 공연 관람을 원하신다면 <span className="text-yellow-400 font-bold">공식 예매처</span>
+          를 이용해주세요.
+        </p>
       </div>
     </div>
   );
