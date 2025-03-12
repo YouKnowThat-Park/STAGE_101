@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
     .from('theaters')
     .select('*') // ✅ 모든 필드 가져오기 (필요하면 'seats, price' 등으로 변경 가능)
     .eq('type', theaterId) // ✅ `type`으로 검색해야 함!
+    .eq('status', false)
     .single();
 
   if (error || !theater) {
