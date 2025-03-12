@@ -4,10 +4,12 @@ import { CartType } from '@/types/cart.type';
 interface AddToCartProps {
   userId: string;
   shopId: string;
-  item: Omit<CartType, 'id' | 'user_id' | 'shop_id' | 'created_at'>; // ✅ id 제외 (DB에서 자동 생성되므로)
+  item: Omit<CartType, 'id' | 'user_id' | 'shop_id' | 'created_at'>;
+  quantity?: number; // ✅ 수량을 추가하여 업데이트에도 활용 가능
 }
 
-const addToCart = async ({ userId, shopId, item }: AddToCartProps) => {
+// ✅ 장바구니에 추가 또는 업데이트 요청
+const addToCart = async ({ userId, shopId, item, quantity }: AddToCartProps) => {
   const res = await fetch('/api/cart', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -15,6 +17,7 @@ const addToCart = async ({ userId, shopId, item }: AddToCartProps) => {
       user_id: userId,
       shop_id: shopId,
       ...item,
+      quantity: quantity ?? item.quantity, // ✅ 수량 변경을 위한 로직 추가
     }),
   });
 
@@ -30,8 +33,8 @@ const useAddToCart = () => {
   return useMutation({
     mutationFn: addToCart,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] }); // ✅ 장바구니 캐시 무효화 → 자동 업데이트
-      alert('✅ 장바구니에 추가되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      alert('✅ 장바구니가 업데이트되었습니다.');
     },
     onError: (error: any) => {
       alert(error.message);
