@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="w-full h-16 bg-white mb-[50px] ">
+      <div className="w-full h-16 bg-white mb-[50px] mt-10 ">
         <Logout />
       </div>
     </header>

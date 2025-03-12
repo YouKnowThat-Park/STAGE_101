@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import { Noto_Serif_KR } from 'next/font/google';
 import './globals.css';
 import Providers from './_providers/providers';
-import { usePathname } from 'next/navigation';
-import Header from './Header';
 import Footer from './Footer';
+import Header from './Header';
 
 const notoSerif = Noto_Serif_KR({
   subsets: ['latin'],
