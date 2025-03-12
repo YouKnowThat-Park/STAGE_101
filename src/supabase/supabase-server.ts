@@ -11,7 +11,10 @@ export async function serverSupabase() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get: async (name: string) => cookieStore.get(name)?.value ?? null,
+        get: async (name: string) => {
+          const value = cookieStore.get(name)?.value ?? null;
+          return value;
+        },
         set: async (name, value, options) => {
           cookieStore.set(name, value, { path: '/', ...options });
         },
