@@ -1,13 +1,21 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
-    <div>
-      <div className="bg-white w-full h-[450px]"></div>
-      <div className="flex py-2 gap-10">
-        <div className="bg-white w-1/2 h-[100px]">안녕</div>
-        <div className="bg-white w-1/2 h-[100px]">안녕</div>
+    <div className="min-h-screen bg-gray-100">
+      <div className="w-full h-[400px] bg-white shadow-md rounded-lg p-6">
+        <p>Welcome to Home!</p>
       </div>
-      <div className="bg-white w-full h-[450px]"></div>
-      <div></div>
+      <div className="flex gap-10">
+        <Link href={'/guestbook'}>
+          <div className=" h-[400px] bg-white shadow-md rounded-lg mt-20">
+            <p>방명록 남기러 가기</p>
+          </div>
+        </Link>
+        <div>
+          <p>안녕하신가</p>
+        </div>
+      </div>
     </div>
   );
 }
