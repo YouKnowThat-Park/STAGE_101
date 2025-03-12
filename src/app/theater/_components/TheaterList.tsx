@@ -18,12 +18,13 @@ const TheaterList = () => {
   return (
     <div className="flex justify-center items-center px-10 py-14  gap-5">
       <button
-        onClick={handleGoBack}
+        onClick={() => router.push('/')}
         className="text-2xl font-bold
-      "
+        "
       >
         STAGE_101
       </button>
+      <button onClick={handleGoBack}>상영 예정</button>
       {theaters.map((theater) => (
         <button
           key={theater.id}
