@@ -8,6 +8,7 @@ const MypageReview = () => {
 
   const formatDateToKST = (dateString: string) =>
     new Date(dateString).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
+
   return (
     <section className="p-4">
       <ul>
