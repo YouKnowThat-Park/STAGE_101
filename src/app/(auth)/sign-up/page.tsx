@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -71,12 +70,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-=======
-import React from "react";
-
-const page = () => {
-  return <div></div>;
-};
-
-export default page;
->>>>>>> main
