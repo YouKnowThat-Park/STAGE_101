@@ -21,7 +21,7 @@ const buttonTabs = [
     key: 'ticket',
     label: (
       <div className="flex flex-col items-center">
-        <TicketIcon />
+        {/* <TicketIcon /> */}
         <span>TICKET</span>
       </div>
     ),
@@ -30,7 +30,7 @@ const buttonTabs = [
     key: 'review',
     label: (
       <div className="flex flex-col items-center">
-        <ReviewIcon />
+        {/* <ReviewIcon /> */}
         <span>REVIEW</span>
       </div>
     ),
@@ -39,7 +39,7 @@ const buttonTabs = [
     key: 'history',
     label: (
       <div className="flex flex-col items-center">
-        <HistoryIcon />
+        {/* <HistoryIcon /> */}
         <span>HISTORY</span>
       </div>
     ),
@@ -48,7 +48,7 @@ const buttonTabs = [
     key: 'qna',
     label: (
       <div className="flex flex-col items-center">
-        <InquiryIcon />
+        {/* <InquiryIcon /> */}
         <span>Q&A</span>
       </div>
     ),
@@ -66,7 +66,7 @@ const MyPage = () => {
         <MypageFooter />
       </div>
 
-      <div className="w-[600px] h-[740px] bg-white flex flex-col justify-end ml-auto mt-20">
+      <div className="w-[600px] h-[740px] bg-white flex flex-col  ml-auto mt-20">
         {/* 프로필 & 유저 정보 */}
         <MypageProfile
           profile_img={profile_img || defaultProfileImg}
@@ -77,14 +77,17 @@ const MyPage = () => {
 
         {/* 네비게이션 탭 */}
         <div className="bg-white max-w-4xl p-2 ">
-          <nav className="flex justify-center items-center gap-20 border-b-2">
+          <nav className="flex justify-center items-center gap-20 border-b-2 border-gray-300">
             {buttonTabs.map((tab) => (
-              <MypageButton
+              <button
                 key={tab.key}
-                label={tab.label}
                 onClick={() => setSelectedTab(tab.key)}
-                isActive={selectedTab === tab.key}
-              />
+                className={` py-2  border-b-2 ${
+                  selectedTab === tab.key ? 'border-black' : 'border-transparent'
+                }`}
+              >
+                {tab.label}
+              </button>
             ))}
           </nav>
           {/* 선택된 탭에 따라 내용 변경 */}
