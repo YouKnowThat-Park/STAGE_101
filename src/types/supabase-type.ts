@@ -102,6 +102,44 @@ export type Database = {
           },
         ]
       }
+      cart_history: {
+        Row: {
+          created_at: string
+          id: string
+          payment_key: string
+          quantity: number
+          status: boolean
+          total_price: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_key?: string
+          quantity: number
+          status?: boolean
+          total_price: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_key?: string
+          quantity?: number
+          status?: boolean
+          total_price?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_history_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       concession_menu: {
         Row: {
           category: string
@@ -272,6 +310,7 @@ export type Database = {
           expires_at: string | null
           id: string
           qr_token: string
+          reservation_id: string
           theater_id: string
           user_id: string
         }
@@ -280,6 +319,7 @@ export type Database = {
           expires_at?: string | null
           id?: string
           qr_token?: string
+          reservation_id?: string
           theater_id?: string
           user_id?: string
         }
@@ -288,6 +328,7 @@ export type Database = {
           expires_at?: string | null
           id?: string
           qr_token?: string
+          reservation_id?: string
           theater_id?: string
           user_id?: string
         }
@@ -361,6 +402,7 @@ export type Database = {
           id: string
           like_count: number | null
           theater_id: string
+          type: string
           user_id: string
         }
         Insert: {
@@ -370,6 +412,7 @@ export type Database = {
           id?: string
           like_count?: number | null
           theater_id?: string
+          type: string
           user_id?: string
         }
         Update: {
@@ -379,6 +422,7 @@ export type Database = {
           id?: string
           like_count?: number | null
           theater_id?: string
+          type?: string
           user_id?: string
         }
         Relationships: [
@@ -569,6 +613,27 @@ export type Database = {
         Args: {
           p_user_id: string
           p_shop_id: string
+        }
+        Returns: undefined
+      }
+      insert_payment_if_not_exists: {
+        Args: {
+          p_id: string
+          p_user_id: string
+          p_reservation_id: string
+          p_amount: number
+          p_status: string
+          p_payment_key: string
+          p_payment_method: string
+        }
+        Returns: undefined
+      }
+      process_reservation: {
+        Args: {
+          seat_numbers: string[]
+          theater_id: string
+          user_id: string
+          total_price: number
         }
         Returns: undefined
       }
