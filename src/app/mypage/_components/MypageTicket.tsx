@@ -21,7 +21,7 @@ const MypageTicket = () => {
   const { data: history } = useTicketHistory(userId ?? '');
 
   return (
-    <section className="flex flex-col justify-center items-center bg-white h-[500px] gap-5">
+    <section className="flex flex-col  items-center bg-white h-[500px] gap-5">
       {!history || history.length === 0 ? (
         // ✅ 예약 내역이 없을 때
         <div className="flex flex-col items-center">
@@ -30,7 +30,7 @@ const MypageTicket = () => {
         </div>
       ) : (
         // ✅ 예약 내역이 있을 때
-        <div className="w-full max-w-lg p-5 rounded-lg shadow-md border bg-[#151515] border-black h-[400px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+        <div className="w-full max-w-lg p-5 rounded-lg shadow-md border bg-[#151515] border-black h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <h2 className="text-xl font-semibold mb-4 text-white">My Tickets</h2>
           <ul className="space-y-4">
             {history.map((ticket) => (
