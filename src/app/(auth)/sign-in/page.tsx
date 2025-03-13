@@ -11,7 +11,7 @@ import { useUserStore } from '@/store/userStore';
 import { startTransition } from 'react';
 import { socialLogin } from './kakao/actions';
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   const handleSignIn = async (data: EmailPasswordFormData) => {
@@ -85,4 +85,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
