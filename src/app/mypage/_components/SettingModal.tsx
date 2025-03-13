@@ -1,12 +1,8 @@
+import { ModalProps } from '@/types/modal/modal-type';
 import DeleteIcon from '@/ui/icon/DeleteIcon';
 import React, { useState } from 'react';
 
-interface SettingModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const SettingModal = ({ isOpen, onClose }: SettingModalProps) => {
+const SettingModal = ({ isOpen, onClose }: ModalProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleDeleteAccount = async () => {
