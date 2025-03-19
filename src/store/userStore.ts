@@ -2,11 +2,7 @@ import { UserType } from '@/types/user-type';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface UserState {
-  id: string | null;
-  email: string | null;
-  nickname: string | null;
-  profile_img: string | null;
+interface UserState extends UserType {
   setUser: (user: UserType | null) => void;
   clearUser: () => void;
 }
@@ -15,24 +11,41 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      id: null,
-      email: null,
-      nickname: null,
-      profile_img: null,
+      id: '',
+      email: '',
+      nickname: '',
+      profile_img: '',
+      created_at: '',
+      name: '',
+      phone: '',
+      point: null,
       setUser: (user) => {
         if (user) {
-          set({
-            id: user.id,
-            email: user.email,
-            nickname: user.nickname,
-            profile_img: user.profile_img,
-          });
+          set({ ...user });
         } else {
-          set({ id: null, email: null, nickname: null, profile_img: null });
+          set({
+            id: '',
+            email: '',
+            nickname: '',
+            profile_img: '',
+            created_at: '',
+            name: '',
+            phone: '',
+            point: null,
+          });
         }
       },
       clearUser: () => {
-        set({ id: null, email: null, nickname: null, profile_img: null });
+        set({
+          id: '',
+          email: '',
+          nickname: '',
+          profile_img: '',
+          created_at: '',
+          name: '',
+          phone: '',
+          point: null,
+        });
       },
     }),
     {
@@ -43,6 +56,10 @@ export const useUserStore = create<UserState>()(
         email: state.email,
         nickname: state.nickname,
         profile_img: state.profile_img,
+        created_at: state.created_at,
+        name: state.name,
+        phone: state.phone,
+        point: state.point,
       }), // ✅ 불필요한 데이터 저장 방지
     },
   ),
