@@ -17,5 +17,6 @@ const AuthInputField = forwardRef<HTMLInputElement, AuthInputFieldProps>(
     );
   },
 );
+AuthInputField.displayName = 'AuthInputField'; // ✅ 추가
 
 export default AuthInputField;
