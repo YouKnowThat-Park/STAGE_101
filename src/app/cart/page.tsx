@@ -11,7 +11,6 @@ import DeleteIcon from '@/ui/icon/DeleteIcon';
 import MinusIcon from '@/ui/icon/MinusIcon';
 import PlusIcon from '@/ui/icon/PlusIcon';
 import useUpdateCartQuantity from '@/hooks/useUpdateCartQuantity';
-import { checkoutCart } from '../../lib/checkoutCart';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -41,7 +40,11 @@ const CartPage = () => {
     if (!userId || !shopId) return;
     try {
       await deleteCartData(userId, shopId);
-      await queryClient.invalidateQueries({ queryKey: ['cart', userId] });
+
+      // ✅ 2초 뒤에 장바구니 데이터 새로고침
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({ queryKey: ['cart', userId] });
+      }, 2000); // 2초 뒤 실행
     } catch (error) {
       console.error('error', error);
       alert('삭제 중 오류가 발생했습니다.');
