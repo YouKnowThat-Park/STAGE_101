@@ -2,9 +2,12 @@ import BlogIcon from '@/ui/icon/BlogIcon';
 import CvIcon from '@/ui/icon/CvIcon';
 import GitHubIcon from '@/ui/icon/GitHubIcon';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import SettingModal from './SettingModal';
 
 const MypageFooter = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   return (
     <div className="text-gray-500 flex flex-col items-center">
       <div className="border-t-2 border-t-black py-10 w-full">
@@ -51,6 +54,9 @@ const MypageFooter = () => {
             <Link href="/ui/notice" className="text-gray-400 hover:text-white text-sm">
               고객센터
             </Link>
+            <button className=" text-red-500" onClick={() => setIsOpenModal(true)}>
+              화원 탈퇴
+            </button>
           </nav>
 
           {/* 소셜 미디어 */}
@@ -77,6 +83,7 @@ const MypageFooter = () => {
           © 2024 STAGE_101. All Rights Reserved.
         </div>
       </div>
+      {isOpenModal && <SettingModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />}
     </div>
   );
 };

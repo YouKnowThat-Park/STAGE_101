@@ -31,13 +31,30 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={onClose}
     >
-      <div className="w-[500px] h-[500px] bg-white">
-        <button onClick={onClose}>
-          <DeleteIcon />
+      <div
+        className="w-[400px] max-w-lg bg-white rounded-lg shadow-lg p-6 flex flex-col items-center"
+        onClick={(e) => e.stopPropagation()} // 클릭시 모달이 닫히지 않도록 방지
+      >
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">회원 탈퇴</h2>
+
+        <p className="text-gray-600 mb-6">
+          회원 탈퇴를 진행하면 계정과 관련된 모든 데이터가 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+        </p>
+
+        <button
+          className="w-full mb-4 py-2 px-4 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none"
+          onClick={handleDeleteAccount}
+          disabled={loading}
+        >
+          {loading ? '탈퇴 중...' : '회원 탈퇴'}
         </button>
 
-        <button>비밀번호 변경</button>
-        <button onClick={handleDeleteAccount}>회원 탈퇴</button>
+        <button
+          className="w-full py-2 px-4 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none"
+          onClick={onClose}
+        >
+          취소
+        </button>
       </div>
     </div>
   );
