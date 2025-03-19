@@ -104,33 +104,49 @@ export type Database = {
       }
       cart_history: {
         Row: {
+          cart_id: string | null
           created_at: string
           id: string
+          image_url: string | null
+          name: string | null
           payment_key: string
           quantity: number
-          status: boolean
+          status: Database["public"]["Enums"]["cart_status"]
           total_price: number
           user_id: string
         }
         Insert: {
+          cart_id?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
+          name?: string | null
           payment_key?: string
           quantity: number
-          status?: boolean
+          status?: Database["public"]["Enums"]["cart_status"]
           total_price: number
           user_id?: string
         }
         Update: {
+          cart_id?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
+          name?: string | null
           payment_key?: string
           quantity?: number
-          status?: boolean
+          status?: Database["public"]["Enums"]["cart_status"]
           total_price?: number
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "cart_history_cart_id_fkey"
+            columns: ["cart_id"]
+            isOneToOne: false
+            referencedRelation: "cart"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "cart_history_user_id_fkey"
             columns: ["user_id"]
@@ -354,28 +370,34 @@ export type Database = {
           created_at: string
           id: string
           seat_number: string
+          show_time: string
           status: string
           theater_id: string
           total_price: number
           user_id: string
+          viewed_at: string
         }
         Insert: {
           created_at?: string
           id?: string
           seat_number: string
+          show_time: string
           status: string
           theater_id?: string
           total_price: number
           user_id?: string
+          viewed_at: string
         }
         Update: {
           created_at?: string
           id?: string
           seat_number?: string
+          show_time?: string
           status?: string
           theater_id?: string
           total_price?: number
           user_id?: string
+          viewed_at?: string
         }
         Relationships: [
           {
@@ -399,8 +421,9 @@ export type Database = {
           comment: string
           created_at: string
           dislike_count: number | null
+          display_name: string
           id: string
-          like_count: number | null
+          image_url: string | null
           theater_id: string
           type: string
           user_id: string
@@ -409,8 +432,9 @@ export type Database = {
           comment: string
           created_at?: string
           dislike_count?: number | null
+          display_name: string
           id?: string
-          like_count?: number | null
+          image_url?: string | null
           theater_id?: string
           type: string
           user_id?: string
@@ -419,8 +443,9 @@ export type Database = {
           comment?: string
           created_at?: string
           dislike_count?: number | null
+          display_name?: string
           id?: string
-          like_count?: number | null
+          image_url?: string | null
           theater_id?: string
           type?: string
           user_id?: string
@@ -522,48 +547,51 @@ export type Database = {
       }
       theaters: {
         Row: {
+          allowed_days: Database["public"]["Enums"]["theaters_days"] | null
           created_at: string
-          day_of_week: string
           description: string
+          end_date: string | null
           id: string
           image_url: Json
           main_img: string
           name: string
           price: number
-          screening_date: string
           show_time: string
+          start_date: string | null
           status: boolean
           total_time: number
           type: string
           video_url: Json
         }
         Insert: {
+          allowed_days?: Database["public"]["Enums"]["theaters_days"] | null
           created_at?: string
-          day_of_week: string
           description: string
+          end_date?: string | null
           id?: string
           image_url: Json
           main_img: string
           name: string
           price: number
-          screening_date: string
           show_time: string
+          start_date?: string | null
           status: boolean
           total_time: number
           type: string
           video_url: Json
         }
         Update: {
+          allowed_days?: Database["public"]["Enums"]["theaters_days"] | null
           created_at?: string
-          day_of_week?: string
           description?: string
+          end_date?: string | null
           id?: string
           image_url?: Json
           main_img?: string
           name?: string
           price?: number
-          screening_date?: string
           show_time?: string
+          start_date?: string | null
           status?: boolean
           total_time?: number
           type?: string
@@ -616,6 +644,19 @@ export type Database = {
         }
         Returns: undefined
       }
+      insert_confirmed_reservation: {
+        Args: {
+          _id: string
+          _seat_number: string
+          _user_id: string
+          _theater_id: string
+          _status: string
+          _total_price: number
+          _viewed_at: string
+          _show_time: string
+        }
+        Returns: undefined
+      }
       insert_payment_if_not_exists: {
         Args: {
           p_id: string
@@ -628,18 +669,31 @@ export type Database = {
         }
         Returns: undefined
       }
-      process_reservation: {
-        Args: {
-          seat_numbers: string[]
-          theater_id: string
-          user_id: string
-          total_price: number
-        }
-        Returns: undefined
-      }
+      process_reservation:
+        | {
+            Args: {
+              seat_numbers: string[]
+              theater_id: string
+              user_id: string
+              total_price: number
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              seat_numbers: string[]
+              theater_id: string
+              user_id: string
+              total_price: number
+              viewed_at: string
+              show_time: string
+            }
+            Returns: undefined
+          }
     }
     Enums: {
-      [_ in never]: never
+      cart_status: "pending" | "completed" | "canceled"
+      theaters_days: "odd" | "even"
     }
     CompositeTypes: {
       [_ in never]: never
