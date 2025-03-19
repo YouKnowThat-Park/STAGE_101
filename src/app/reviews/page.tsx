@@ -1,85 +1,58 @@
 'use client';
+
+import { useState } from 'react';
+import { useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import BronzeCrownIcon from '@/ui/icon/BronzeCrownIcon';
-import ReviewAddModal from './_components/ReviewAddModal';
 import Image from 'next/image';
 import { ReviewsType } from '@/types/review.type';
-import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { useQueryClient } from '@tanstack/react-query';
+import fetchAllReviews, { FetchAllReviewsResponse } from '@/lib/fetchAllReviews';
+import ReviewAddModal from './_components/ReviewAddModal';
 
 const ReviewPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const { id } = useUserStore(); // userStore에서 로그인한 사용자 ID를 가져옵니다
   const queryClient = useQueryClient();
-  const [sortOption, setSortOption] = useState<'newest' | 'oldest'>('newest');
-  const [reviews, setReviews] = useState<ReviewsType[]>([]);
-  const [userReviewCount, setUserReviewCount] = useState<number>(0);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState<boolean>(false);
+  const [sortOption, setSortOption] = useState<'newest' | 'oldest'>('newest'); // 'newest' 또는 'oldest'
 
-  // API에서 리뷰 데이터를 받아오는 함수
-  const fetchReviews = async (page: number) => {
-    if (!id) {
-      console.error('User ID is missing');
-      return;
-    }
+  // useInfiniteQuery로 무한 스크롤
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
+    FetchAllReviewsResponse,
+    Error
+  >({
+    queryKey: ['reviews', { sort: sortOption, userId: id }],
+    queryFn: async ({ pageParam = 1 }) => {
+      if (!id) return { reviews: [], totalCount: 0, nextPage: undefined };
 
-    setIsFetchingNextPage(true);
+      const response = await fetchAllReviews({
+        pageParam: pageParam as number,
+        sort: sortOption, // 'newest' 또는 'oldest' 그대로 전달
+        order: sortOption === 'newest' ? 'desc' : 'asc', // 정렬에 맞춰 'desc' 또는 'asc' 설정
+        userId: id, // 사용자 ID 전달
+      });
 
-    try {
-      const res = await fetch(
-        `/api/reviews/count-review?userId=${id}&page=${page}&sort=${sortOption}`,
-      );
-      const data = await res.json();
+      return response;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalCount = lastPage.totalCount;
+      const currentCount = allPages.flatMap((page) => page.reviews).length;
+      return currentCount < totalCount ? lastPage.nextPage : undefined;
+    },
+    initialPageParam: 1, // 첫 페이지는 1부터 시작
+  });
 
-      if (res.ok) {
-        // 데이터를 정렬하는 로직 추가
-        const sortedReviews =
-          sortOption === 'newest'
-            ? data.reviews.sort(
-                (a: ReviewsType, b: ReviewsType) =>
-                  new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-              )
-            : data.reviews.sort(
-                (a: ReviewsType, b: ReviewsType) =>
-                  new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-              );
+  const reviews = data?.pages.flatMap((page) => page.reviews) || []; // 리뷰 목록
 
-        setReviews((prevReviews) => [...prevReviews, ...sortedReviews]);
-        setUserReviewCount(data.reviewCount); // 사용자 리뷰 수를 상태에 저장
-        setHasNextPage(data.reviews.length > 0); // 만약 데이터가 더 있으면 `hasNextPage`를 true로 설정
-      } else {
-        console.error('Failed to fetch reviews:', data.error);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsFetchingNextPage(false);
-    }
-  };
-
-  useEffect(() => {
-    console.log('useEffect triggered. ID:', id);
-
-    // `id` 값이 있을 때만 `fetchReviews` 함수 호출
-    if (id) {
-      fetchReviews(1); // 초기 페이지 1부터 시작
-    } else {
-      console.log('로그인된 사용자가 없습니다.');
-    }
-  }, [id, sortOption]); // `sortOption`이 변경될 때마다 데이터를 새로 가져오기
+  console.log(reviews);
 
   const handleSortChange = (option: 'newest' | 'oldest') => {
-    if (sortOption === option) return; // 같은 옵션이면 변경 X
-    setSortOption(option);
-    setReviews([]); // 새로운 정렬 기준에 맞게 리뷰 목록 초기화
-    fetchReviews(1); // 첫 페이지부터 다시 데이터를 가져옴
+    if (sortOption === option) return; // 같은 옵션이면 변경하지 않음
+    setSortOption(option); // 옵션 변경
   };
 
   const handleLoadMore = () => {
-    if (isFetchingNextPage || !hasNextPage) return;
-    const nextPage = Math.ceil(reviews.length / 10) + 1; // 페이지네이션: 10개 리뷰씩 로드
-    fetchReviews(nextPage);
+    if (isFetchingNextPage || !hasNextPage) return; // 더 이상 데이터가 없거나 로딩 중이면 실행 안 함
+    fetchNextPage();
   };
 
   return (
@@ -120,25 +93,16 @@ const ReviewPage = () => {
                       src={reviewImgUrl}
                       alt="리뷰 이미지"
                       width={100}
-                      height={100}
-                      className="w-[100px] h-[100px] object-cover border border-black rounded-lg"
+                      height={150}
+                      className="w-[100px] h-[150px] object-cover border border-black rounded-lg"
                     />
                   </div>
                 </div>
 
                 <div className="flex gap-4 text-xs">
                   <p>✅ {new Date(review.created_at).toISOString().split('T')[0]}</p>
-                  <p>✅ {review.users?.nickname}</p>
-                  <span className="flex items-center gap-1 mt-[-3px]">
-                    <BronzeCrownIcon
-                      color={
-                        review.userReviewCount && review.userReviewCount >= 10
-                          ? '#facc15'
-                          : 'currentColor'
-                      }
-                    />
-                    {review.userReviewCount ?? 0}회 사용자 리뷰
-                  </span>
+                  <p>✅ {review.display_name || '이름 없음'}</p>
+
                   <span className="mt-[-3px]">
                     <BronzeCrownIcon color={review.past_views >= 10 ? '#facc15' : 'currentColor'} />
                     {review.past_views ?? 0}회 감상

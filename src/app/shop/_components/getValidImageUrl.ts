@@ -5,7 +5,6 @@ export const getValidImageUrl = (image_url: string | string[]) => {
     }
     return JSON.parse(image_url); // ✅ `\"https://...\"` 같은 형식이면 변환
   } catch (error) {
-    console.error('📌 이미지 URL 파싱 오류:', error);
     return image_url.toString().replace(/^"+|"+$/g, ''); // ✅ JSON 파싱 실패 시 앞뒤 따옴표 제거
   }
 };
