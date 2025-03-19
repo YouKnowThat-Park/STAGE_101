@@ -35,13 +35,23 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
   const { reservations, totalPrice } = await seatRes.json();
 
-  // ✅ 클라이언트 컴포넌트로 **순수 데이터만 전달**
+  // ✅ `viewed_at`과 `show_time`을 가져오기
+  if (!reservations || reservations.length === 0) {
+    throw new Error('🚨 예약된 좌석 정보를 찾을 수 없습니다.');
+  }
+
+  const viewedAt = reservations[0]?.viewed_at; // ✅ 첫 번째 예약의 날짜
+  const showTime = reservations[0]?.show_time; // ✅ 첫 번째 예약의 상영 시간
+
+  // ✅ 클라이언트 컴포넌트로 데이터 전달
   return (
     <CheckoutClient
-      userId={userId} // ✅ 함수가 아니라 userId 값만 전달
+      userId={userId}
       seatIds={seatIds}
       theaterId={params.theaterId}
       totalPrice={totalPrice}
+      viewed_at={viewedAt} // ✅ 추가
+      show_time={showTime} // ✅ 추가
     />
   );
 }

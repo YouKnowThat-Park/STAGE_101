@@ -26,10 +26,32 @@ export default function CheckoutClient({
   viewed_at,
   show_time,
 }: CheckoutClientProps) {
+  console.log('🚀 [디버깅] CheckoutClient가 받은 props:', {
+    userId,
+    seatIds,
+    theaterId,
+    totalPrice,
+    viewed_at,
+    show_time,
+  });
   const { name, phone, isLoading } = useUserHook(userId);
   const { data: theaterData } = useTheaterData(theaterId);
 
   const [tossPayments, setTossPayments] = useState<TossPaymentsInstance | null>(null);
+
+  //테스트용 스테이트
+  const [viewedAt, setViewedAt] = useState(viewed_at);
+  const [showTime, setShowTime] = useState(show_time);
+
+  useEffect(() => {
+    if (viewed_at) setViewedAt(viewed_at);
+    if (show_time) setShowTime(show_time);
+  }, [viewed_at, show_time]); // ✅ props 값이 변경되면 상태 업데이트
+
+  useEffect(() => {
+    console.log('[디버그] viewedAt 변경됨:', viewedAt);
+    console.log('[디버그] showTime 변경됨:', showTime);
+  }, [viewedAt, showTime]);
 
   useEffect(() => {
     async function initTossPayments() {
@@ -52,32 +74,30 @@ export default function CheckoutClient({
   if (isLoading) return <p className="text-white">로딩 중...</p>;
 
   const createReservation = async () => {
-    if (!userId || !theaterId || !seatIds.length || !totalPrice) {
-      console.error('🚨 필수 데이터 누락:', {
-        userId,
-        theaterId,
-        seatIds,
-        totalPrice,
-      });
-      return null;
-    }
+    const formattedViewedAt = new Date(viewed_at).toISOString();
+    const formattedShowTime = show_time.length === 8 ? show_time.slice(0, 5) : show_time;
+
+    const requestData = {
+      user_id: userId,
+      theater_id: theaterId,
+      seats: seatIds,
+      total_price: totalPrice,
+      viewed_at: formattedViewedAt,
+      show_time: formattedShowTime, // ✅ "16:00" 형식으로 변환
+    };
+
+    console.log('🚀 [디버깅] 프론트엔드에서 보낼 데이터:', JSON.stringify(requestData, null, 2));
 
     try {
       const response = await fetch(`${API_URL}/api/reservation/create`, {
-        // ✅ 백틱(```)으로 감싸기
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId, // ✅ 서버에서 요구하는 필드명 사용
-          theater_id: theaterId,
-          seat_number: seatIds, // ✅ seatIds 배열을 올바르게 전달
-          total_price: totalPrice,
-          viewed_at, // ✅ 추가
-          show_time, // ✅ 추가
-        }),
+        body: JSON.stringify(requestData),
       });
 
       const data = await response.json();
+      console.log('✅ [서버 응답]:', data); // ✅ 서버 응답 확인
+
       if (!response.ok) throw new Error(data.message || '예약 생성 실패');
 
       return data.reservationId;
@@ -86,6 +106,7 @@ export default function CheckoutClient({
       return null;
     }
   };
+
   const handleTossPayment = async () => {
     if (!tossPayments) {
       console.error('🚨 토스 결제 모듈이 로드되지 않았습니다.');
