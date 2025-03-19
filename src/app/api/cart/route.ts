@@ -10,39 +10,42 @@ export async function POST(req: NextRequest) {
     if (!user_id || !shop_id || !quantity) {
       return NextResponse.json({ error: '필수 정보가 누락되었습니다.' }, { status: 400 });
     }
+
+    // 기존 장바구니 데이터 확인
     const { data: existingCart, error: fetchError } = await supabase
       .from('cart')
-      .select('quantity')
+      .select('id, quantity')
       .eq('user_id', user_id)
       .eq('shop_id', shop_id)
       .single();
+
     if (fetchError && fetchError.code !== 'PGRST116') {
-      // 'PGRST116' = 데이터 없음
       return NextResponse.json({ error: fetchError.message }, { status: 500 });
     }
 
-    const newQuantity = existingCart ? existingCart.quantity + quantity : quantity; // ✅ 기존 수량 + 새로 추가된 수량
+    const newQuantity = existingCart ? existingCart.quantity + quantity : quantity;
+
+    // 장바구니에 추가 (중복 방지)
     const { data, error } = await supabase.from('cart').upsert(
       [
         {
+          id: existingCart?.id || crypto.randomUUID(), // ✅ 기존 ID 유지
           user_id,
           shop_id,
-          quantity: newQuantity, // ✅ 기존 수량 + 추가 수량
+          quantity: newQuantity,
           image_url,
           name,
           point,
         },
       ],
-      {
-        onConflict: 'user_id, shop_id', // ✅ user_id & shop_id 기준으로 중복 방지
-      },
+      { onConflict: 'user_id, shop_id' },
     );
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ message: '장바구니에 추가 되었습니다.', data }, { status: 201 });
+    return NextResponse.json({ message: '장바구니에 추가되었습니다.', data }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -57,7 +60,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'user_id가 필요합니다.' }, { status: 400 });
   }
 
-  const { data, error } = await supabase.from('cart').select('*').eq('user_id', user_id);
+  const { data, error } = await supabase
+    .from('cart')
+    .select('*')
+    .eq('user_id', user_id)
+    .order('created_at', { ascending: false });
+
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ data }, { status: 200 });
@@ -65,21 +73,53 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const supabase = await serverSupabase();
+
   try {
     const { searchParams } = new URL(req.url);
     const user_id = searchParams.get('user_id');
     const shop_id = searchParams.get('shop_id');
+
     if (!user_id || !shop_id) {
       return NextResponse.json({ error: 'user_id와 shop_id가 필요합니다.' }, { status: 400 });
     }
-    const { error } = await supabase
+
+    // 1️⃣ cart 테이블에서 삭제할 데이터의 cart_id 찾기
+    const { data: cartData, error: cartFindError } = await supabase
       .from('cart')
-      .delete()
+      .select('id')
       .eq('user_id', user_id)
-      .eq('shop_id', shop_id);
-    if (error) throw error;
-    return NextResponse.json({ message: '장바구니에서 삭제되되었습니다.' }, { status: 200 });
+      .eq('shop_id', shop_id)
+      .single();
+
+    if (cartFindError || !cartData) {
+      return NextResponse.json(
+        { error: '해당 장바구니 아이템을 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    const cart_id = cartData.id;
+
+    // 2️⃣ cart_history에서 해당 cart_id 삭제 (Foreign Key Constraint 해결)
+    const { error: historyDeleteError } = await supabase
+      .from('cart_history')
+      .delete()
+      .eq('cart_id', cart_id);
+
+    if (historyDeleteError) {
+      throw historyDeleteError;
+    }
+
+    // 3️⃣ cart 테이블에서 해당 cart_id 삭제
+    const { error: deleteError } = await supabase.from('cart').delete().eq('id', cart_id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
+
+    return NextResponse.json({ message: '장바구니에서 삭제되었습니다.' }, { status: 200 });
   } catch (error: any) {
+    console.error('❌ 장바구니 삭제 오류:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
