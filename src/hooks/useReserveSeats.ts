@@ -1,55 +1,63 @@
 import { useState } from 'react';
-
 interface ReserveSeatsProps {
   seats: string[];
-  userId: string;
-  theaterId: string;
+  user_id: string;
+  theater_id: string;
+  viewed_at: string;
+  show_time: string;
+  price: number; // ✅ 추가
+  total_price: number;
 }
 
 export function useReserveSeats() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const reserveSeats = async ({ seats, userId, theaterId }: ReserveSeatsProps) => {
+  const reserveSeats = async ({
+    seats,
+    user_id,
+    theater_id,
+    viewed_at,
+    show_time,
+    total_price,
+  }: ReserveSeatsProps) => {
     setLoading(true);
     setError(null);
 
     try {
-      // ✅ 기존 `pending` 상태 예약 조회
-      const resCheck = await fetch('/api/reservation/seats', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seats, user_id: userId, theater_id: theaterId }),
-      });
+      console.log('📡 [프론트엔드] 서버로 예약 요청 전송 중...');
 
-      const { exists } = await resCheck.json();
+      // ✅ `viewed_at`을 ISO 8601 형식으로 변환
+      const formattedViewedAt = new Date(`${viewed_at}T00:00:00.000Z`).toISOString();
 
-      // ✅ 기존 예약이 존재하면 **즉시 종료 (추가 예약 방지)**
-      if (exists) {
-        console.warn('⚠️ 이미 pending 상태의 예약이 존재함. 추가 예약 안함.');
-        return false; // ✅ 예약 생성 안 함!
-      }
-
-      // ✅ 예약 생성 (기존 예약이 없을 경우에만 실행됨)
-      const res = await fetch('/api/reservation/seats/reserve', {
+      const response = await fetch('/api/reservation/seats/reserve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           seats,
-          user_id: userId,
-          theater_id: theaterId,
-          total_price: seats.length * 500, // 가격 로직 유지
+          user_id,
+          theater_id,
+          viewed_at: formattedViewedAt, // ✅ 변환된 값 사용
+          show_time, // ✅ 그대로 전달
+          total_price,
         }),
       });
 
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error);
+      console.log('📡 [프론트엔드] 서버 응답 상태 코드:', response.status);
+
+      const result = await response.json();
+      console.log('✅ [프론트엔드] 서버 응답 데이터:', result);
+
+      if (!response.ok) {
+        console.error('🚨 [프론트엔드] 예약 실패:', result.error);
+        setError(result.error);
+        return false;
       }
 
       return true;
     } catch (err) {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류 발생');
+      console.error('🚨 [프론트엔드] 요청 중 오류 발생:', err);
+      setError('서버 요청 실패');
       return false;
     } finally {
       setLoading(false);
