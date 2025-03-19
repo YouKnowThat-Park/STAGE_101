@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -66,7 +67,7 @@ const PaymentSuccessPage = () => {
     }
 
     confirmPayment();
-  }, [orderId, reservationId, amount, isConfirmed]);
+  }, [orderId, reservationId, amount, paymentKey, userId, isConfirmed]); // ✅ 모든 변수를 의존성 배열에 추가
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -92,9 +93,11 @@ const PaymentSuccessPage = () => {
           <p className="text-lg font-semibold">{amount}원</p>
 
           {qrToken ? (
-            <img
+            <Image
               src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrToken}`}
               alt="QR Code"
+              width={24}
+              height={24}
               className="w-24 h-24 mt-4"
             />
           ) : (
