@@ -1,0 +1,85 @@
+/* ✅ 달력 전체 스타일 */
+.react-calendar {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* ✅ 월/연도 네비게이션 버튼 */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.react-calendar__navigation button {
+  background: transparent;
+  border: none;
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.react-calendar__navigation button:hover {
+  color: #d93636;
+}
+
+/* ✅ 요일 부분 (일, 월, 화... 헤더) */
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 900;
+  color: #666;
+}
+
+/* ✅ 날짜(일수) 부분 기본 스타일 */
+.react-calendar__tile {
+  padding: 15px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  border-radius: 6px;
+}
+
+/* ✅ 날짜(일수) hover 효과 */
+.react-calendar__tile:hover {
+  background: #ff4d4d;
+  color: white;
+  /* transform: scale(1.1); */
+}
+
+/* ✅ 선택된 날짜 스타일 */
+.react-calendar__tile--active {
+  background: #333 !important;
+  color: white;
+}
+
+/* ✅ 오늘 날짜 스타일 */
+.react-calendar__tile--now {
+  background: #ffcccc;
+  color: black;
+}
+
+/* 
+     ✅ 비활성화된 날짜 (선택 불가능)
+     - 배경은 흰색으로, 글자만 회색 처리 
+  */
+.react-calendar__tile--disabled,
+.react-calendar__tile:disabled {
+  background: white !important;
+  color: #999 !important;
+  cursor: not-allowed;
+}
+
+/* ✅ 홀수/짝수 날짜 필터링용 클래스 (JS에서 className 추가 시 사용) */
+.odd-day {
+  background: #ffe5e5 !important;
+}
+.even-day {
+  background: #e5f7ff !important;
+}
