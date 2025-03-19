@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         `
         id, amount, payment_method, status, 
         reservations (
-          seat_number, total_price, status,
+          seat_number, total_price, status, viewed_at,
           theaters (name, show_time)
         )
       `,
@@ -53,13 +53,15 @@ export async function POST(req: NextRequest) {
 
     console.log('✅ 요청된 데이터:', { orderId, userId, amount, paymentKey, reservationId });
 
-    // ✅ 1. 예약 정보 확인
+    // ✅ 1. 기존 예약 정보 조회
     const { data: existingReservation, error: reservationError } = await supabase
       .from('reservations')
-      .select('id, status, theater_id, seat_number')
+      .select('id, status, theater_id, seat_number, show_time, viewed_at')
       .eq('id', reservationId)
       .eq('user_id', userId)
       .maybeSingle();
+
+    console.log('🛠️ [디버깅] 기존 예약 데이터:', existingReservation);
 
     if (reservationError || !existingReservation) {
       throw new Error('🚨 해당 예약을 찾을 수 없습니다.');
@@ -79,35 +81,36 @@ export async function POST(req: NextRequest) {
       throw new Error('🚨 해당 예약의 theater_id를 찾을 수 없습니다.');
     }
 
-    // ✅ 2. 기존 결제 내역 확인
-    const { data: existingPayment } = await supabase
-      .from('payments')
-      .select('id')
+    // ✅ 2. 기존 `viewed_at`, `show_time` 값 유지 (NULL 방지)
+    const formattedViewedAt =
+      existingReservation.viewed_at && existingReservation.viewed_at !== null
+        ? new Date(existingReservation.viewed_at).toISOString()
+        : null; // NULL이면 업데이트 제외
+
+    const formattedShowTime = existingReservation.show_time ?? '미정'; // ✅ NULL 방지
+
+    console.log('✅ [디버깅] 변환된 viewed_at:', formattedViewedAt);
+    console.log('✅ [디버깅] 변환된 show_time:', formattedShowTime);
+
+    // ✅ 3. 예약 상태 업데이트 (`pending` → `confirmed`)
+    const updateData: any = { status: 'confirmed', show_time: formattedShowTime };
+    if (formattedViewedAt) {
+      updateData.viewed_at = formattedViewedAt;
+    }
+
+    const { error: reservationUpdateError } = await supabase
+      .from('reservations')
+      .update(updateData)
+      .eq('id', reservationId)
       .eq('user_id', userId)
-      .eq('reservation_id', reservationId)
-      .maybeSingle();
+      .eq('status', 'pending');
 
-    if (existingPayment) {
-      console.warn('⚠️ 이미 결제된 예약입니다.');
-      return NextResponse.json({ success: true, message: '이미 결제됨' });
-    }
-
-    // ✅ 3. 중복된 orderId 방지 → UUID 생성
-    let finalOrderId = uuidv4();
-    const { data: orderExists } = await supabase
-      .from('payments')
-      .select('id')
-      .eq('id', orderId)
-      .maybeSingle();
-
-    if (!orderExists) {
-      finalOrderId = orderId;
-    }
+    if (reservationUpdateError) throw new Error(reservationUpdateError.message);
 
     // ✅ 4. 결제 정보 저장
     const { error: paymentError } = await supabase.from('payments').insert([
       {
-        id: finalOrderId,
+        id: orderId,
         user_id: userId,
         reservation_id: reservationId,
         amount: parseInt(amount, 10),
@@ -119,45 +122,9 @@ export async function POST(req: NextRequest) {
 
     if (paymentError) throw new Error(paymentError.message);
 
-    // ✅ 5. 예약 상태 업데이트 (pending → confirmed)
-    const { error: reservationUpdateError } = await supabase
-      .from('reservations')
-      .update({ status: 'confirmed' })
-      .eq('id', reservationId)
-      .eq('user_id', userId)
-      .eq('status', 'pending');
+    console.log('✅ [서버] 결제 정보 저장 완료');
 
-    if (reservationUpdateError) throw new Error(reservationUpdateError.message);
-
-    // ✅ 6. QR 코드 발급 (기존 데이터 확인)
-    const { data: existingQr } = await supabase
-      .from('qr_sessions')
-      .select('qr_token')
-      .eq('user_id', userId)
-      .eq('reservation_id', reservationId) // ✅ reservation_id 사용
-      .maybeSingle();
-
-    let qrToken = uuidv4(); // 새로운 QR 토큰 생성
-
-    // ✅ QR 코드가 없으면 새로 저장
-    if (!existingQr) {
-      const { error: qrError } = await supabase.from('qr_sessions').insert([
-        {
-          id: uuidv4(),
-          user_id: userId,
-          reservation_id: reservationId, // ✅ reservation_id로 연결
-          theater_id: theaterId, // ✅ 올바른 theater_id 저장
-          qr_token: qrToken,
-          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ]);
-
-      if (qrError) throw new Error(qrError.message);
-    } else {
-      qrToken = existingQr.qr_token; // 기존 QR 사용
-    }
-
-    return NextResponse.json({ success: true, qr_token: qrToken, seat_number: seatNumber });
+    return NextResponse.json({ success: true, seat_number: seatNumber });
   } catch (error: any) {
     console.error('🚨 결제 확인 오류:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

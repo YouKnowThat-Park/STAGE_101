@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-// ✅ Supabase 클라이언트 설정
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -9,37 +8,51 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, theaterId, seatIds } = await req.json();
+    const { userId, theaterId, seatIds, totalPrice, viewed_at, show_time } = await req.json();
 
-    // ✅ 1. `theaters` 테이블에서 `UUID` 및 `price` 조회
+    // ✅ 필수 데이터 검증 (누락 데이터 확인)
+    if (!userId || !theaterId || !seatIds?.length || !viewed_at || !show_time) {
+      return NextResponse.json({ success: false, message: '필수 데이터 누락' }, { status: 400 });
+    }
+
+    // ✅ `viewed_at`이 ISO 8601 형식인지 확인 후 변환
+    let formattedViewedAt = viewed_at;
+    if (!viewed_at.includes('T')) {
+      formattedViewedAt = new Date(`${viewed_at}T00:00:00.000Z`).toISOString();
+    }
+
+    console.log('✅ 변환된 viewed_at:', formattedViewedAt);
+
+    // ✅ 2. `theaters` 테이블에서 `UUID` 및 `price` 조회
     const { data: theaterData, error: theaterError } = await supabase
       .from('theaters')
       .select('id, price')
-      .eq('type', theaterId) // 🔥 `type` 기준으로 `id(UUID)` 조회
+      .eq('type', theaterId)
       .single();
 
     if (theaterError || !theaterData) {
-      console.error('🚨 상영관 조회 실패:', theaterError);
       return NextResponse.json({ success: false, message: 'Invalid theaterId' }, { status: 400 });
     }
 
     const actualTheaterId = theaterData.id;
-    const pricePerSeat = theaterData.price; // ✅ 가격 가져오기
-    const totalPrice = pricePerSeat * seatIds.length; // ✅ 가격 계산
+    const pricePerSeat = theaterData.price;
+    const finalTotalPrice = pricePerSeat * seatIds.length;
 
-    // ✅ 2. 예약 정보 저장 (좌석번호를 문자열로 저장)
+    // ✅ 3. 예약 정보 저장
     const { data, error } = await supabase
       .from('reservations')
       .insert([
         {
           user_id: userId,
           theater_id: actualTheaterId,
-          seat_number: seatIds.join(', '), // ✅ 문자열로 저장
-          total_price: totalPrice, // ✅ 가격 저장
+          seat_number: seatIds, // ✅ 배열로 저장
+          total_price: finalTotalPrice,
           status: 'pending',
+          viewed_at: formattedViewedAt, // ✅ 변환된 `viewed_at`
+          show_time: show_time || '미정', // ✅ `show_time` 기본값
         },
       ])
-      .select('id, total_price') // ✅ 저장된 가격도 확인
+      .select('id, total_price, viewed_at, show_time')
       .single();
 
     if (error) throw error;
@@ -48,6 +61,8 @@ export async function POST(req: NextRequest) {
       success: true,
       reservationId: data.id,
       totalPrice: data.total_price,
+      viewed_at: data.viewed_at,
+      show_time: data.show_time,
     });
   } catch (error) {
     console.error('🚨 예약 생성 실패:', error);

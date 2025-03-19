@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   // ✅ 2. reservations 테이블에서 해당 theater_id의 예약 좌석 조회
   let query = supabase
     .from('reservations')
-    .select('seat_number, total_price') // ✅ total_price 추가
+    .select('seat_number, total_price, viewed_at, show_time') // ✅ `viewed_at` & `show_time` 추가
     .eq('theater_id', validTheaterId);
 
   // ✅ 특정 좌석만 조회해야 할 경우

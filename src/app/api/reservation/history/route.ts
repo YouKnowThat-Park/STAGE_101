@@ -1,17 +1,18 @@
 import { serverSupabase } from '@/supabase/supabase-server';
 import { NextRequest, NextResponse } from 'next/server';
 
-// ✅ TypeScript 타입 추가
+// ✅ TypeScript 타입 수정
 interface Theater {
   id: string;
   name: string;
-  screening_date: string;
-  main_img: string;
-  type: string;
+  start_date: string | null;
+  end_date: string | null;
+  main_img: string | null;
+  type: string | null;
 }
 
 interface Payment {
-  payment_method: string;
+  payment_method: string | null;
 }
 
 interface Reservation {
@@ -20,8 +21,8 @@ interface Reservation {
   seat_number: string;
   total_price: number;
   status: string;
-  theaters: Theater;
-  payments: Payment[];
+  theaters?: Theater;
+  payments?: Payment;
   qr_token?: string | null;
 }
 
@@ -36,14 +37,14 @@ export async function GET(req: NextRequest) {
   const supabase = await serverSupabase();
 
   try {
-    // ✅ reservations 가져오기 (타입 명시)
+    // ✅ reservations 가져오기 (`screening_date` 제거 및 `start_date`, `end_date` 추가)
     const { data: reservations, error: resError } = await supabase
       .from('reservations')
       .select(
         `
         id, created_at, seat_number, total_price, status,
-        theaters!inner ( id, name, screening_date, main_img, type ),
-        payments!left ( payment_method )
+        theaters ( id, name, start_date, end_date, main_img, type ),
+        payments ( payment_method )
       `,
       )
       .eq('user_id', userId)
@@ -58,23 +59,25 @@ export async function GET(req: NextRequest) {
     // ✅ TypeScript에서 정확한 타입 추론을 위해 변환
     const formattedReservations: Reservation[] = reservations.map((ticket) => ({
       ...ticket,
-      theaters: Array.isArray(ticket.theaters) ? ticket.theaters[0] : ticket.theaters, // ✅ 첫 번째 극장 정보만 사용
-      payments: ticket.payments || [],
+      theaters: Array.isArray(ticket.theaters) ? ticket.theaters[0] : ticket.theaters || undefined, // ✅ 배열이면 첫 번째 요소 사용
+      payments: Array.isArray(ticket.payments) ? ticket.payments[0] : ticket.payments || null, // ✅ 배열이면 첫 번째 요소 사용
       qr_token: null, // 기본값 설정 후 업데이트
     }));
 
     // ✅ 각 예약 ID에 대해 `qr_sessions`에서 `qr_token` 개별 조회
     for (const ticket of formattedReservations) {
-      const { data: qrData } = await supabase
-        .from('qr_sessions')
-        .select('qr_token')
-        .eq('user_id', userId)
-        .eq('theater_id', ticket.theaters.id)
-        .maybeSingle();
+      if (ticket.theaters?.id) {
+        const { data: qrData } = await supabase
+          .from('qr_sessions')
+          .select('qr_token')
+          .eq('user_id', userId)
+          .eq('theater_id', ticket.theaters.id)
+          .maybeSingle();
 
-      console.log('🎟️ Supabase QR 데이터:', qrData);
+        console.log('🎟️ Supabase QR 데이터:', qrData);
 
-      ticket.qr_token = qrData?.qr_token || null;
+        ticket.qr_token = qrData?.qr_token || null;
+      }
     }
 
     return NextResponse.json(formattedReservations);
