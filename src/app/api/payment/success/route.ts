@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, message: '필수 데이터 누락' }, { status: 400 });
     }
 
-    // ✅ 결제 및 예약 정보 조회 (seat_number 포함)
+    // ✅ 결제 및 예약 정보 조회 (`qr_token` 포함)
     const { data, error } = await supabase
       .from('payments')
       .select(
@@ -23,7 +23,8 @@ export async function GET(req: NextRequest) {
         reservations (
           seat_number, total_price, status, viewed_at,
           theaters (name, show_time)
-        )
+        ),
+        qr_sessions (qr_token)
       `,
       )
       .eq('user_id', userId)
@@ -37,6 +38,8 @@ export async function GET(req: NextRequest) {
         { status: 500 },
       );
     }
+
+    console.log('✅ [백엔드] 결제 정보 응답:', data);
 
     return NextResponse.json({ success: true, payment: data });
   } catch (error: any) {
@@ -53,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     console.log('✅ 요청된 데이터:', { orderId, userId, amount, paymentKey, reservationId });
 
-    // ✅ 1. 기존 예약 정보 조회
+    // ✅ 기존 예약 정보 조회
     const { data: existingReservation, error: reservationError } = await supabase
       .from('reservations')
       .select('id, status, theater_id, seat_number, show_time, viewed_at')
@@ -81,22 +84,38 @@ export async function POST(req: NextRequest) {
       throw new Error('🚨 해당 예약의 theater_id를 찾을 수 없습니다.');
     }
 
-    // ✅ 2. 기존 `viewed_at`, `show_time` 값 유지 (NULL 방지)
-    const formattedViewedAt =
-      existingReservation.viewed_at && existingReservation.viewed_at !== null
-        ? new Date(existingReservation.viewed_at).toISOString()
-        : null; // NULL이면 업데이트 제외
+    // ✅ 기존 QR 코드 확인
+    let qrToken;
+    const { data: existingQr } = await supabase
+      .from('qr_sessions')
+      .select('qr_token')
+      .eq('reservation_id', reservationId)
+      .maybeSingle();
 
-    const formattedShowTime = existingReservation.show_time ?? '미정'; // ✅ NULL 방지
+    if (existingQr) {
+      console.log('🛠️ 기존 QR 코드 재사용:', existingQr.qr_token);
+      qrToken = existingQr.qr_token;
+    } else {
+      // ✅ 새로운 QR 코드 생성
+      qrToken = uuidv4();
+      console.log('🛠️ 새로운 QR 코드 생성 중:', qrToken);
 
-    console.log('✅ [디버깅] 변환된 viewed_at:', formattedViewedAt);
-    console.log('✅ [디버깅] 변환된 show_time:', formattedShowTime);
+      const { error: qrError } = await supabase.from('qr_sessions').insert([
+        {
+          id: uuidv4(),
+          user_id: userId,
+          reservation_id: reservationId,
+          theater_id: theaterId,
+          qr_token: qrToken,
+        },
+      ]);
 
-    // ✅ 3. 예약 상태 업데이트 (`pending` → `confirmed`)
-    const updateData: any = { status: 'confirmed', show_time: formattedShowTime };
-    if (formattedViewedAt) {
-      updateData.viewed_at = formattedViewedAt;
+      if (qrError) throw new Error(qrError.message);
+      console.log('✅ 새로운 QR 코드 저장 완료:', qrToken);
     }
+
+    // ✅ 예약 상태 업데이트 (`pending` → `confirmed`)
+    const updateData: any = { status: 'confirmed' };
 
     const { error: reservationUpdateError } = await supabase
       .from('reservations')
@@ -107,7 +126,7 @@ export async function POST(req: NextRequest) {
 
     if (reservationUpdateError) throw new Error(reservationUpdateError.message);
 
-    // ✅ 4. 결제 정보 저장
+    // ✅ 결제 정보 저장
     const { error: paymentError } = await supabase.from('payments').insert([
       {
         id: orderId,
@@ -124,7 +143,11 @@ export async function POST(req: NextRequest) {
 
     console.log('✅ [서버] 결제 정보 저장 완료');
 
-    return NextResponse.json({ success: true, seat_number: seatNumber });
+    return NextResponse.json({
+      success: true,
+      seat_number: seatNumber,
+      qr_token: qrToken, // ✅ 프론트에서 QR 코드 표시할 수 있도록 반환
+    });
   } catch (error: any) {
     console.error('🚨 결제 확인 오류:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

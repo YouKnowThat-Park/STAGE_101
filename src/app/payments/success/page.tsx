@@ -33,20 +33,35 @@ const PaymentSuccessPage = () => {
       if (!orderId || !reservationId || !amount || isConfirmed) return;
 
       try {
-        // ✅ 결제 정보 조회 (좌석 포함)
+        console.log('🛠️ 결제 정보 확인 요청:', {
+          orderId,
+          reservationId,
+          amount,
+          paymentKey,
+          userId,
+        });
+
+        // ✅ 기존 결제 정보 조회
         const checkRes = await fetch(
           `/api/payment/success?reservationId=${reservationId}&userId=${userId}`,
         );
         const checkData = await checkRes.json();
 
+        console.log('✅ 기존 결제 정보 응답:', checkData);
+
         if (checkData.success && checkData.payment) {
-          setQrToken(checkData.payment.qr_token);
-          setSeatNumber(checkData.payment.reservations?.seat_number || '좌석 정보 없음');
-          setIsConfirmed(true);
-          return;
+          console.log('🎉 기존 결제 정보에서 QR 코드 발견:', checkData.payment.qr_token);
+
+          if (checkData.payment.qr_token) {
+            setQrToken(checkData.payment.qr_token);
+            setSeatNumber(checkData.payment.reservations?.seat_number || '좌석 정보 없음');
+            setIsConfirmed(true);
+            return;
+          }
         }
 
-        // ✅ 결제 요청
+        // ✅ 기존 QR이 없을 경우, 결제 요청 진행
+        console.log('🚀 새로운 결제 요청 실행');
         const res = await fetch('/api/payment/success', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -54,8 +69,17 @@ const PaymentSuccessPage = () => {
         });
 
         const result = await res.json();
+        console.log('✅ 결제 요청 응답:', result);
+
         if (result.success) {
-          setQrToken(result.qr_token);
+          console.log('🎉 결제 성공, QR 코드:', result.qr_token);
+
+          if (result.qr_token) {
+            setQrToken(result.qr_token);
+          } else {
+            console.warn('⚠️ QR 코드가 응답에 없음');
+          }
+
           setSeatNumber(result.seat_number || '좌석 정보 없음');
           setIsConfirmed(true);
         } else {
@@ -67,7 +91,11 @@ const PaymentSuccessPage = () => {
     }
 
     confirmPayment();
-  }, [orderId, reservationId, amount, paymentKey, userId, isConfirmed]); // ✅ 모든 변수를 의존성 배열에 추가
+  }, [orderId, reservationId, amount, paymentKey, userId, isConfirmed]);
+
+  useEffect(() => {
+    console.log('📢 현재 qrToken 상태 업데이트:', qrToken);
+  }, [qrToken]);
 
   return (
     <div className="flex justify-center items-center h-screen">
