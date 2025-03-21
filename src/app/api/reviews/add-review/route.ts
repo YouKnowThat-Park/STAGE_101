@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     // ✅ theater_id를 기반으로 극장 정보 가져오기 (🔥 추가된 부분)
     const { data: theaterData, error: theaterError } = await supabase
       .from('theaters')
-      .select('id, name, main_img, screening_date')
+      .select('id, name, main_img')
       .eq('id', theater_id)
       .single();
 

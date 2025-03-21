@@ -3,23 +3,25 @@ import { ReviewModalProps } from '@/types/modal/modal-type';
 import React, { useEffect, useState } from 'react';
 
 const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
-  // ✅ useUserStore를 최상단에서 항상 실행
   const userId = useUserStore((state) => state.id);
 
-  // ✅ 상태값 선언
+  // ✅ 상태값 선언 (기본값 설정)
   const [comment, setComment] = useState('');
   const [imageType, setImageType] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<'name' | 'nickname'>('nickname');
   const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
   const [watchedTheaters, setWatchedTheaters] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
-    if (!isOpen || !userId) return; // ✅ 모달이 닫혀있거나 userId 없으면 실행 안 함
-
     const fetchAvailableTheaters = async () => {
+      console.log('📢 [DEBUG] API 요청 시작'); // ✅ API 호출 시작 로그
+
       try {
         const response = await fetch(`/api/reviews/watched-theaters?userId=${userId}`);
+        console.log('📢 [DEBUG] API 응답 상태:', response.status); // ✅ 응답 상태 확인
+
         const data = await response.json();
+        console.log('📢 [DEBUG] API 응답 데이터:', data); // ✅ 응답 데이터 확인
 
         if (!response.ok) throw new Error(data.error || '데이터를 불러오지 못했습니다.');
         setWatchedTheaters(data.theaters || []);
@@ -32,9 +34,15 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
   }, [isOpen, userId]);
 
   const handleSubmit = async () => {
-    console.log('🚀 handleSubmit 실행됨');
-    console.log('✅ handleSubmit 실행 직전 displayName:', displayName);
-    console.log('✅ handleSubmit 실행 직전 useRealName:', displayName === 'name');
+    if (!selectedTheater) {
+      alert('극장을 선택해주세요.');
+      return;
+    }
+
+    if (!comment.trim()) {
+      alert('리뷰 내용을 입력해주세요.');
+      return;
+    }
 
     try {
       const response = await fetch('/api/reviews/add-review', {
@@ -50,11 +58,12 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error('리뷰 저장 실패');
+      if (!response.ok) throw new Error(result.error || '리뷰 저장 실패');
+
       onSubmit();
       onClose();
     } catch (error) {
-      console.error(error);
+      console.error('❌ [ERROR] 리뷰 저장 실패:', error);
       alert('리뷰 작성 중 오류가 발생했습니다.');
     }
   };
@@ -80,8 +89,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
           >
             <option value="">리뷰를 작성할 극장을 선택하세요</option>
             {watchedTheaters.length > 0 ? (
-              watchedTheaters.map((theater) => (
-                <option key={theater.id} value={theater.id}>
+              watchedTheaters.map((theater, index) => (
+                <option key={`${theater.id}-${index}`} value={theater.id}>
                   {theater.name}
                 </option>
               ))
