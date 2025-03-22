@@ -12,11 +12,11 @@ const Footer = () => {
   if (isMypage) return null; // ✅ `/theater`에서는 헤더 숨김
 
   return (
-    <div className="border-t-2 border-t-black py-32 ">
+    <div className=" hidden min-[481px]:block border-t-2 border-t-black py-16 mt-48 ">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* 회사 정보 */}
         <div className="text-center md:text-left">
-          <h2 className="text-lg font-semibold">STAGE_101</h2>
+          <h2 className="text-lg text-gray-400 font-semibold">STAGE_101</h2>
           <p className="text-sm text-gray-400">아오특별시 아오구 아오로 123</p>
           <p className="text-sm text-gray-400">📩 문의 : youkn0wthat@naver.com</p>
         </div>
