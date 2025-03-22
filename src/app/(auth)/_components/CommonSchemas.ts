@@ -1,9 +1,15 @@
 import { z } from 'zod';
 
 export const emailPasswordSchema = z.object({
-  email: z.string().email('유효한 이메일을 입력해주세요.').trim(),
+  email: z
+    .string()
+    .nonempty({ message: '이메일을 입력해주세요.' })
+    .email('유효한 이메일을 입력해주세요.')
+    .trim(),
+
   password: z
     .string()
+    .nonempty({ message: '비밀번호를 입력해주세요.' })
     .min(8, '비밀번호는 최소 8자리 이상이어야 합니다.')
     .regex(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,32}$/,
