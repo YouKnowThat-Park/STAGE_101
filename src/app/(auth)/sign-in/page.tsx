@@ -2,7 +2,6 @@
 
 import GoogleLogin from '@/ui/icon/GoogleLogin';
 import KakaoLogin from '@/ui/icon/KakaoLogin';
-import QrLogin from '@/ui/icon/QrLogin';
 import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
@@ -17,7 +16,7 @@ const Page = () => {
   const handleSignIn = async (data: EmailPasswordFormData) => {
     try {
       const user = await signIn(data.email, data.password);
-      useUserStore.getState().setUser(user); // ✅ Zustand 상태 업데이트
+      useUserStore.getState().setUser(user);
 
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
@@ -41,47 +40,53 @@ const Page = () => {
   };
 
   return (
-    <>
-      <div className="flex gap-4 justify-center items-center py-10">
-        <div className="w-[450px] h-96 bg-slate-400 flex flex-col gap-1 p-4">
-          <SignInForm onSubmit={handleSignIn} />
+    <div className=" py-20 bg-black text-white flex items-center justify-center">
+      <div className="bg-[#1C1C1C]/80 border border-gray-700 rounded-xl px-10  py-10 shadow-md backdrop-blur w-[420px] flex flex-col gap-6">
+        {/* 타이틀 */}
+        <h2 className="text-2xl font-bold text-center text-white tracking-wide">
+          <span className="text-[#C9A66B]">STAGE_101</span>
+        </h2>
 
-          <div className="flex justify-center items-center mt-2">
-            <div className="flex gap-2">
-              <input type="checkbox" id="checkbox" />
-              <label htmlFor="checkbox" className="text-sm">
-                이메일 저장
-              </label>
-            </div>
-            <p className="ml-48 text-sm">이메일/비밀번호 찾기</p>
-          </div>
+        {/* 로그인 폼 */}
+        <SignInForm onSubmit={handleSignIn} />
 
-          {/* Test 소설 로그인 아이콘 */}
-          <div className="flex justify-center gap-6 mt-4">
-            <button onClick={() => handleSocialSignIn('kakao')}>
-              <KakaoLogin />
-            </button>
-            <button onClick={() => handleSocialSignIn('google')}>
-              <GoogleLogin />
-            </button>
-            <button onClick={() => alert('QR 로그인 기능 준비 중!')}>
-              <QrLogin />
-            </button>
-          </div>
-
-          {/* 로그인 버튼 */}
-          <div className="flex flex-col justify-center items-center mt-9 gap-2">
-            <button className="bg-blue-500 text-white h-10 w-48">로그인</button>
-            <button className="text-sm ml-[200px] border-b border-black" onClick={handleSignUpPage}>
-              이메일과 비밀번호가 없으신가요?
-            </button>
-          </div>
+        {/* 이메일 저장 & 비밀번호 찾기 */}
+        <div className="flex justify-between text-sm text-gray-400">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" id="checkbox" className="accent-[#C9A66B]" />
+            이메일 저장
+          </label>
+          <button className="underline hover:text-white">비밀번호 찾기</button>
         </div>
 
-        {/* 오른쪽 사진 박스 */}
-        <div className="w-80 h-96 bg-white"></div>
+        {/* 소셜 로그인 */}
+        <div className="flex justify-center gap-6 mt-2">
+          <button onClick={() => handleSocialSignIn('kakao')}>
+            <KakaoLogin />
+          </button>
+          <button onClick={() => handleSocialSignIn('google')}>
+            <GoogleLogin />
+          </button>
+        </div>
+
+        {/* 로그인 버튼 */}
+        <button
+          type="submit"
+          className="bg-[#C9A66B] text-black font-semibold w-full py-2 rounded-lg hover:bg-[#e7c894] transition"
+          onClick={() => handleSignIn}
+        >
+          로그인
+        </button>
+
+        {/* 회원가입 */}
+        <p className="text-center text-sm text-gray-400">
+          계정이 없으신가요?{' '}
+          <button onClick={handleSignUpPage} className="underline hover:text-white">
+            회원가입
+          </button>
+        </p>
       </div>
-    </>
+    </div>
   );
 };
 
