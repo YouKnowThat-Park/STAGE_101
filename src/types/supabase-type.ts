@@ -375,7 +375,7 @@ export type Database = {
           theater_id: string
           total_price: number
           user_id: string
-          viewed_at: string
+          viewed_at: string | null
         }
         Insert: {
           created_at?: string
@@ -386,7 +386,7 @@ export type Database = {
           theater_id?: string
           total_price: number
           user_id?: string
-          viewed_at: string
+          viewed_at?: string | null
         }
         Update: {
           created_at?: string
@@ -397,7 +397,7 @@ export type Database = {
           theater_id?: string
           total_price?: number
           user_id?: string
-          viewed_at?: string
+          viewed_at?: string | null
         }
         Relationships: [
           {
