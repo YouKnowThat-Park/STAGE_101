@@ -33,7 +33,7 @@ const Logout = () => {
   return (
     <div className="flex justify-between items-center h-16 px-8 bg-black text-white">
       {/* ✅ 헤더 전체 높이 설정 (h-16) + 가운데 정렬 (items-center) */}
-      <Link href="/" className="text-xl font-bold">
+      <Link href="/" className="text-xl font-bold text-[#C9A66B]">
         STAGE_101
       </Link>
 
