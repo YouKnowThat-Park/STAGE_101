@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function TheaterPage() {
   return (
-    <div className="relative h-[700px] bg-black text-white">
+    <div className="relative h-[700px]  text-white">
       {/* ✅ 배경 이미지 */}
       <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20 md:bg-none"></div>
 
