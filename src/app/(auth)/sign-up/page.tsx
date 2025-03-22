@@ -12,12 +12,10 @@ const SignUpPage = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 🔹 뒤로 가기 (useCallback 적용)
   const goBack = useCallback(() => {
     router.push('/sign-in');
   }, [router]);
 
-  // 🔹 회원가입 처리
   const submitForm = async (data: SignUpFormData) => {
     try {
       const signUpResult = await signUp(data);
@@ -33,13 +31,11 @@ const SignUpPage = () => {
     }
   };
 
-  // 🔹 모달 닫기 처리 (useCallback 적용)
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-    router.push('/sign-in?success=true'); // ✅ `??` → `?`로 수정 (잘못된 URL 수정)
+    router.push('/sign-in?success=true');
   }, [router]);
 
-  // ✅ `handleCloseModal`이 `useEffect` 의존성 배열에서 빠지도록 개선
   useEffect(() => {
     if (isModalOpen) {
       const timer = setTimeout(handleCloseModal, 3000);
@@ -48,30 +44,41 @@ const SignUpPage = () => {
   }, [isModalOpen, handleCloseModal]);
 
   return (
-    <>
+    <div className="py-20 bg-black text-white flex items-center justify-center  px-4">
       {!isModalOpen && (
-        <div>
-          {/* 🔹 회원가입 UI */}
-          <div className="flex w-[600px] h-[600px] justify-center bg-gray-300">
-            <button onClick={goBack}>
-              <GoBackIcon size={40} color="#000" />
+        <div className="bg-[#1C1C1C]/80 border border-gray-700 rounded-xl px-10 py-10 shadow-md backdrop-blur w-[420px] flex flex-col gap-6">
+          {/* 🔄 상단 라인: 버튼 + 타이틀 */}
+          <div className="relative h-10 mb-4">
+            {/* 왼쪽 뒤로가기 버튼 */}
+            <button
+              onClick={goBack}
+              className="absolute left-0 top-1/2 -translate-y-1/2 text-white hover:opacity-80 transition"
+            >
+              <GoBackIcon size={24} color="#fff" />
             </button>
-            <SignUpForm onSubmit={submitForm} />
+
+            {/* 가운데 타이틀 */}
+            <h2 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-[#C9A66B] tracking-wide">
+              STAGE_101
+            </h2>
           </div>
 
-          {/* 🔹 하단 이용약관 */}
-          <div className="bg-white w-[600px] h-[100px] mt-3">
-            <p>이용약관</p>
-            <p>개인정보 보관</p>
+          {/* 폼 */}
+          <SignUpForm onSubmit={submitForm} />
+
+          {/* 하단 약관 */}
+          <div className="text-xs text-gray-400 text-center mt-4">
+            <p>이용약관 · 개인정보처리방침</p>
+            <p>© 2024 STAGE_101. All Rights Reserved.</p>
           </div>
         </div>
       )}
+
+      {/* 완료 모달 */}
       <SignUpModal isOpen={isModalOpen} onClose={handleCloseModal} />
-    </>
+    </div>
   );
 };
 
-// ✅ `displayName` 추가 (빌드 경고 해결)
 SignUpPage.displayName = 'SignUpPage';
-
 export default SignUpPage;
