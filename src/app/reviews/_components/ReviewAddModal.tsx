@@ -1,6 +1,23 @@
 import { useUserStore } from '@/store/userStore';
 import { ReviewModalProps } from '@/types/modal/modal-type';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import BronzeCrownIcon from '@/ui/icon/BronzeCrownIcon';
+
+interface WatchedTheaterType {
+  id: string;
+  user_id: string;
+  theater_id: string;
+  viewed_at: string;
+  theaters: {
+    id: string;
+    name: string;
+    main_img: string;
+  };
+  users: {
+    profile_img: string;
+  };
+}
 
 const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
   const userId = useUserStore((state) => state.id);
@@ -10,7 +27,26 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
   const [imageType, setImageType] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<'name' | 'nickname'>('nickname');
   const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
-  const [watchedTheaters, setWatchedTheaters] = useState<{ id: string; name: string }[]>([]);
+  const [watchedTheaters, setWatchedTheaters] = useState<WatchedTheaterType[]>([]);
+
+  // ✅ 미리보기 데이터 (실시간 업데이트)
+  const [previewReview, setPreviewReview] = useState<{
+    theater: string;
+    comment: string;
+    image?: string;
+    profileImg?: string;
+    date: string;
+    displayName: string;
+    pastViews?: number;
+  }>({
+    theater: '극장 선택 안됨',
+    comment: '',
+    image: '',
+    profileImg: '',
+    date: '',
+    displayName: '',
+    pastViews: 0,
+  });
 
   useEffect(() => {
     const fetchAvailableTheaters = async () => {
@@ -32,6 +68,36 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
     fetchAvailableTheaters();
   }, [isOpen, userId]);
+
+  // ✅ 입력 값이 변경될 때마다 미리보기 업데이트
+  useEffect(() => {
+    if (!selectedTheater) return;
+
+    const fetchUserAndTheaterInfo = async () => {
+      try {
+        const res = await fetch(
+          `/api/reviews/user-theater-info?userId=${userId}&theaterId=${selectedTheater}`,
+        );
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || '정보를 불러올 수 없습니다.');
+
+        setPreviewReview({
+          theater: data.theater_name || '극장 선택 안됨',
+          comment,
+          image: imageType === 'poster' ? data.theater_main_img : '',
+          profileImg: imageType === 'profile' ? data.profile_img : '',
+          date: new Date().toISOString().split('T')[0],
+          displayName: displayName === 'name' ? data.name : data.nickname,
+          pastViews: data.past_views || 0,
+        });
+      } catch (error) {
+        console.error('❌ [ERROR] 사용자 및 극장 정보 불러오기 실패:', error);
+      }
+    };
+
+    fetchUserAndTheaterInfo();
+  }, [selectedTheater, imageType, displayName]);
 
   const handleSubmit = async () => {
     if (!selectedTheater) {
@@ -74,9 +140,16 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
       onClick={onClose}
     >
       <div
-        className="relative bg-white p-6 rounded shadow-lg w-[600px] h-[550px] flex flex-col"
+        className="relative bg-white p-6 rounded shadow-lg w-[600px] h-[90vh] flex flex-col "
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+
         <h2 className="text-2xl font-bold text-center mb-4">리뷰 작성</h2>
 
         {/* 극장 선택 드롭다운 */}
@@ -84,14 +157,17 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
           <label className="block font-medium text-gray-700">극장 선택</label>
           <select
             value={selectedTheater || ''}
-            onChange={(e) => setSelectedTheater(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2"
+            onChange={(e) => {
+              console.log('✅ 선택한 극장 ID:', e.target.value);
+              setSelectedTheater(e.target.value);
+            }}
+            className="w-full border border-gray-300 rounded-md p-2 text-black"
           >
             <option value="">리뷰를 작성할 극장을 선택하세요</option>
             {watchedTheaters.length > 0 ? (
               watchedTheaters.map((theater, index) => (
-                <option key={`${theater.id}-${index}`} value={theater.id}>
-                  {theater.name}
+                <option key={theater.id} value={theater.theaters.id}>
+                  {theater.theaters?.name ?? '이름 없음'}
                 </option>
               ))
             ) : (
@@ -153,6 +229,33 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
             />
             <span>프로필 사진</span>
           </label>
+        </div>
+
+        {/* ✅ 미리보기 추가 */}
+        <h2 className="">[미리 보기]</h2>
+        <div className="relative bg-white border border-black rounded-lg shadow-md p-4 flex flex-col gap-3">
+          <div className="flex items-start gap-4">
+            <div className="flex-1">
+              <h4 className="text-lg font-black border-b border-black pb-1">
+                {previewReview.theater}
+              </h4>
+              <p className="text-sm mt-3 text-gray-600 break-words">{previewReview.comment}</p>
+            </div>
+            <div className="flex-shrink-0">
+              <Image
+                src={previewReview.image || previewReview.profileImg || '/poster-placeholder.jpg'}
+                alt="프로필 이미지가 없습니다."
+                width={100}
+                height={150}
+                className="w-[100px] h-[150px] object-cover border border-black rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4 text-xs">
+            <p>✅ {previewReview.date}</p>
+            <p>✅ {previewReview.displayName || '이름 없음'}</p>
+          </div>
         </div>
 
         {/* 작성 버튼 */}
