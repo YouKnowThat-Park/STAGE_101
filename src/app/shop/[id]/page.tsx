@@ -51,59 +51,95 @@ const Page = () => {
     });
   };
 
+  if (loading) return <div className="text-center text-gray-400 mt-10">로딩 중...</div>;
+  if (error || !item)
+    return <div className="text-center text-red-500 mt-10">상품 정보를 불러올 수 없습니다.</div>;
+
   return (
-    <div className="bg-white w-full h-[700px]">
-      <Image
-        src={imageUrl}
-        alt={item?.name ?? '상품 이미지'}
-        height={200}
-        width={200}
-        unoptimized
-      />
+    <div className="bg-black text-white min-h-screen py-10 px-6 flex flex-col items-center">
+      <div className="bg-[#1C1C1C] p-8 rounded-xl shadow-lg w-full max-w-2xl">
+        {/* 이미지 */}
+        <div className="w-full flex justify-center mb-6">
+          <Image
+            src={imageUrl}
+            alt={item.name}
+            width={300}
+            height={300}
+            className="rounded-lg object-cover"
+            unoptimized
+          />
+        </div>
 
-      <div className="flex items-center space-x-2 my-4">
-        <button onClick={decreaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
-          ➖
-        </button>
-        <input
-          type="number"
-          value={quantity}
-          onChange={handleInputChange}
-          className="w-12 text-center border border-gray-300 rounded"
-          min={1}
-        />
-        <button onClick={increaseQuantity} className="px-3 py-1 bg-gray-200 rounded">
-          ➕
-        </button>
+        {/* 상품 정보 */}
+        <h1 className="text-3xl font-bold text-center mb-2">{item.name}</h1>
+        <p className="text-xl text-[#C9A66B] font-semibold text-center mb-4">
+          {item.point.toLocaleString()} 포인트
+        </p>
+        <div className="bg-gray-800/40 p-4 rounded mb-6 text-sm text-gray-300 leading-relaxed">
+          {item.description || '상품 설명이 없습니다.'}
+        </div>
+
+        {/* 수량 선택 */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <button
+            onClick={decreaseQuantity}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl transition"
+          >
+            −
+          </button>
+
+          <input
+            type="number"
+            value={quantity}
+            onChange={handleInputChange}
+            min={1}
+            className="w-14 text-center py-2 rounded bg-black border border-gray-600 text-white text-lg outline-none focus:ring-2 focus:ring-[#C9A66B]"
+          />
+
+          <button
+            onClick={increaseQuantity}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl transition"
+          >
+            +
+          </button>
+        </div>
+
+        {/* 버튼 영역 */}
+        <div className="flex justify-center gap-4">
+          <button
+            disabled
+            className="px-6 py-2 rounded-lg bg-gray-500 text-white cursor-not-allowed"
+          >
+            구매하기
+          </button>
+          <button
+            onClick={handleAddToCart}
+            className="px-6 py-2 rounded-lg bg-[#C9A66B] text-black font-semibold hover:bg-[#e7c894] transition"
+          >
+            장바구니 담기
+          </button>
+        </div>
       </div>
 
-      <div className="flex w-[200px] justify-between">
-        <button>구매하기</button>
-        <button onClick={handleAddToCart}>장바구니에 담기</button>
-      </div>
-
-      <div>{item?.name}</div>
-      <div>{item?.point}</div>
-      <div className="bg-slate-300 w-full h-[100px]">{item?.description}</div>
-
-      {/* 안내 사항 */}
-      <div className="bg-gray-100 p-4 rounded-md">
-        <h2>안내사항</h2>
-        <p className="text-xs">
+      {/* 안내사항 */}
+      <div className="mt-10 max-w-2xl w-full bg-gray-800/70 p-6 rounded-xl text-sm text-gray-300 space-y-2">
+        <h2 className="text-lg font-bold text-white">📌 안내사항</h2>
+        <p>
           이 페이지는 실제 거래가 이루어지지 않는 가상의 쇼핑몰입니다. 프론트엔드 개발자를 꿈꾸는
-          학생이 학습 목적으로 제작하였으며, 자세한 내용은
+          학생이 학습 목적으로 제작하였으며, 자세한 내용은{' '}
           <Link
             href="https://youkn0wthat.tistory.com/"
             target="_blank"
-            className="font-bold border-b border-b-black cursor-pointer"
+            className="underline text-[#C9A66B] hover:text-yellow-200"
           >
-            블로그에서
-          </Link>
-          확인하실 수 있습니다.
+            블로그
+          </Link>{' '}
+          에서 확인하실 수 있습니다.
         </p>
-        <p className="text-xs">📩 문의 사항 : youkn0wthat@naver.com</p>
-        <p className="text-xs">🔗 GitHub :</p>
+        <p>📩 문의 : youkn0wthat@naver.com</p>
+        <p>🔗 GitHub : (링크 추가 가능)</p>
       </div>
+
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </div>
   );
