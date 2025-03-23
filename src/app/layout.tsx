@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body className={`${notoSerif.className} min-h-screen bg-black`}>
         <Providers>
-          <div className="max-w-screen-2xl mx-auto px-56">
+          <div className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 2xl:px-56">
             <Header />
             {children}
             <Footer />
