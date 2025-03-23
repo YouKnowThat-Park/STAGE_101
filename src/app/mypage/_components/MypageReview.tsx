@@ -10,29 +10,19 @@ const MypageReview = () => {
   const { data: reviews } = useReviews();
   const { profile_img } = useUserStore();
 
-  console.log('🔍 리뷰 데이터 확인:', reviews);
-  if (reviews) {
-    reviews.forEach((review: any, index: number) => {
-      console.log(`📝 리뷰 ${index + 1}:`, review);
-      console.log('👉 저장된 display_name:', review.display_name); // ✅ 저장된 display_name 확인
-    });
-  }
-
   const formatDateToKST = (dateString: string) =>
     new Date(dateString).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
 
   return (
     <section className="flex flex-col items-center bg-white h-[500px] gap-5">
-      <div className="w-full max-w-lg p-5 rounded-lg shadow-md border bg-[#151515] border-black h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
-        <h2 className="text-2xl font-bold text-white mb-4">내 리뷰</h2>
-
+      <div className="w-full max-w-lg p-5 bg-white  h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {reviews?.length > 0 ? (
           <ul className="space-y-4">
             {reviews.map((review: ReviewsType) => {
               const theaterName = review.theaters?.name || '공연 제목';
               const reviewImgUrl = review.image_url || '/default-image.jpg';
               const displayName = review.display_name || '익명'; // ✅ 저장된 display_name 사용
-              const userProfileImg = profile_img || '/default-profile.png';
+              const userProfileImg = profile_img || '/default.png';
 
               return (
                 <li
