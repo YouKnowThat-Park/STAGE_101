@@ -7,7 +7,7 @@ const MinusIcon = () => {
       viewBox="0 0 512 512"
       width={20}
       height={20}
-      fill="black"
+      fill="#e5e7eb"
     >
       <path d="M384,265H128v-17h256V265z" />
     </svg>
