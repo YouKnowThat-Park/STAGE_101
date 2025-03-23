@@ -77,7 +77,7 @@ const MypageHistory = () => {
         </div>
       ) : (
         // ✅ 아이템 목록에 스크롤 적용 (높이 고정)
-        <div className="w-full max-w-lg max-h-[450px] overflow-y-scroll scrollbar-hide [&::-webkit-scrollbar]:hidden border rounded-lg p-2">
+        <div className="w-full max-w-lg max-h-[450px] overflow-y-scroll scrollbar-hide [&::-webkit-scrollbar]:hidden rounded-lg ">
           {history.map((item, index) => (
             <div
               key={index}

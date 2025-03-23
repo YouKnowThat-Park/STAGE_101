@@ -66,39 +66,39 @@ const MyPage = () => {
         <MypageFooter />
       </div>
 
-      <div className="w-[600px] h-[740px] bg-white flex flex-col  ml-auto mt-20">
-        {/* 프로필 & 유저 정보 */}
+      <div className="flex flex-col gap-5 mt-20 ml-28">
         <MypageProfile
           profile_img={profile_img || defaultProfileImg}
           nickname={nickname}
           name={name}
           point={point}
         />
+        <nav className="bg-white rounded-md flex justify-center items-center gap-20 border-b-2 border-gray-300">
+          {buttonTabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setSelectedTab(tab.key)}
+              className={` py-2  border-b-2 ${
+                selectedTab === tab.key ? 'border-black' : 'border-transparent'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+        <div className="w-[600px] h-[540px] bg-white flex flex-col  ml-auto rounded-lg ">
+          {/* 네비게이션 탭 */}
+          <div className="bg-white max-w-4xl border border-gray-500 p-2 rounded-lg ">
+            {/* 선택된 탭에 따라 내용 변경 */}
+            <div className="mt-6 ">
+              {selectedTab === 'ticket' && <MypageTicket />}
 
-        {/* 네비게이션 탭 */}
-        <div className="bg-white max-w-4xl p-2 ">
-          <nav className="flex justify-center items-center gap-20 border-b-2 border-gray-300">
-            {buttonTabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setSelectedTab(tab.key)}
-                className={` py-2  border-b-2 ${
-                  selectedTab === tab.key ? 'border-black' : 'border-transparent'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-          {/* 선택된 탭에 따라 내용 변경 */}
-          <div className="mt-6 ">
-            {selectedTab === 'ticket' && <MypageTicket />}
+              {selectedTab === 'review' && <MypageReview />}
 
-            {selectedTab === 'review' && <MypageReview />}
+              {selectedTab === 'history' && <MypageHistory />}
 
-            {selectedTab === 'history' && <MypageHistory />}
-
-            {selectedTab === 'qna' && <MypageQna />}
+              {selectedTab === 'qna' && <MypageQna />}
+            </div>
           </div>
         </div>
       </div>

@@ -21,16 +21,16 @@ const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProp
   };
 
   return (
-    <div className="bg-[#151515] w-full max-w-4xl h-[150px] p-6 flex items-center gap-6 relative">
+    <div className="bg-white w-full max-w-4xl h-[150px] p-6 flex items-center gap-6 relative rounded-lg border border-gray-500">
       {/* 프로필 이미지 */}
       <div className="flex gap-5 p-3 w-full">
-        <div className="bg-white w-[100px] h-[100px] rounded-sm flex items-center justify-center overflow-hidden">
+        <div className="bg-white w-[100px] h-[100px] border border-black rounded-sm flex items-center justify-center overflow-hidden">
           <Image
             src={getValidImageUrl(profile_img)}
             alt="profile_image"
             width={100}
             height={100}
-            className="rounded-sm object-cover"
+            className="rounded-lg object-cover"
             style={{ objectFit: 'cover' }} // ✅ 이미지가 컨테이너를 넘지 않도록 설정
           />
         </div>

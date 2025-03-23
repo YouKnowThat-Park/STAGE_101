@@ -47,8 +47,7 @@ const MypageTicket = () => {
         </div>
       ) : (
         // ✅ 예약 내역이 있을 때
-        <div className="w-full max-w-lg p-5 rounded-lg shadow-md border bg-[#151515] border-black h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
-          <h2 className="text-xl font-semibold mb-4 text-white">My Tickets</h2>
+        <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-4">
             {history.map((ticket) => (
               <li key={ticket.id} className="p-4 bg-white rounded-lg border border-black">
