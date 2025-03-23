@@ -129,7 +129,7 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white text-black p-6">
+    <div className="flex flex-col items-center justify-center  text-black p-6">
       {/* STEP 1: 달력 (날짜 선택) */}
       {step === 1 && (
         <TheaterCalendar theaterId={theaterId} onDateTimeSelect={handleCalendarNext} />
