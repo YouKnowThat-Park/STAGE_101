@@ -33,11 +33,10 @@ export default function Home() {
         </div>
 
         {/* QnA 섹션 */}
-        <div className="h-[500px] w-[400px] bg-white shadow-md rounded-lg flex-1 flex flex-col items-center">
-          <Link href={'/home/HomeQna'}>
-            <h2 className="w-full text-center mt-3">전체 보기</h2>
+        <div className="h-[100px] w-[400px] bg-white shadow-md rounded-lg flex-1 flex flex-col justify-center items-center">
+          <Link href={'/notion'}>
+            <h2 className="w-full text-center mt-3">기능적 문제 히스토리</h2>
           </Link>
-          <HomeQna />
         </div>
       </div>
 
