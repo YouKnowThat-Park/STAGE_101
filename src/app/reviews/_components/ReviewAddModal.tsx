@@ -50,14 +50,11 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
   useEffect(() => {
     const fetchAvailableTheaters = async () => {
-      console.log('📢 [DEBUG] API 요청 시작'); // ✅ API 호출 시작 로그
+      if (!userId) return; // 🚫 유저 ID 없으면 요청하지 않음
 
       try {
         const response = await fetch(`/api/reviews/watched-theaters?userId=${userId}`);
-        console.log('📢 [DEBUG] API 응답 상태:', response.status); // ✅ 응답 상태 확인
-
         const data = await response.json();
-        console.log('📢 [DEBUG] API 응답 데이터:', data); // ✅ 응답 데이터 확인
 
         if (!response.ok) throw new Error(data.error || '데이터를 불러오지 못했습니다.');
         setWatchedTheaters(data.theaters || []);
@@ -85,8 +82,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
         setPreviewReview({
           theater: data.theater_name || '극장 선택 안됨',
           comment,
-          image: imageType === 'poster' ? data.theater_main_img : '',
-          profileImg: imageType === 'profile' ? data.profile_img : '',
+          image: imageType === 'poster' ? data.theater_main_img : 'default.png',
+          profileImg: imageType === 'profile' ? data.profile_img : 'default.png',
           date: new Date().toISOString().split('T')[0],
           displayName: displayName === 'name' ? data.name : data.nickname,
           pastViews: data.past_views || 0,
@@ -243,7 +240,7 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
             </div>
             <div className="flex-shrink-0">
               <Image
-                src={previewReview.image || previewReview.profileImg || '/poster-placeholder.jpg'}
+                src={previewReview.image || previewReview.profileImg || '/default.png'}
                 alt="프로필 이미지가 없습니다."
                 width={100}
                 height={150}
@@ -267,6 +264,12 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
             작성 하기
           </button>
         </div>
+        {!userId && (
+          <div className="absolute inset-0 z-50 backdrop-blur-sm bg-white/50 flex flex-col items-center justify-center text-center text-gray-700 px-4 pointer-events-auto">
+            <h3 className="text-xl font-bold mb-2">로그인이 필요합니다</h3>
+            <p className="text-sm">리뷰를 작성하려면 로그인 해주세요.</p>
+          </div>
+        )}
       </div>
     </div>
   );
