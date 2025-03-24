@@ -49,11 +49,6 @@ export default function CheckoutClient({
   }, [viewed_at, show_time]); // ✅ props 값이 변경되면 상태 업데이트
 
   useEffect(() => {
-    console.log('[디버그] viewedAt 변경됨:', viewedAt);
-    console.log('[디버그] showTime 변경됨:', showTime);
-  }, [viewedAt, showTime]);
-
-  useEffect(() => {
     async function initTossPayments() {
       if (!CLIENT_KEY) {
         console.error('🚨 TOSS CLIENT KEY가 설정되지 않았습니다.');
@@ -85,8 +80,6 @@ export default function CheckoutClient({
       viewed_at: formattedViewedAt,
       show_time: formattedShowTime, // ✅ "16:00" 형식으로 변환
     };
-
-    console.log('🚀 [디버깅] 프론트엔드에서 보낼 데이터:', JSON.stringify(requestData, null, 2));
 
     try {
       const response = await fetch(`${API_URL}/api/reservation/create`, {
