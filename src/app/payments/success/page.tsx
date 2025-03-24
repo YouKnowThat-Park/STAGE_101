@@ -8,7 +8,7 @@ const formatPhoneNumber = (phone: string | null) => {
   if (!phone) return '정보 없음';
   const digits = phone.replace(/\D/g, '');
   return digits.length === 11
-    ? `${digits.slice(0, 3)}-${digits.slice(3, 5)}**-${digits.slice(8, 10)}**`
+    ? `${digits.slice(0, 3)}-${digits.slice(3, 4)}**-${digits.slice(7, 9)}**`
     : '유효하지 않은 번호';
 };
 
@@ -33,35 +33,18 @@ const PaymentSuccessPage = () => {
       if (!orderId || !reservationId || !amount || isConfirmed) return;
 
       try {
-        console.log('🛠️ 결제 정보 확인 요청:', {
-          orderId,
-          reservationId,
-          amount,
-          paymentKey,
-          userId,
-        });
-
-        // ✅ 기존 결제 정보 조회
         const checkRes = await fetch(
           `/api/payment/success?reservationId=${reservationId}&userId=${userId}`,
         );
         const checkData = await checkRes.json();
 
-        console.log('✅ 기존 결제 정보 응답:', checkData);
-
-        if (checkData.success && checkData.payment) {
-          console.log('🎉 기존 결제 정보에서 QR 코드 발견:', checkData.payment.qr_token);
-
-          if (checkData.payment.qr_token) {
-            setQrToken(checkData.payment.qr_token);
-            setSeatNumber(checkData.payment.reservations?.seat_number || '좌석 정보 없음');
-            setIsConfirmed(true);
-            return;
-          }
+        if (checkData.success && checkData.payment?.qr_token) {
+          setQrToken(checkData.payment.qr_token);
+          setSeatNumber(checkData.payment.reservations?.seat_number || '좌석 정보 없음');
+          setIsConfirmed(true);
+          return;
         }
 
-        // ✅ 기존 QR이 없을 경우, 결제 요청 진행
-        console.log('🚀 새로운 결제 요청 실행');
         const res = await fetch('/api/payment/success', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -69,70 +52,80 @@ const PaymentSuccessPage = () => {
         });
 
         const result = await res.json();
-        console.log('✅ 결제 요청 응답:', result);
 
         if (result.success) {
-          console.log('🎉 결제 성공, QR 코드:', result.qr_token);
-
-          if (result.qr_token) {
-            setQrToken(result.qr_token);
-          } else {
-            console.warn('⚠️ QR 코드가 응답에 없음');
-          }
-
+          setQrToken(result.qr_token ?? null);
           setSeatNumber(result.seat_number || '좌석 정보 없음');
           setIsConfirmed(true);
-        } else {
-          console.error('🚨 결제 확인 실패:', result.error);
         }
       } catch (error) {
-        console.error('🚨 결제 확인 오류:', error);
+        console.error('결제 확인 오류:', error);
       }
     }
 
     confirmPayment();
   }, [orderId, reservationId, amount, paymentKey, userId, isConfirmed]);
 
-  useEffect(() => {
-    console.log('📢 현재 qrToken 상태 업데이트:', qrToken);
-  }, [qrToken]);
-
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white rounded-lg shadow-lg w-[600px] flex">
-        <div className="bg-red-500 text-white w-1/3 flex flex-col justify-center items-center rounded-l-lg p-4">
-          <p className="text-xl font-bold">🎟️ 티켓</p>
+    <div className="flex justify-center items-center py-14">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 space-y-6 relative">
+        {/* 공연 정보 */}
+        <div className="text-center border-b pb-4">
+          <h2 className="text-xl font-bold text-black">{theaterName}</h2>
+          <p className="text-sm text-gray-500">{showTime}</p>
         </div>
 
-        <div className="p-6 flex-1">
-          <div className="flex gap-5 items-center">
-            <p className="text-lg font-semibold">{userName}</p>
-            <p className="text-lg font-semibold">{formatPhoneNumber(userPhone)}</p>
+        {/* 유저 정보 */}
+        <div className="flex justify-between text-sm text-gray-800">
+          <p>
+            <span className="text-purple-500">👤</span> {userName}
+          </p>
+          <p>
+            <span className="text-red-500">📞</span> {formatPhoneNumber(userPhone)}
+          </p>
+        </div>
+
+        {/* 주요 정보 박스 */}
+        <div className="grid grid-cols-2 gap-4 text-sm mt-2">
+          {/* 좌석 */}
+          <div className="bg-gray-100 p-3 rounded-lg shadow-inner">
+            <p className="text-gray-500 text-xs mb-1">좌석</p>
+            <p className="text-base font-semibold text-indigo-600">{seatNumber}</p>
           </div>
-          <p>{theaterName}</p>
-          <p>{showTime}</p>
-          <p className="text-gray-700 text-sm mt-3">💺 좌석:</p>
-          <p className="text-lg font-semibold">{seatNumber || '좌석 정보 없음'}</p>
 
-          <p className="text-gray-700 text-sm mt-2">🛒 주문 번호:</p>
-          <p className="text-[13px] font-semibold">{orderId}</p>
+          {/* 결제금액 */}
+          <div className="bg-gray-100 p-3 rounded-lg shadow-inner">
+            <p className="text-gray-500 text-xs mb-1">결제 금액</p>
+            <p className="text-base font-semibold text-blue-500">
+              {Number(amount).toLocaleString()}원
+            </p>
+          </div>
 
-          <p className="text-gray-700 text-sm mt-2">💰 결제 금액:</p>
-          <p className="text-lg font-semibold">{amount}원</p>
+          {/* 주문번호 */}
+          <div className="col-span-2 bg-gray-100 p-3 rounded-lg shadow-inner break-words">
+            <p className="text-gray-500 text-xs mb-1">주문 번호</p>
+            <p className="text-[13px] font-mono text-gray-700">{orderId}</p>
+          </div>
+        </div>
 
+        {/* QR 코드 */}
+        <div className="flex justify-center mt-6">
           {qrToken ? (
             <Image
               src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrToken}`}
               alt="QR Code"
-              width={24}
-              height={24}
-              className="w-24 h-24 mt-4"
+              width={150}
+              height={150}
+              className="rounded-md border"
             />
           ) : (
-            <p className="text-gray-500 mt-4">QR 코드 생성 중...</p>
+            <p className="text-gray-400">QR 코드 생성 중...</p>
           )}
+        </div>
 
-          <a href="/" className="text-blue-500 font-bold hover:underline text-sm mt-4 inline-block">
+        {/* 하단 버튼 */}
+        <div className="text-center mt-6">
+          <a href="/" className="inline-block text-sm text-blue-600 font-medium hover:underline">
             홈으로 이동
           </a>
         </div>
