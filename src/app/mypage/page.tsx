@@ -48,7 +48,7 @@ const MyPage = () => {
   const { name, point } = useUserHook(id);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-40 px-4 py-10 lg:px-20 relative ">
+    <div className="flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative ">
       {/* 📱 상단 로고 (모바일 전용) */}
       <div className="lg:hidden text-white text-center text-2xl font-bold mb-4">STAGE_101</div>
 
