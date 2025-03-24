@@ -10,7 +10,7 @@ const MypageFooter = () => {
 
   return (
     <div className="text-gray-500 flex flex-col items-center">
-      <div className="border-t-2 border-t-black py-10 w-full">
+      <div className="border-t-2 border-t-black w-full">
         <div className="max-w-screen-md mx-auto flex flex-col items-center text-center ">
           {/* 회사 정보 */}
           <div className="flex flex-col">

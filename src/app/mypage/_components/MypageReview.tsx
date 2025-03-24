@@ -20,7 +20,7 @@ const MypageReview = () => {
           <ul className="space-y-4">
             {reviews.map((review: ReviewsType) => {
               const theaterName = review.theaters?.name || '공연 제목';
-              const reviewImgUrl = review.image_url || '/default-image.jpg';
+              const reviewImgUrl = review.image_url || '/default.jpg';
               const displayName = review.display_name || '익명';
               const userProfileImg = profile_img || '/default.png';
 
