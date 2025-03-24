@@ -31,33 +31,38 @@ const Logout = () => {
   };
 
   return (
-    <div className="flex justify-between items-center h-16 px-8 bg-black text-white">
-      {/* ✅ 헤더 전체 높이 설정 (h-16) + 가운데 정렬 (items-center) */}
-      <Link href="/" className="text-xl font-bold text-[#C9A66B]">
+    <div
+      className="
+        flex items-center h-16 px-8 bg-black text-white justify-between
+        max-[500px]:justify-start max-[500px]:gap-6 
+        max-[500px]:overflow-x-auto max-[500px]:whitespace-nowrap 
+        max-[500px]:scroll-smooth max-[500px]:[&::-webkit-scrollbar]:hidden
+      "
+    >
+      <Link href="/" className="text-xl font-bold text-[#C9A66B] flex-shrink-0">
         STAGE_101
       </Link>
 
-      {/* ✅ 로그인 상태에 따라 버튼 표시 */}
       {id ? (
-        <button onClick={handleLogout} className="text-red-500">
+        <button onClick={handleLogout} className="text-red-500 flex-shrink-0">
           LOGOUT
         </button>
       ) : (
-        <Link href="/sign-in" className="hover:underline">
+        <Link href="/sign-in" className="hover:underline flex-shrink-0">
           LOGIN
         </Link>
       )}
 
-      <Link href="/theater" className="hover:underline">
+      <Link href="/theater" className="hover:underline flex-shrink-0">
         THEATER
       </Link>
-      <Link href="/shop" className="hover:underline">
+      <Link href="/shop" className="hover:underline flex-shrink-0">
         SHOP
       </Link>
-      <Link href="/cart" className="hover:underline">
+      <Link href="/cart" className="hover:underline flex-shrink-0">
         CART
       </Link>
-      <Link href="/mypage" className="hover:underline">
+      <Link href="/mypage" className="hover:underline flex-shrink-0">
         MYPAGE
       </Link>
     </div>
