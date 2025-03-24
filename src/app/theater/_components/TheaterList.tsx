@@ -16,7 +16,19 @@ const TheaterList = () => {
   };
 
   return (
-    <div className="flex justify-center items-center px-10 py-14  gap-5">
+    <div
+      className="
+    flex justify-center items-center px-10 py-14 gap-5
+    max-[755px]:overflow-x-auto
+    max-[755px]:whitespace-nowrap
+    max-[755px]:scroll-smooth
+    max-[755px]:cursor-grab
+    max-[755px]:active:cursor-grabbing
+    max-[755px]:[-webkit-overflow-scrolling:touch]
+    max-[755px]:[scrollbar-width:none]
+    max-[755px]:[&::-webkit-scrollbar]:hidden
+  "
+    >
       <button
         onClick={() => router.push('/')}
         className="text-2xl font-bold
