@@ -2,19 +2,15 @@
 import { useUserStore } from '@/store/userStore';
 import React, { useState } from 'react';
 import MypageHistory from './_components/MypageHistory';
-import MypageQna from './_components/MypageQna';
 import MypageTicket from './_components/MypageTicket';
-import MypageButton from './_components/MypageButton';
 import MypageProfile from './_components/MypageProfile';
 import { useUserHook } from '@/hooks/useUserHook';
-import TicketIcon from '@/ui/icon/TicketIcon';
-import InquiryIcon from '@/ui/icon/InquiryIcon';
+
 import MypageReview from './_components/MypageReview';
-import ReviewIcon from '@/ui/icon/ReviewIcon';
-import HistoryIcon from '@/ui/icon/HistoryIcon';
+
 import MypageFooter from './_components/MypageFooter';
 
-const defaultProfileImg = '/next.svg'; // ✅ public 폴더 이미지 경로
+const defaultProfileImg = '/default.png'; // ✅ public 폴더 이미지 경로
 
 const buttonTabs = [
   {
@@ -44,15 +40,6 @@ const buttonTabs = [
       </div>
     ),
   },
-  {
-    key: 'qna',
-    label: (
-      <div className="flex flex-col items-center">
-        {/* <InquiryIcon /> */}
-        <span>Q&A</span>
-      </div>
-    ),
-  },
 ];
 
 const MyPage = () => {
@@ -67,28 +54,28 @@ const MyPage = () => {
       </div>
 
       <div className="flex flex-col gap-5 mt-20 ml-28">
-        <MypageProfile
-          profile_img={profile_img || defaultProfileImg}
-          nickname={nickname}
-          name={name}
-          point={point}
-        />
-        <nav className="bg-white rounded-md flex justify-center items-center gap-20 border-b-2 border-gray-300">
-          {buttonTabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setSelectedTab(tab.key)}
-              className={` py-2  border-b-2 ${
-                selectedTab === tab.key ? 'border-black' : 'border-transparent'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-        <div className="w-[600px] h-[540px] bg-white flex flex-col  ml-auto rounded-lg ">
+        <div className="w-[600px] h-[540px] bg-[#151515] flex flex-col  ml-auto  ">
+          <MypageProfile
+            profile_img={profile_img || defaultProfileImg}
+            nickname={nickname}
+            name={name}
+            point={point}
+          />
+          <nav className="bg-white flex justify-center items-center gap-20 border-b-2 border-gray-300">
+            {buttonTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setSelectedTab(tab.key)}
+                className={` py-2  border-b-2 ${
+                  selectedTab === tab.key ? 'border-black' : 'border-transparent'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
           {/* 네비게이션 탭 */}
-          <div className="bg-white max-w-4xl border border-gray-500 p-2 rounded-lg ">
+          <div className="bg-white max-w-4xl border-gray-500 p-2 ">
             {/* 선택된 탭에 따라 내용 변경 */}
             <div className="mt-6 ">
               {selectedTab === 'ticket' && <MypageTicket />}
@@ -96,8 +83,6 @@ const MyPage = () => {
               {selectedTab === 'review' && <MypageReview />}
 
               {selectedTab === 'history' && <MypageHistory />}
-
-              {selectedTab === 'qna' && <MypageQna />}
             </div>
           </div>
         </div>
