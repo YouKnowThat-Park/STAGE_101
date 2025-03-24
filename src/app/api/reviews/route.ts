@@ -6,11 +6,10 @@ export async function GET(req: NextRequest) {
 
   const {
     data: { user },
-    error: authError,
   } = await supabase.auth.getUser();
 
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!user) {
+    return NextResponse.json([]);
   }
 
   const { data, error } = await supabase

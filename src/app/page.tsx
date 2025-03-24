@@ -30,9 +30,9 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-center gap-10 mt-20 w-full max-w-[1100px]">
-        {/* 리뷰 전체보기 */}
-        <div className="h-[500px] w-full lg:w-[400px] shadow-md rounded-lg flex flex-col items-center">
+      <div className="flex flex-wrap justify-center gap-10 mt-20 w-full max-w-[1100px]">
+        {/* 리뷰 랭킹 */}
+        <div className="min-w-[350px] flex-1 max-w-[400px] shadow-md rounded-lg flex flex-col items-center">
           <div className="w-full flex">
             <button
               onClick={() => setIsReviewModalOpen(true)}
@@ -45,8 +45,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* QnA */}
-        <div className="flex flex-col gap-6 flex-1">
+        {/* 히스토리 + 트러블슈팅 */}
+        <div className="flex flex-col gap-6 flex-1 min-w-[350px]">
           <div className="h-[100px] w-full bg-white shadow-md rounded-lg flex flex-col justify-center items-center">
             <Link href="/notion">
               <h2 className="w-full text-center mt-3">기능적 문제 히스토리</h2>
