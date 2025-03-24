@@ -5,7 +5,7 @@ export interface FetchAllReviewsProps {
   sort: string; // 정렬 옵션 ('newest', 'oldest' 등)
   order: string; // 정렬 순서 ('asc', 'desc' 등)
   theaterId?: string; // 선택적 필터 (극장 ID)
-  userId: string; // 사용자 ID
+  userId?: string; // 사용자 ID
 }
 
 export interface FetchAllReviewsResponse {
@@ -23,11 +23,11 @@ const fetchAllReviews = async ({
 }: FetchAllReviewsProps): Promise<FetchAllReviewsResponse> => {
   // URL 파라미터 생성
   const queryParams = new URLSearchParams({
-    sort: sort === 'newest' ? 'created_at' : 'created_at', // 'newest'나 'oldest'를 'created_at'으로 매핑
-    order, // 'asc' 또는 'desc'
-    page: String(pageParam), // pageParam을 string으로 변환
-    userId, // 사용자 ID
-    ...(theaterId ? { theaterId } : {}), // theaterId가 있을 경우 추가
+    sort: sort === 'newest' ? 'created_at' : 'created_at',
+    order,
+    page: String(pageParam),
+    ...(userId ? { userId } : {}), // ✅ userId 있을 때만 추가
+    ...(theaterId ? { theaterId } : {}),
   });
 
   // 서버에서 리뷰 데이터를 가져옴
