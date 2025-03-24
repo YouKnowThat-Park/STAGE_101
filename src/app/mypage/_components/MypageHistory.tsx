@@ -69,15 +69,16 @@ const MypageHistory = () => {
   };
 
   return (
-    <section className="flex flex-col items-center bg-white h-auto gap-5 py-5">
+    <section className="flex flex-col items-center bg-white h-[500px] gap-5 ">
       {history.length === 0 ? (
         <div className="flex flex-col items-center">
           <NoHistoryIcon />
-          <p>거래 내역이 없습니다.</p>
+          <p>You have no transaction history yet.</p>
         </div>
       ) : (
         // ✅ 아이템 목록에 스크롤 적용 (높이 고정)
-        <div className="w-full max-w-lg max-h-[450px] overflow-y-scroll scrollbar-hide [&::-webkit-scrollbar]:hidden rounded-lg ">
+        // ✅ 예약 내역이 있을 때
+        <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           {history.map((item, index) => (
             <div
               key={index}

@@ -21,15 +21,15 @@ const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProp
   };
 
   return (
-    <div className="bg-white w-full max-w-4xl h-[150px] p-6 flex items-center gap-6 relative rounded-lg border border-gray-500">
+    <div className="bg-[#151515] w-full max-w-4xl h-[150px] p-6 flex items-center gap-6 relative rounded-t-lg border border-gray-500">
       {/* 프로필 이미지 */}
       <div className="flex gap-5 p-3 w-full">
-        <div className="bg-white w-[100px] h-[100px] border border-black rounded-sm flex items-center justify-center overflow-hidden">
+        <div className="bg-white w-[100px] h-[110px] border border-black rounded-md flex items-center justify-center overflow-hidden">
           <Image
-            src={getValidImageUrl(profile_img)}
+            src={profile_img || '/default.png'}
             alt="profile_image"
             width={100}
-            height={100}
+            height={110}
             className="rounded-lg object-cover"
             style={{ objectFit: 'cover' }} // ✅ 이미지가 컨테이너를 넘지 않도록 설정
           />
@@ -37,8 +37,10 @@ const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProp
 
         {/* 유저 정보 */}
         <div className="flex flex-col gap-2">
-          <div className="bg-white px-4 py-2 rounded-md text-black">
-            {nickname} / <span className="text-sm">{name}</span>
+          <div className="bg-white px-4 py-2 text-[15px] rounded-md  text-black">
+            {nickname}
+            <br />
+            <span className="text-sm">{name}</span>
           </div>
           <div className="bg-white flex px-4 py-2 rounded-md gap-2 text-black">
             {point}

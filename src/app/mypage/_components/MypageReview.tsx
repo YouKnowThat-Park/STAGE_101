@@ -15,13 +15,13 @@ const MypageReview = () => {
 
   return (
     <section className="flex flex-col items-center bg-white h-[500px] gap-5">
-      <div className="w-full max-w-lg p-5 bg-white  h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div className="w-full max-w-lg  bg-white h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {reviews?.length > 0 ? (
           <ul className="space-y-4">
             {reviews.map((review: ReviewsType) => {
               const theaterName = review.theaters?.name || '공연 제목';
               const reviewImgUrl = review.image_url || '/default-image.jpg';
-              const displayName = review.display_name || '익명'; // ✅ 저장된 display_name 사용
+              const displayName = review.display_name || '익명';
               const userProfileImg = profile_img || '/default.png';
 
               return (
@@ -55,7 +55,7 @@ const MypageReview = () => {
                   {/* 날짜 및 사용자 정보 */}
                   <div className="flex gap-4 text-xs text-gray-700 mt-2">
                     <p>✅ {formatDateToKST(review.created_at)}</p>
-                    <p>✅ {displayName}</p> {/* ✅ display_name 사용 */}
+                    <p>✅ {displayName}</p>
                     <span className="text-xs">{review.past_views ?? 0}회 감상</span>
                   </div>
                 </li>
@@ -63,9 +63,9 @@ const MypageReview = () => {
             })}
           </ul>
         ) : (
-          <div className="flex flex-col items-center text-white">
+          <div className="flex flex-col items-center text-gray-600 ">
             <NoReviewIcon />
-            <p className="mt-2">작성한 리뷰가 없습니다.</p>
+            <p className="">No reviews written.</p>
           </div>
         )}
       </div>

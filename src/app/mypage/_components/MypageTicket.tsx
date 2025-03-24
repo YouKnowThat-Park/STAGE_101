@@ -50,7 +50,7 @@ const MypageTicket = () => {
         <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-4">
             {history.map((ticket) => (
-              <li key={ticket.id} className="p-4 bg-white rounded-lg border border-black">
+              <li key={ticket.id} className="p-4 bg-white rounded-lg border border-gray-700 ">
                 {/* ✅ STAGE_101 & 이미지 한 줄 정렬 */}
                 <div className="flex justify-between items-start">
                   <div className="w-full">
@@ -82,11 +82,11 @@ const MypageTicket = () => {
                   />
                 </div>
 
-                <div className="flex gap-2 text-xs mt-1">
+                <div className="flex gap-2 text-xs mt-3">
                   <p>✅ 결제 금액: {ticket.total_price}원</p>
                   <p>✅ 결제 시간: {formatTime(ticket.created_at)}</p>
                   <button
-                    className="text-xs text-red-500 ml-[120px] mt-1"
+                    className="text-xs text-red-500 ml-[100px] mt-1"
                     onClick={() => cancelReservation(ticket.id)}
                     disabled={loading}
                   >
