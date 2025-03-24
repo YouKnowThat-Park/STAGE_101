@@ -74,8 +74,6 @@ export async function GET(req: NextRequest) {
           .eq('theater_id', ticket.theaters.id)
           .maybeSingle();
 
-        console.log('🎟️ Supabase QR 데이터:', qrData);
-
         ticket.qr_token = qrData?.qr_token || null;
       }
     }
