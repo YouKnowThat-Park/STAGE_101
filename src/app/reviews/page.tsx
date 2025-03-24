@@ -16,19 +16,19 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   const { id: userId } = useUserStore();
   const queryClient = useQueryClient();
   const [sortOption, setSortOption] = useState<'newest' | 'oldest'>('newest');
+  const [isMobile, setIsMobile] = useState(false);
 
-  // ✅ 로그인 안 해도 리뷰 가져오도록 변경
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
     FetchAllReviewsResponse,
     Error
   >({
-    queryKey: ['reviews', { sort: sortOption }], // userId 제거
+    queryKey: ['reviews', { sort: sortOption }],
     queryFn: async ({ pageParam = 1 }) => {
       return await fetchAllReviews({
         pageParam: pageParam as number,
         sort: sortOption,
         order: sortOption === 'newest' ? 'desc' : 'asc',
-        userId: userId || undefined, // userId가 없으면 undefined로 설정
+        userId: userId || undefined,
       });
     },
     getNextPageParam: (lastPage, allPages) => {
@@ -40,14 +40,12 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   });
 
   useEffect(() => {
-    if (isOpenReviewModal) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-    }
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isOpenReviewModal ? 'hidden' : 'auto';
+    document.documentElement.style.overflow = isOpenReviewModal ? 'hidden' : 'auto';
     return () => {
       document.body.style.overflow = 'auto';
       document.documentElement.style.overflow = 'auto';
@@ -62,12 +60,13 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
       {isOpenReviewModal && (
         <motion.div
           initial={{ x: 0 }}
-          animate={{ x: isOpenWriteModal ? '-15%' : 0 }}
+          animate={{
+            x: isOpenWriteModal && !isMobile ? '-15%' : 0,
+          }}
           exit={{ x: '-100%' }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="bg-white w-[500px] h-[90vh] overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:hidden shadow-lg p-6 relative rounded-lg"
+          className="bg-white w-[90%] max-w-[500px] h-[90vh] overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:hidden shadow-lg p-6 relative rounded-lg z-40"
         >
-          {/* 닫기 버튼 */}
           <button
             onClick={() => {
               setIsOpenReviewModal(false);
@@ -82,8 +81,6 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
             <div className="mb-4 p-5 bg-white flex justify-between gap-5 w-full">
               <button onClick={() => setSortOption('newest')}>최신 순</button>
               <button onClick={() => setSortOption('oldest')}>오래된 순</button>
-
-              {/* ✅ 리뷰 작성 버튼 */}
               <button
                 onClick={() => setIsOpenWriteModal(true)}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -92,11 +89,10 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
               </button>
             </div>
 
-            {/* 리뷰 목록 */}
             <div className="reviews w-full space-y-4">
               {reviews.map((review: ReviewsType, index: number) => {
                 const reviewImgUrl = review.image_url || '/next.svg';
-                const isBlurred = !userId && index >= 5; // 5개까지는 보이고 이후부터 블러 처리
+                const isBlurred = !userId && index >= 5;
 
                 return (
                   <div
@@ -125,7 +121,6 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                       <div className="flex gap-4 text-xs">
                         <p>✅ {new Date(review.created_at).toISOString().split('T')[0]}</p>
                         <p>✅ {review.display_name || '이름 없음'}</p>
-
                         <span className="mt-[-3px]">
                           <BronzeCrownIcon
                             color={review.past_views >= 10 ? '#facc15' : 'currentColor'}
@@ -166,25 +161,23 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
       {/* ✅ 리뷰 작성 모달 */}
       {isOpenWriteModal && (
         <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: isOpenReviewModal ? '15%' : 0 }}
-          exit={{ x: '100%' }}
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="bg-white w-[500px] h-[90vh] overflow-hidden overflow-y-auto shadow-lg p-6 relative rounded-lg"
+          className="absolute inset-0 bg-white w-full h-full overflow-y-auto shadow-lg p-6 rounded-lg z-50"
         >
-          {/* 닫기 버튼 */}
           <button
             onClick={() => setIsOpenWriteModal(false)}
-            className="absolute top-2 right-4 text-gray-600 hover:text-black"
+            className="absolute top-2 right-4 text-gray-600 hover:text-black z-50"
           >
             ✕
           </button>
 
-          {/* 리뷰 작성 모달 내용 */}
           <ReviewAddModal
             isOpen={isOpenWriteModal}
             onClose={() => setIsOpenWriteModal(false)}
-            watchedTheaters={[]} // 관람한 극장 목록 (데이터 추가 필요)
+            watchedTheaters={[]}
             onSubmit={() => {
               setIsOpenWriteModal(false);
               queryClient.invalidateQueries({ queryKey: ['reviews'] });
