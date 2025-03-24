@@ -140,9 +140,9 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
         <>
           <h1 className="text-2xl font-bold mb-4">{theaterData?.name || '극장'} - 좌석 선택</h1>
 
-          <div className="flex flex-col items-center gap-2 mt-6">
+          <div className="flex flex-col items-center gap-[6px] mt-6 px-2 w-full">
             {[...Array(5)].map((_, rowIndex) => (
-              <div key={rowIndex} className="flex gap-2">
+              <div key={rowIndex} className="flex justify-center gap-[4px]">
                 {[...Array(10)].map((_, seatIndex) => {
                   const seat = String.fromCharCode(65 + rowIndex) + (seatIndex + 1);
                   const isReserved = reservedSeats.includes(seat);
@@ -153,14 +153,16 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
                       key={seat}
                       onClick={() => handleSeatClick(seat)}
                       disabled={isReserved}
-                      className={`w-10 h-10 flex items-center justify-center text-black rounded-md cursor-pointer transition
-                        ${
-                          isReserved
-                            ? 'bg-gray-500 cursor-not-allowed'
-                            : isSelected
-                              ? 'bg-blue-500'
-                              : 'bg-green-500 hover:bg-gray-400'
-                        }`}
+                      className={`rounded-md text-[2.8vw] sm:text-[2vw] md:text-sm
+              w-[7vw] h-[7vw] min-w-[24px] min-h-[24px] max-w-[36px] max-h-[36px]
+              flex items-center justify-center transition font-semibold
+              ${
+                isReserved
+                  ? 'bg-gray-500 cursor-not-allowed text-white'
+                  : isSelected
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-green-500 hover:bg-gray-400 text-white'
+              }`}
                     >
                       {seat}
                     </button>

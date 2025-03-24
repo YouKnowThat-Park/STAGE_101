@@ -132,18 +132,40 @@ export default function CheckoutClient({
   };
 
   return (
-    <div className="text-white text-center p-6">
-      <h1 className="text-2xl font-bold">결제 페이지</h1>
-      <p>{theaterData?.name}</p>
-      <p>상영 시간: {theaterData?.show_time}</p>
-      <p className="mt-2">총 가격: {totalPrice.toLocaleString()}원</p>
+    <div className="flex justify-center items-center py-24 px-4">
+      <div className="bg-white shadow-xl rounded-lg p-8 max-w-md w-full">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">🎫 결제 페이지</h2>
 
-      <button
-        onClick={handleTossPayment}
-        className="bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-md text-white font-bold mt-6"
-      >
-        토스로 결제하기
-      </button>
+        <div className="space-y-3 text-gray-700 text-sm">
+          <p>
+            <span className="font-medium text-gray-900">공연명:</span>{' '}
+            {theaterData?.name || '제목 없음'}
+          </p>
+          <p>
+            <span className="font-medium text-gray-900">상영 시간:</span> {theaterData?.show_time}
+          </p>
+          <p>
+            <span className="font-medium text-gray-900">선택 좌석:</span>{' '}
+            {seatIds.join(', ') || '없음'}
+          </p>
+          <p>
+            <span className="font-medium text-gray-900">예매자:</span> {name}
+          </p>
+          <p>
+            <span className="font-medium text-gray-900">연락처:</span> {phone}
+          </p>
+          <p className="text-lg font-bold text-right mt-4">
+            총 결제 금액: <span className="text-blue-600">{totalPrice.toLocaleString()}원</span>
+          </p>
+        </div>
+
+        <button
+          onClick={handleTossPayment}
+          className="w-full mt-6 py-3 rounded-md text-white bg-blue-500 hover:bg-blue-600 font-semibold transition"
+        >
+          토스로 결제하기
+        </button>
+      </div>
     </div>
   );
 }
