@@ -107,12 +107,6 @@ const Page = () => {
         {/* 버튼 영역 */}
         <div className="flex justify-center gap-4">
           <button
-            disabled
-            className="px-6 py-2 rounded-lg bg-gray-500 text-white cursor-not-allowed"
-          >
-            구매하기
-          </button>
-          <button
             onClick={handleAddToCart}
             className="px-6 py-2 rounded-lg bg-[#C9A66B] text-black font-semibold hover:bg-[#e7c894] transition"
           >
