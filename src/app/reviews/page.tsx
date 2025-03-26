@@ -16,7 +16,17 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   const { id: userId } = useUserStore();
   const queryClient = useQueryClient();
   const [sortOption, setSortOption] = useState<'newest' | 'oldest'>('newest');
-  const [isMobile, setIsMobile] = useState(false);
+  const [isNarrow, setIsNarrow] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNarrow(window.innerWidth < 1200);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
     FetchAllReviewsResponse,
@@ -40,12 +50,14 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   });
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
+    if (isOpenReviewModal) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+    }
 
-  useEffect(() => {
-    document.body.style.overflow = isOpenReviewModal ? 'hidden' : 'auto';
-    document.documentElement.style.overflow = isOpenReviewModal ? 'hidden' : 'auto';
     return () => {
       document.body.style.overflow = 'auto';
       document.documentElement.style.overflow = 'auto';
@@ -60,12 +72,12 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
       {isOpenReviewModal && (
         <motion.div
           initial={{ x: 0 }}
-          animate={{
-            x: isOpenWriteModal && !isMobile ? '-15%' : 0,
-          }}
+          animate={{ x: isOpenWriteModal && !isNarrow ? '-15%' : 0 }}
           exit={{ x: '-100%' }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="bg-white w-[90%] max-w-[500px] h-[90vh] overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:hidden shadow-lg p-6 relative rounded-lg z-40"
+          className={`bg-white ${
+            isNarrow ? 'w-full h-full' : 'w-[500px] h-[90vh]'
+          } overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:hidden shadow-lg p-6 relative rounded-lg`}
         >
           <button
             onClick={() => {
@@ -118,15 +130,9 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                         </div>
                       </div>
 
-                      <div className="flex gap-4 text-xs">
+                      <div className="flex gap-4 text-xs mt-2">
                         <p>✅ {new Date(review.created_at).toISOString().split('T')[0]}</p>
                         <p>✅ {review.display_name || '이름 없음'}</p>
-                        <span className="mt-[-3px]">
-                          <BronzeCrownIcon
-                            color={review.past_views >= 10 ? '#facc15' : 'currentColor'}
-                          />
-                          {review.past_views ?? 0}회 감상
-                        </span>
                       </div>
                     </div>
 
@@ -161,11 +167,13 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
       {/* ✅ 리뷰 작성 모달 */}
       {isOpenWriteModal && (
         <motion.div
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '100%' }}
+          initial={isNarrow ? { y: '100%' } : { x: '100%' }}
+          animate={isNarrow ? { y: 0 } : { x: '15%' }}
+          exit={isNarrow ? { y: '100%' } : { x: '100%' }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="absolute inset-0 bg-white w-full h-full overflow-y-auto shadow-lg p-6 rounded-lg z-50"
+          className={`bg-white ${
+            isNarrow ? 'w-full h-full absolute inset-0 z-50' : 'w-[500px] h-[90vh]'
+          } overflow-hidden overflow-y-auto shadow-lg p-6 rounded-lg`}
         >
           <button
             onClick={() => setIsOpenWriteModal(false)}
