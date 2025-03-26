@@ -17,7 +17,7 @@ const MypageReview = () => {
     <section className="flex flex-col items-center bg-white h-[500px] gap-5">
       <div className="w-full max-w-lg  bg-white h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {reviews?.length > 0 ? (
-          <ul className="space-y-4">
+          <ul className="space-y-4 p-5">
             {reviews.map((review: ReviewsType) => {
               const theaterName = review.theaters?.name || '공연 제목';
               const reviewImgUrl = review.image_url || '/default.jpg';
@@ -63,7 +63,7 @@ const MypageReview = () => {
             })}
           </ul>
         ) : (
-          <div className="flex flex-col items-center text-gray-600 ">
+          <div className="flex flex-col items-center text-gray-600 mt-8 ">
             <NoReviewIcon />
             <p className="">No reviews written.</p>
           </div>

@@ -40,7 +40,7 @@ const MypageTicket = () => {
   return (
     <section className="flex flex-col items-center bg-white h-[500px] gap-5">
       {!history || history.length === 0 ? (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-8">
           <NoTicketIcon />
           <p>No tickets booked.</p>
         </div>

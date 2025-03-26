@@ -71,7 +71,7 @@ const MypageHistory = () => {
   return (
     <section className="flex flex-col items-center bg-white h-[500px] gap-5 ">
       {history.length === 0 ? (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-8">
           <NoHistoryIcon />
           <p>You have no transaction history yet.</p>
         </div>
