@@ -82,8 +82,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
         setPreviewReview({
           theater: data.theater_name || '극장 선택 안됨',
           comment,
-          image: imageType === 'poster' ? data.theater_main_img : 'default.png',
-          profileImg: imageType === 'profile' ? data.profile_img : 'default.png',
+          image: imageType === 'poster' ? data.theater_main_img : '/default.png',
+          profileImg: imageType === 'profile' ? data.profile_img : '/default.png',
           date: new Date().toISOString().split('T')[0],
           displayName: displayName === 'name' ? data.name : data.nickname,
           pastViews: data.past_views || 0,
@@ -177,7 +177,7 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
         <div className="flex flex-col mb-4">
           <label className="mb-1 font-medium text-gray-700">내용</label>
           <textarea
-            placeholder="최대 80자까지만 입력 가능합니다."
+            placeholder="최대 100자까지만 입력 가능합니다."
             className="border border-gray-300 rounded-md p-2 h-36 resize-none"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -229,8 +229,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
         </div>
 
         {/* ✅ 미리보기 추가 */}
-        <h2 className="">[미리 보기]</h2>
-        <div className="relative bg-white border border-black rounded-lg shadow-md p-4 flex flex-col gap-3">
+        <h2 className="mt-4">[미리 보기]</h2>
+        <div className="relative bg-white border border-black rounded-lg shadow-md p-4 flex flex-col gap-3 mt-3">
           <div className="flex items-start gap-4">
             <div className="flex-1">
               <h4 className="text-lg font-black border-b border-black pb-1">
@@ -250,8 +250,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
           </div>
 
           <div className="flex gap-4 text-xs">
-            <p>✅ {previewReview.date}</p>
-            <p>✅ {previewReview.displayName || '이름 없음'}</p>
+            <p>✅ {previewReview.date || '날짜'}</p>
+            <p>✅ {previewReview.displayName || '실명/닉네임'}</p>
           </div>
         </div>
 
