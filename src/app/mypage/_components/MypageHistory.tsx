@@ -82,22 +82,22 @@ const MypageHistory = () => {
           {history.map((item, index) => (
             <div
               key={index}
-              className="flex justify-between border p-4 rounded-lg bg-white shadow-lg gap-4 mb-2"
+              className="flex flex-row border p-4 rounded-lg bg-white shadow-lg gap-4 mb-2"
             >
               {/* 🔹 왼쪽 텍스트 영역 */}
               <div className="flex flex-col flex-grow">
-                {/* 🔺 이름을 왼쪽 상단에 배치 */}
                 <h2 className="text-lg font-semibold mb-1">{item.name || '상품명 없음'}</h2>
                 <hr className="border-gray-300 mb-2" />
-                <div className="flex flex-col gap-1 w-full h-[95px] text-xs mt-2 text-gray-500">
+
+                <div className="flex flex-col gap-1 w-full text-xs mt-2 text-gray-500">
                   <p>이 상품은 매장에서 직접 수령하는 상품입니다.</p>
                   <p>사용 기한이 있는 상품은 만료 후 교환 및 환불이 불가합니다.</p>
                   <p>모든 상품은 소비자 보호법 및 회사 정책에 따라 적용됩니다.</p>
                 </div>
 
-                {/* ✅ 텍스트 & 버튼을 같은 줄에 배치 */}
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center space-x-3 text-sm text-gray-800">
+                {/* ✅ 텍스트 줄바꿈 + 겹침 방지 */}
+                <div className="flex flex-wrap justify-between items-start mt-3 gap-y-1">
+                  <div className="flex flex-wrap gap-x-3 text-sm text-gray-800">
                     <span>✅ {new Date(item.created_at).toISOString().split('T')[0]}</span>
                     <span>💰 {item.total_price.toLocaleString()}원</span>
                     <p className="text-gray-700 text-sm">
@@ -111,22 +111,21 @@ const MypageHistory = () => {
                 </div>
               </div>
 
-              {/* 🔹 오른쪽 이미지 + 버튼 (버튼을 이미지 아래로) */}
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-28 h-28 relative rounded-lg overflow-hidden border">
+              {/* 🔹 이미지 오른쪽에 고정 + 반응형 사이즈 조절 */}
+              <div className="flex flex-col items-center gap-2 shrink-0">
+                <div className="relative rounded-lg overflow-hidden border w-28 h-28 max-[420px]:w-24 max-[420px]:h-24">
                   <Image
                     src={item.image_url || '/default-image.png'}
                     alt={item.name || '상품 이미지'}
-                    width={112}
-                    height={112}
+                    width={96}
+                    height={96}
                     className="object-cover w-full h-full"
                   />
                 </div>
 
-                {/* ✅ 버튼을 이미지 아래로 정렬 */}
                 {item.status === 'pending' && (
                   <button
-                    className="mt-6 text-red-500 text-sm border-b-2  "
+                    className="mt-2 text-red-500 text-sm border-b-2"
                     onClick={() => handleCancel(item.payment_key)}
                   >
                     취소 하기
