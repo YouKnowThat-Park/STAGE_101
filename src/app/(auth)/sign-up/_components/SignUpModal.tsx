@@ -14,9 +14,9 @@ const SignUpModal = ({ isOpen, onClose }: SignUpModalProps) => {
 
       {/* ✅ 모달 정렬: flex + items-center + justify-center 활용 */}
       <DialogContent className="fixed inset-0 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-xl font-bold">회원가입 완료</h2>
-          <p className="mt-2">환영합니다! 🎉</p>
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-black">
+          <h2 className="text-xl font-bold text-black">회원가입 완료</h2>
+          <p className="mt-2 text-black">환영합니다! 🎉</p>
 
           <DialogClose asChild>
             <button
