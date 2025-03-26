@@ -39,8 +39,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    console.log('✅ [백엔드] 결제 정보 응답:', data);
-
     return NextResponse.json({ success: true, payment: data });
   } catch (error: any) {
     console.error('🚨 결제 정보 조회 중 오류:', error);
@@ -54,8 +52,6 @@ export async function POST(req: NextRequest) {
     const { orderId, userId, amount, paymentKey, reservationId } = await req.json();
     const supabase = await serverSupabase();
 
-    console.log('✅ 요청된 데이터:', { orderId, userId, amount, paymentKey, reservationId });
-
     // ✅ 기존 예약 정보 조회
     const { data: existingReservation, error: reservationError } = await supabase
       .from('reservations')
@@ -63,8 +59,6 @@ export async function POST(req: NextRequest) {
       .eq('id', reservationId)
       .eq('user_id', userId)
       .maybeSingle();
-
-    console.log('🛠️ [디버깅] 기존 예약 데이터:', existingReservation);
 
     if (reservationError || !existingReservation) {
       throw new Error('🚨 해당 예약을 찾을 수 없습니다.');
@@ -93,12 +87,10 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (existingQr) {
-      console.log('🛠️ 기존 QR 코드 재사용:', existingQr.qr_token);
       qrToken = existingQr.qr_token;
     } else {
       // ✅ 새로운 QR 코드 생성
       qrToken = uuidv4();
-      console.log('🛠️ 새로운 QR 코드 생성 중:', qrToken);
 
       const { error: qrError } = await supabase.from('qr_sessions').insert([
         {
@@ -111,7 +103,6 @@ export async function POST(req: NextRequest) {
       ]);
 
       if (qrError) throw new Error(qrError.message);
-      console.log('✅ 새로운 QR 코드 저장 완료:', qrToken);
     }
 
     // ✅ 예약 상태 업데이트 (`pending` → `confirmed`)
@@ -140,8 +131,6 @@ export async function POST(req: NextRequest) {
     ]);
 
     if (paymentError) throw new Error(paymentError.message);
-
-    console.log('✅ [서버] 결제 정보 저장 완료');
 
     return NextResponse.json({
       success: true,

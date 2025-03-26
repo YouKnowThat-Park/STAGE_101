@@ -25,14 +25,6 @@ export async function GET(req: NextRequest) {
     .eq('id', theaterId)
     .single();
 
-  console.log('📌 [DEBUG] API 응답 데이터:', {
-    profile_img: user?.profile_img,
-    name: user?.name,
-    nickname: user?.nickname,
-    theater_main_img: theater?.main_img,
-    theater_name: theater?.name,
-  });
-
   if (userError || theaterError) {
     return NextResponse.json({ error: '데이터 조회 실패' }, { status: 500 });
   }

@@ -9,7 +9,6 @@ export async function checkoutCart({
   totalPrice: number;
   quantity: number;
 }) {
-  console.log('🔥 checkoutCart 실행됨');
   const supabase = await serverSupabase();
 
   const validQuantity =
@@ -50,8 +49,6 @@ export async function checkoutCart({
     console.error('❌ 장바구니 조회 실패:', cartError);
     return { success: false, message: '장바구니가 없습니다.' };
   }
-
-  console.log('🛒 장바구니 데이터:', cartData);
 
   const cartId = cartData.id; // ✅ cart_id 가져오기
   const orderId = crypto.randomUUID(); // 🔹 새로운 주문 ID 생성 (중복 방지)

@@ -25,8 +25,6 @@ export function useReserveSeats() {
     setError(null);
 
     try {
-      console.log('📡 [프론트엔드] 서버로 예약 요청 전송 중...');
-
       // ✅ `viewed_at`을 ISO 8601 형식으로 변환
       const formattedViewedAt = new Date(`${viewed_at}T00:00:00.000Z`).toISOString();
 
@@ -43,10 +41,7 @@ export function useReserveSeats() {
         }),
       });
 
-      console.log('📡 [프론트엔드] 서버 응답 상태 코드:', response.status);
-
       const result = await response.json();
-      console.log('✅ [프론트엔드] 서버 응답 데이터:', result);
 
       if (!response.ok) {
         console.error('🚨 [프론트엔드] 예약 실패:', result.error);

@@ -17,8 +17,6 @@ export async function fetchSeats(
   viewedAt: string,
   showTime: string,
 ): Promise<string[]> {
-  console.log(`🔍 [fetchSeats] 실행됨: ${theaterId}, 날짜: ${viewedAt}, 시간: ${showTime}`);
-
   if (!theaterId || !viewedAt || !showTime) {
     console.error('🚨 필수 데이터 누락 (theaterId, viewedAt, showTime)');
     return []; // ✅ 빈 배열 반환
@@ -36,7 +34,6 @@ export async function fetchSeats(
   }
 
   const validTheaterId = theater.id;
-  console.log(`✅ [fetchSeats] UUID 변환 성공: ${validTheaterId}`);
 
   // ✅ `viewed_at`과 `show_time` 필터 추가!
   const { data, error } = await supabaseSubscription
@@ -51,21 +48,17 @@ export async function fetchSeats(
     return [];
   }
 
-  console.log(`📡 [fetchSeats] 데이터 수신 완료:`, data);
-
   return data.map((s) => s.seat_number);
 }
 
 // ✅ 리스너들에게 데이터 전파
 function notifyListeners(theaterId: string) {
   const seatsArray = Array.from(reservedSeatsMap[theaterId] || []);
-  console.log(`📢 [notifyListeners] ${theaterId} 좌석 업데이트 실행됨:`, seatsArray);
 
   if (!listenersMap[theaterId]) return;
 
   listenersMap[theaterId].forEach((listener) => {
     if (typeof listener === 'function') {
-      console.log(`✅ [notifyListeners] 리스너 실행됨! 좌석:`, seatsArray);
       listener(seatsArray);
     } else {
       console.error('🚨 [notifyListeners] listener is not a function:', listener);
@@ -92,10 +85,6 @@ export function subscribeToSeats(
 
   if (!listenersMap[theaterId]) listenersMap[theaterId] = [];
   listenersMap[theaterId].push(listener);
-
-  console.log(
-    `🎯 [subscribeToSeats] 리스너 등록됨: ${theaterId}, 날짜: ${viewedAt}, 시간: ${showTime}`,
-  );
 
   fetchSeats(theaterId, viewedAt, showTime).then((seats) => {
     // ✅ 올바른 인수 전달

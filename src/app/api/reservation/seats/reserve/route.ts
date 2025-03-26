@@ -6,13 +6,10 @@ export async function POST(req: Request) {
   const supabase = await serverSupabase();
 
   try {
-    console.log('📌 [서버] API 호출됨 ✅');
-
     // JSON 데이터 파싱
     let body;
     try {
       body = await req.json();
-      console.log('📌 [서버] 받은 요청 데이터:', JSON.stringify(body, null, 2));
     } catch (parseError) {
       console.error('🚨 [서버] JSON 파싱 오류:', parseError);
       return NextResponse.json({ error: '잘못된 요청 형식 (JSON 파싱 실패)' }, { status: 400 });
@@ -43,8 +40,6 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-
-    console.log('✅ [서버] 필수 데이터 검증 완료');
 
     // 🎯 theaters 테이블에서 실제 UUID(id) 조회
     const { data: theaterData, error: theaterError } = await supabase
@@ -93,15 +88,12 @@ export async function POST(req: Request) {
       show_time, // ✅ 기존 값 유지
     }));
 
-    console.log('🎟️ [서버] 예약 데이터:', insertData);
-
     const { data, error } = await supabase.from('reservations').insert(insertData).select();
     if (error) {
       console.error('🚨 [서버] 좌석 예약 실패:', error.message);
       throw new Error(error.message);
     }
 
-    console.log('✅ [서버] 좌석 예약 성공:', data);
     return NextResponse.json({ success: true, reservations: data }, { status: 201 });
   } catch (error: any) {
     console.error('🚨 서버 오류:', error);

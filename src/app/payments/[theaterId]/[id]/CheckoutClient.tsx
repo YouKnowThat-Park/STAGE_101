@@ -26,14 +26,6 @@ export default function CheckoutClient({
   viewed_at,
   show_time,
 }: CheckoutClientProps) {
-  console.log('🚀 [디버깅] CheckoutClient가 받은 props:', {
-    userId,
-    seatIds,
-    theaterId,
-    totalPrice,
-    viewed_at,
-    show_time,
-  });
   const { name, phone, isLoading } = useUserHook(userId);
   const { data: theaterData } = useTheaterData(theaterId);
 
@@ -89,7 +81,6 @@ export default function CheckoutClient({
       });
 
       const data = await response.json();
-      console.log('✅ [서버 응답]:', data); // ✅ 서버 응답 확인
 
       if (!response.ok) throw new Error(data.message || '예약 생성 실패');
 

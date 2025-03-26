@@ -46,15 +46,12 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
 
   // ✅ 날짜 선택 후 Step 변경
   const handleCalendarNext = (date: Date) => {
-    console.log('📌 [프론트엔드] 선택한 날짜 (viewedAt):', date.toISOString().split('T')[0]);
     setViewedAt(date.toISOString().split('T')[0]); // ✅ viewedAt만 저장
     setStep(2);
   };
 
   // ✅ 좌석 선택
   const handleSeatClick = (seat: string) => {
-    console.log(`📌 [프론트엔드] 좌석 클릭됨: ${seat}`);
-
     if (reservedSeats.includes(seat)) {
       console.warn(`⚠️ 이미 예약된 좌석: ${seat}`);
       return;
@@ -64,15 +61,12 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
       const updatedSeats = prev.includes(seat)
         ? prev.filter((s) => s !== seat)
         : [...prev, seat].slice(0, 4);
-      console.log('📌 [프론트엔드] 현재 선택된 좌석:', updatedSeats);
       return updatedSeats;
     });
   };
 
   // ✅ 결제하기
   const handlePayment = async () => {
-    console.log('📌 [프론트엔드] 결제 함수 실행됨! ✅');
-
     if (
       !selectedSeats.length ||
       !userId ||
@@ -96,8 +90,6 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
 
     const totalPrice = selectedSeats.length * theaterData.price;
 
-    console.log('📌 [프론트엔드] 계산된 total_price:', totalPrice);
-
     const success = await reserveSeats({
       seats: selectedSeats,
       user_id: userId,
@@ -114,7 +106,6 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
       return;
     }
 
-    console.log('✅ [프론트엔드] 예약 성공! 결제 페이지로 이동합니다.');
     router.push(`/payments/${theaterId}/${selectedSeats.join('-')}`);
   };
 

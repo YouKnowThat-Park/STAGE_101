@@ -6,8 +6,6 @@ export async function POST(req: NextRequest) {
     const supabase = await serverSupabase();
     const { comment, display_name, type, theater_id, useRealName } = await req.json();
 
-    console.log('✅ 백엔드에서 받은 데이터:', { comment, display_name, useRealName });
-
     if (!comment) return NextResponse.json({ error: '리뷰 내용을 입력하세요.' }, { status: 400 });
     if (!type || (type !== 'poster' && type !== 'profile')) {
       return NextResponse.json({ error: '올바른 이미지 타입을 선택하세요.' }, { status: 400 });
@@ -48,10 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ✅ 닉네임 or 실명 결정
-    console.log('🔥 useRealName 값:', useRealName);
     const finalDisplayName = useRealName ? userData.name : userData.nickname;
-
-    console.log('✅ 최종 저장될 display_name:', finalDisplayName);
 
     // ✅ 리뷰 저장
     const { data, error } = await supabase

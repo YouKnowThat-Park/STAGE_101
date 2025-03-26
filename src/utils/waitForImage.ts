@@ -1,10 +1,8 @@
 export const waitForImage = async (url: string, retries = 5, delay = 1500): Promise<string> => {
   for (let i = 0; i < retries; i++) {
-    console.log(`🔄 이미지 확인 시도 (${i + 1}/${retries}): ${url}`);
     const response = await fetch(url, { method: 'HEAD' });
 
     if (response.ok) {
-      console.log('✅ 이미지 확인 성공:', url);
       return url; // ✅ 이미지가 정상적으로 로드됨
     }
 

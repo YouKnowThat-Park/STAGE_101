@@ -15,8 +15,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
     }
 
-    console.log('✅ 서버에서 받은 원본 데이터:', body);
-
     const userId = body.user_id;
     const theaterId = body.theater_id;
     const seatIds = body.seats;
@@ -32,9 +30,6 @@ export async function POST(req: NextRequest) {
     // ✅ `viewed_at`, `show_time` 변환
     viewedAt = new Date(viewedAt).toISOString();
     showTime = showTime.length === 5 ? `${showTime}:00` : showTime;
-
-    console.log('✅ 변환된 viewed_at:', viewedAt);
-    console.log('✅ 변환된 show_time:', showTime);
 
     // ✅ `theaters` 테이블에서 `UUID` 조회
     const { data: theaterData, error: theaterError } = await supabase
@@ -77,7 +72,6 @@ export async function POST(req: NextRequest) {
     }
 
     const reservationId = reservationData.id;
-    console.log('✅ 생성된 예약 ID:', reservationId);
 
     // ✅ QR 코드 생성 (기존 QR 코드 확인 후 생성)
     let qrToken = uuidv4();
@@ -89,10 +83,8 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (existingQr) {
-      console.log('🛠️ 기존 QR 코드 재사용:', existingQr.qr_token);
       qrToken = existingQr.qr_token;
     } else {
-      console.log('🛠️ 새로운 QR 코드 생성 중...');
       const { data: newQr, error: qrInsertError } = await supabase
         .from('qr_sessions')
         .insert([
@@ -117,7 +109,6 @@ export async function POST(req: NextRequest) {
       }
 
       qrToken = newQr.qr_token;
-      console.log('✅ 새로운 QR 코드 생성 완료:', qrToken);
     }
 
     // ✅ 결제 정보 저장 (payment_key를 null이 아닌 값으로 설정)
@@ -141,13 +132,6 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
-
-    console.log('📢 [백엔드] 최종 응답 데이터:', {
-      success: true,
-      reservationId,
-      qr_token: qrToken, // ✅ QR 코드 응답 확인
-      paymentKey,
-    });
 
     return NextResponse.json({
       success: true,
