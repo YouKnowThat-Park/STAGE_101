@@ -53,12 +53,6 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
         profileImageUrl = await uploadImageToSupabase(selectedFile, user.id);
       }
 
-      console.log('📤 PATCH 요청 시작:', {
-        id: user.id,
-        nickname: newNickname,
-        profile_img: profileImageUrl,
-      });
-
       const res = await fetch('/api/user', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +64,6 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
       });
 
       const result = await res.json();
-      console.log('📥 PATCH 응답 데이터:', result); // 🚨 서버 응답 로그 추가
 
       if (!res.ok) {
         throw new Error(result.error || '서버 오류 발생');
