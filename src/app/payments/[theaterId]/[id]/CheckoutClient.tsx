@@ -56,7 +56,7 @@ export default function CheckoutClient({
     }
 
     initTossPayments();
-  }, [CLIENT_KEY]); // ✅ CLIENT_KEY 변경 시 다시 실행
+  }, []); // ✅ CLIENT_KEY 변경 시 다시 실행
 
   if (isLoading) return <p className="text-white">로딩 중...</p>;
 

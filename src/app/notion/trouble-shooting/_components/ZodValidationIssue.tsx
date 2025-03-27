@@ -22,10 +22,10 @@ const ZodValidationIssue = () => {
             <h3 className="font-bold text-base">🎯 문제 상황</h3>
             <ul className="list-disc ml-5 space-y-1">
               <li>
-                <code>Zod</code>로 폼 검증 중, 빈 문자열 입력 시 <strong>"Required"</strong> 기본
-                메시지만 출력됨
+                <code>Zod</code>로 폼 검증 중, 빈 문자열 입력 시 <strong>{`"Required"`}</strong>
+                기본 메시지만 출력됨
               </li>
-              <li>커스텀 메시지(예: "이름을 입력해주세요.")가 나오지 않음</li>
+              <li>{`커스텀 메시지(예: "이름을 입력해주세요.")가 나오지 않음`}</li>
               <li>
                 <code>min</code> / <code>regex</code>만 적용했을 경우, 빈 값은 검증 대상조차 되지
                 않음
@@ -38,7 +38,7 @@ const ZodValidationIssue = () => {
                 Zod의 <code>string()</code>은 기본적으로 빈 문자열도 유효한 값으로 간주함
               </li>
               <li>
-                <code>.nonempty()</code>를 명시하지 않으면, 이후의 <code>min()</code>이나{' '}
+                <code>.nonempty()</code>를 명시하지 않으면, 이후의 <code>min()</code>이나
                 <code>regex()</code>는 무시됨
               </li>
               <li>결과적으로 빈 문자열에 대한 커스텀 메시지가 출력되지 않음</li>
@@ -68,8 +68,9 @@ nickname: z
 
             <h3 className="font-bold text-base">💬 회고</h3>
             <p>
-              Zod의 기본 동작을 이해하는 것이 중요했고, 빈 문자열도 "유효한 문자열"로 판단한다는
-              점이 함정이었다. 필수 입력값엔 반드시 <code>nonempty()</code>를 명시해줄 것.
+              {` Zod의 기본 동작을 이해하는 것이 중요했고, 빈 문자열도 "유효한 문자열"로 판단한다는
+              점이 함정이었다. 필수 입력값엔 반드시 `}
+              <code>nonempty()</code>를 명시해줄 것.
             </p>
           </div>
         )}

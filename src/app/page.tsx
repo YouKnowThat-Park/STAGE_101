@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import HomeReviews from './home/HomeReviews';
-import ReviewPage from './reviews/page';
+import ReviewPage from './reviews/ReviewPage';
+import Image from 'next/image';
 
 export default function Home() {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -23,9 +24,11 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center py-10 mb-[50px] px-4">
       {/* ✅ 슬라이드 이미지 반응형 */}
       <div className="w-full max-w-[1100px] h-[300px] sm:h-[400px] bg-white shadow-md rounded-lg p-1 overflow-hidden">
-        <img
+        <Image
           src={images[currentSlide]}
           alt={`slide-${currentSlide}`}
+          height={300}
+          width={800}
           className="w-full h-full object-cover rounded-md transition-all duration-700"
         />
       </div>

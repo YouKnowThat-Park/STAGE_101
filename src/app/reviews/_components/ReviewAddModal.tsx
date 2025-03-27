@@ -94,7 +94,7 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
     };
 
     fetchUserAndTheaterInfo();
-  }, [selectedTheater, imageType, displayName]);
+  }, [selectedTheater, imageType, displayName, comment, userId]);
 
   const handleSubmit = async () => {
     if (!selectedTheater) {

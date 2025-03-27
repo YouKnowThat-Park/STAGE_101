@@ -32,8 +32,8 @@ const SeatSyncIssue = () => {
               <li>
                 TypeScript 오류 발생:{' '}
                 <code>
-                  'void' 형식의 인수는 'SetStateAction&lt;string[]&gt;' 형식의 매개변수에 할당될 수
-                  없습니다
+                  {`'void' 형식의 인수는 'SetStateAction&lt;string[]&gt;' 형식의 매개변수에 할당될 수
+                  없습니다`}
                 </code>
               </li>
             </ul>
