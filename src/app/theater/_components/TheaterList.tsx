@@ -5,10 +5,10 @@ const TheaterList = () => {
   const router = useRouter();
 
   const theaters = [
-    { id: 'cinemaA', name: '시네마 A관' },
-    { id: 'cinemaB', name: '시네마 B관' },
-    { id: 'musicalA', name: '뮤지컬 A관' },
-    { id: 'musicalB', name: '뮤지컬 B관' },
+    { id: 'cinemaA', name: '뮤지컬 A관' },
+    { id: 'musicalA', name: '뮤지컬 B관' },
+    { id: 'musicalB', name: '뮤지컬 C관' },
+    { id: 'cinemaB', name: '시네마 A관' },
   ];
 
   const handleGoBack = () => {

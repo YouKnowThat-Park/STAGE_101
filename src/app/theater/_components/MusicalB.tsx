@@ -43,7 +43,7 @@ const MusicalB = ({
         <Image
           src={main_img}
           alt="뮤지컬 포스터"
-          width={300}
+          width={1000}
           height={500}
           className="rounded-lg shadow-lg"
         />
@@ -78,13 +78,20 @@ const MusicalB = ({
         </div>
 
         {/* 🪑 좌석 UI */}
-        <div className="flex flex-col items-center gap-2 mt-6">
+        <div className="flex flex-col items-center gap-2 mt-6 w-full px-2">
           {SEATS.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex gap-2">
+            <div key={rowIndex} className="flex justify-center gap-[4px] w-full">
               {row.map((seat, seatIndex) => (
                 <div
                   key={seatIndex}
-                  className="w-10 h-10 flex items-center justify-center bg-gray-700 text-white rounded-md cursor-pointer hover:bg-gray-500 transition"
+                  className="
+            flex items-center justify-center 
+            bg-[#374151] text-white rounded-md 
+            hover:bg-[#4b5563] transition
+            text-[2.8vw] sm:text-[1.8vw] md:text-sm 
+            w-[7.5vw] h-[7.5vw] 
+            min-w-[24px] min-h-[24px] 
+            max-w-[36px] max-h-[36px]"
                 >
                   {seat}
                 </div>
