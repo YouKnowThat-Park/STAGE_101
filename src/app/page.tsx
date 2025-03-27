@@ -46,17 +46,19 @@ export default function Home() {
         </div>
 
         {/* 히스토리 + 트러블슈팅 */}
-        <div className="flex flex-col gap-6 flex-1 min-w-[350px]">
-          <div className="h-[100px] w-full bg-white shadow-md rounded-lg flex flex-col justify-center items-center">
-            <Link href="/notion">
-              <h2 className="w-full text-center mt-3">기능적 문제 히스토리</h2>
+        <div className="flex flex-col gap-4 flex-1 min-w-[350px]">
+          {[
+            { href: '/notion/feature-decisions', label: '기능 선택 이유' },
+            { href: '/notion/feature-history', label: '기능적 문제 히스토리' },
+            { href: '/notion/trouble-shooting', label: '트러블 슈팅' },
+            { href: '/notion/trouble-shooting', label: '회고' },
+          ].map(({ href, label }) => (
+            <Link key={label} href={href}>
+              <div className="h-[86px] w-full bg-[#2A2A2A]/80 border border-[#444] rounded-md hover:bg-[#3A3A3A]/90 transition duration-200 flex items-center justify-center px-4">
+                <p className="text-sm text-[#ddd] tracking-wide">{label}</p>
+              </div>
             </Link>
-          </div>
-          <div className="h-[100px] w-full bg-white shadow-md rounded-lg flex flex-col justify-center items-center">
-            <Link href="/notion">
-              <h2 className="w-full text-center mt-3">트러블 슈팅</h2>
-            </Link>
-          </div>
+          ))}
         </div>
       </div>
 
