@@ -111,33 +111,10 @@ export async function POST(req: NextRequest) {
       qrToken = newQr.qr_token;
     }
 
-    // ✅ 결제 정보 저장 (payment_key를 null이 아닌 값으로 설정)
-    const paymentKey = uuidv4();
-    const { error: paymentError } = await supabase.from('payments').insert([
-      {
-        id: uuidv4(),
-        user_id: userId,
-        reservation_id: reservationId,
-        amount: totalPrice,
-        status: 'pending',
-        payment_key: paymentKey,
-        payment_method: '카드',
-      },
-    ]);
-
-    if (paymentError) {
-      console.error('🚨 결제 정보 저장 실패:', paymentError);
-      return NextResponse.json(
-        { success: false, message: 'Payment creation failed', error: paymentError },
-        { status: 500 },
-      );
-    }
-
     return NextResponse.json({
       success: true,
       reservationId,
       qr_token: qrToken, // ✅ 프론트에서 QR 코드 표시 가능하도록 보장
-      paymentKey, // ✅ 결제 확인용
     });
   } catch (error) {
     console.error('🚨 예약 생성 실패:', error);
