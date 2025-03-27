@@ -120,14 +120,14 @@ const Page = () => {
         <h2 className="text-lg font-bold text-white">📌 안내사항</h2>
         <p>
           이 페이지는 실제 거래가 이루어지지 않는 가상의 쇼핑몰입니다. 프론트엔드 개발자를 꿈꾸는
-          학생이 학습 목적으로 제작하였으며, 자세한 내용은{' '}
+          학생이 학습 목적으로 제작하였으며, 자세한 내용은
           <Link
             href="https://youkn0wthat.tistory.com/"
             target="_blank"
             className="underline text-[#C9A66B] hover:text-yellow-200"
           >
             블로그
-          </Link>{' '}
+          </Link>
           에서 확인하실 수 있습니다.
         </p>
         <p>📩 문의 : youkn0wthat@naver.com</p>
