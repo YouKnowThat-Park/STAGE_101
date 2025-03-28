@@ -22,13 +22,13 @@ export default function TheaterPage() {
               className="absolute w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>5월 30일</p>
+              <p>9월 10일</p>
               <h2 className="text-lg font-bold">Les Miserables</h2>
               <p className="text-sm text-gray-300 mt-2">
                 혁명과 자유를 향한 감동적인 이야기. 감성을 자극하는 명곡과 함께!
               </p>
               <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                예매하기
+                9월 2일 Open
               </button>
             </div>
           </div>
@@ -43,13 +43,13 @@ export default function TheaterPage() {
               className="absolute w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>6월 2일</p>
+              <p>9월 11일</p>
               <h2 className="text-lg font-bold">나는 내일, 어제의 너와 만난다</h2>
               <p className="text-sm text-gray-300 mt-2">
                 시간이 엇갈리는 두 남녀의 운명적인 사랑 이야기.
               </p>
               <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                예매하기
+                9월 3일 Open
               </button>
             </div>
           </div>
@@ -64,13 +64,13 @@ export default function TheaterPage() {
               className="absolute w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>7월 15일</p>
+              <p>10월 10일</p>
               <h2 className="text-lg font-bold">먼데이키즈 서울의 꿈</h2>
               <p className="text-sm text-gray-300 mt-2">
                 감성을 자극하는 명곡과 함께하는 특별한 밤!
               </p>
               <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                예매하기
+                10월 2일 Open
               </button>
             </div>
           </div>
