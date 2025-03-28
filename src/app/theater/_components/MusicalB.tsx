@@ -1,6 +1,8 @@
+import { useUserStore } from '@/store/userStore';
+import LoginModal from '@/ui/modal/LoginModal';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface MusicalAProps {
   theaterId: string;
@@ -31,8 +33,20 @@ const MusicalB = ({
   total_time,
 }: MusicalAProps) => {
   const router = useRouter();
+  const { id } = useUserStore();
+  const [showModal, setShowModal] = useState(false);
 
-  const handleReservationGo = () => {
+  const handleReservationGo = async () => {
+    if (!id) {
+      setShowModal(true);
+      return;
+    }
+
+    sessionStorage.setItem('allowPaymentsAccess', 'true');
+
+    // 🔐 렌더 타이밍 충돌 방지용 강제 지연
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
     router.push(`/payments/${theaterId}`);
   };
 
@@ -134,6 +148,7 @@ const MusicalB = ({
           를 이용해주세요.
         </p>
       </div>
+      <LoginModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
