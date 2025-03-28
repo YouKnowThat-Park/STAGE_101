@@ -22,9 +22,15 @@ export async function middleware(req: NextRequest) {
     error,
   } = await supabase.auth.getUser();
 
+  const pathname = req.nextUrl.pathname;
+
   // ✅ 유저가 로그인된 상태라면 `/sign-in`, `/sign-up` 접근 차단 후 `/`로 리다이렉트
   if (user && (req.nextUrl.pathname === '/sign-in' || req.nextUrl.pathname === '/sign-up')) {
     return NextResponse.redirect(new URL('/', req.url)); // ✅ `/`로 강제 이동
+  }
+
+  if (!user && pathname.startsWith('/payments')) {
+    return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
   return NextResponse.next(); // ✅ 요청을 계속 진행
@@ -32,5 +38,5 @@ export async function middleware(req: NextRequest) {
 
 // ✅ 미들웨어 적용할 경로 (로그인 & 회원가입 페이지에서만 실행)
 export const config = {
-  matcher: ['/sign-in', '/sign-up'],
+  matcher: ['/sign-in', '/sign-up', '/payments/:path*'],
 };
