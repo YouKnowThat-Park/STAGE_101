@@ -4,7 +4,7 @@ export default function TheaterPage() {
   return (
     <div className="relative h-[700px]  text-white">
       {/* ✅ 배경 이미지 */}
-      <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20 md:bg-none"></div>
+      <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20 "></div>
 
       {/* ✅ 메인 콘텐츠 */}
       <div className="relative z-10 flex flex-col items-center py-20">
