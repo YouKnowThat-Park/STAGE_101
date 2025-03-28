@@ -4,9 +4,11 @@ import GitHubIcon from '@/ui/icon/GitHubIcon';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import SettingModal from './SettingModal';
+import { useUserStore } from '@/store/userStore';
 
 const MypageFooter = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const { id } = useUserStore();
 
   return (
     <div className="text-gray-500 flex flex-col items-center">
@@ -54,9 +56,11 @@ const MypageFooter = () => {
             <Link href="/ui/notice" className="text-gray-400 hover:text-white text-sm">
               고객센터
             </Link>
-            <button className=" text-red-500" onClick={() => setIsOpenModal(true)}>
-              화원 탈퇴
-            </button>
+            {id && (
+              <button className=" text-red-500" onClick={() => setIsOpenModal(true)}>
+                화원 탈퇴
+              </button>
+            )}
           </nav>
 
           {/* 소셜 미디어 */}
