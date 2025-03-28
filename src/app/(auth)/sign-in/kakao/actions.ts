@@ -9,7 +9,7 @@ export const socialLogin = async (provider: 'kakao' | 'google') => {
   const redirectUrl =
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:3000/api/auth/callback'
-      : 'https://your-production-url.com/auth/callback';
+      : 'https://stage-101.vercel.app/api/auth/callback';
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
