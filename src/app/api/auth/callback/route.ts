@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(
       new URL(
         '/sign-in?error=OAuth 코드 없음',
-        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+        process.env.NEXT_PUBLIC_API_URL || 'https://stage-101.vercel.app',
       ),
     );
   }
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(
       new URL(
         '/sign-in?error=세션 없음',
-        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+        process.env.NEXT_PUBLIC_API_URL || 'https://stage-101.vercel.app',
       ),
     );
   }
