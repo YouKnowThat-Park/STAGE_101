@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const formatPhoneNumber = (phone: string | null) => {
   if (!phone) return '정보 없음';
@@ -31,30 +31,32 @@ const PaymentSuccessPage = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [accessAllowed, setAccessAllowed] = useState<boolean | null>(null);
 
-  // ✅ 뒤로가기 차단 (popstate 감지해서 alert)
+  // ✅ 최초 진입 감지용 ref
+  const hasPushedState = useRef(false);
+
   useEffect(() => {
+    // ✅ 최초 진입 시 한 번만 pushState
+    if (!hasPushedState.current) {
+      history.pushState(null, '', location.href);
+      hasPushedState.current = true;
+    }
+
     const onPopState = () => {
       alert('이미 결제가 완료된 세션입니다.');
       history.pushState(null, '', location.href);
     };
 
-    // ✅ 진짜 뒤로가기 눌렀을 때만 감지하게끔 history 조작
-    history.pushState(null, '', location.href);
     window.addEventListener('popstate', onPopState);
-
-    return () => {
-      window.removeEventListener('popstate', onPopState);
-    };
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // ✅ 결제 파라미터 검증 및 세션 체크
+  // ✅ 결제 파라미터 검증 및 접근 허용
   useEffect(() => {
     const key = searchParams.get('paymentKey');
-
     const isValid = key !== null && key !== '' && key !== 'undefined';
 
     if (!isValid) {
-      console.warn('⚠️ paymentKey 없음. 그러나 정상적인 재시도일 수 있음');
+      console.warn('⚠️ paymentKey 없음. 그러나 재시도 가능성 있음');
     }
 
     setAccessAllowed(true); // 무조건 허용
