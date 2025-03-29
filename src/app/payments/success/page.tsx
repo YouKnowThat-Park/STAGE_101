@@ -15,9 +15,9 @@ const formatPhoneNumber = (phone: string | null) => {
 const blockBackNavigation = () => {
   history.pushState(null, '', location.href);
 
-  const handler = (e: PopStateEvent) => {
-    // ✅ history 길이가 1이면 더 이상 뒤로 갈 수 없다는 뜻 → 이때는 알림 안 띄움
-    if (history.length <= 1) return;
+  const handler = () => {
+    const paid = sessionStorage.getItem('paymentDone');
+    if (!paid) return; // ✅ 결제 안 된 경우에는 무시
 
     alert('이미 결제가 완료된 세션입니다.');
     history.pushState(null, '', location.href);
@@ -46,10 +46,16 @@ const PaymentSuccessPage = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [accessAllowed, setAccessAllowed] = useState<boolean | null>(null);
 
+  useEffect(() => {
+    if (!accessAllowed) return;
+
+    const cleanup = blockBackNavigation(); // ✅ 이제 안전하게 실행됨
+    return cleanup;
+  }, [accessAllowed]);
+
   // ✅ 진입 조건 체크 및 뒤로가기 방지 등록
   useEffect(() => {
     const paymentKey = searchParams.get('paymentKey');
-
     if (paymentKey === null) return;
 
     if (!paymentKey || paymentKey === 'undefined') {
@@ -62,11 +68,9 @@ const PaymentSuccessPage = () => {
 
     if (!alreadyPaid) {
       sessionStorage.setItem('paymentDone', 'true');
-      const cleanup = blockBackNavigation();
-      return cleanup;
     }
 
-    setAccessAllowed(true);
+    setAccessAllowed(true); // 👉 popstate 등록은 이거 true 되고 나서!
   }, [router, searchParams]);
 
   // ✅ 결제 확인 요청
