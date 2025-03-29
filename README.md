@@ -9,6 +9,14 @@
 극장 예약부터 리뷰, 포인트, 상점까지  
 완결성 있는 흐름을 설계한 개인 프로젝트입니다.
 
+> [모바일 & 데스크탑 화면]
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ba8ece85-2bd3-4b0c-abae-76c268e6aeb6" width="15%" />
+  <img src="https://github.com/user-attachments/assets/d405da89-9339-4aef-994d-eef8f4787d5a" width="45%" />
+</p>
+
+
 ## 👨‍💻 담당 역할
 
 | 분야         | 담당자     |
