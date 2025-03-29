@@ -12,28 +12,6 @@ const formatPhoneNumber = (phone: string | null) => {
     : '유효하지 않은 번호';
 };
 
-const blockBackNavigation = () => {
-  history.pushState(null, '', location.href);
-
-  let hasPushed = false; // ✅ 최초 popstate 무시용 플래그
-
-  const handler = () => {
-    if (!hasPushed) {
-      hasPushed = true; // ✅ 첫 popstate는 무시
-      return;
-    }
-
-    const paid = sessionStorage.getItem('paymentDone');
-    if (!paid) return;
-
-    alert('이미 결제가 완료된 세션입니다.');
-    history.pushState(null, '', location.href); // 다시 막기
-  };
-
-  window.addEventListener('popstate', handler);
-  return () => window.removeEventListener('popstate', handler);
-};
-
 const PaymentSuccessPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,16 +31,24 @@ const PaymentSuccessPage = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [accessAllowed, setAccessAllowed] = useState<boolean | null>(null);
 
+  // ✅ 뒤로가기 차단 (popstate 감지해서 alert)
   useEffect(() => {
-    if (!accessAllowed) return;
+    const onPopState = () => {
+      alert('이미 결제가 완료된 세션입니다.');
+      history.pushState(null, '', location.href);
+    };
 
-    const cleanup = blockBackNavigation(); // ✅ 이제 안전하게 실행됨
-    return cleanup;
-  }, [accessAllowed]);
+    // ✅ 진짜 뒤로가기 눌렀을 때만 감지하게끔 history 조작
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', onPopState);
 
-  // ✅ 진입 조건 체크 및 뒤로가기 방지 등록
+    return () => {
+      window.removeEventListener('popstate', onPopState);
+    };
+  }, []);
+
+  // ✅ 결제 파라미터 검증 및 세션 체크
   useEffect(() => {
-    const paymentKey = searchParams.get('paymentKey');
     if (paymentKey === null) return;
 
     if (!paymentKey || paymentKey === 'undefined') {
@@ -71,14 +57,8 @@ const PaymentSuccessPage = () => {
       return;
     }
 
-    const alreadyPaid = sessionStorage.getItem('paymentDone');
-
-    if (!alreadyPaid) {
-      sessionStorage.setItem('paymentDone', 'true');
-    }
-
-    setAccessAllowed(true); // 👉 popstate 등록은 이거 true 되고 나서!
-  }, [router, searchParams]);
+    setAccessAllowed(true);
+  }, [router, paymentKey]);
 
   // ✅ 결제 확인 요청
   useEffect(() => {
