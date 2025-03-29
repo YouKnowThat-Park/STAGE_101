@@ -3,19 +3,26 @@
 import { loadTossPayments, TossPaymentsInstance } from '@tosspayments/payment-sdk';
 import { useEffect, useState } from 'react';
 import { useUserHook } from '@/hooks/useUserHook';
-import { v4 as uuidv4 } from 'uuid'; // ✅ UUID 라이브러리 추가
+import { v4 as uuidv4 } from 'uuid';
 import { useTheaterData } from '@/hooks/useTheaterData';
 
 const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
+// ✅ 현재 브라우저 origin 추출
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return 'https://stage-101.vercel.app'; // fallback (필요하면 바꿔도 됨)
+};
 
 interface CheckoutClientProps {
   userId: string;
   seatIds: string[];
   theaterId: string;
   totalPrice: number;
-  viewed_at: string; // ✅ 추가
-  show_time: string; // ✅ 추가
+  viewed_at: string;
+  show_time: string;
 }
 
 export default function CheckoutClient({
@@ -30,15 +37,13 @@ export default function CheckoutClient({
   const { data: theaterData } = useTheaterData(theaterId);
 
   const [tossPayments, setTossPayments] = useState<TossPaymentsInstance | null>(null);
-
-  //테스트용 스테이트
   const [viewedAt, setViewedAt] = useState(viewed_at);
   const [showTime, setShowTime] = useState(show_time);
 
   useEffect(() => {
     if (viewed_at) setViewedAt(viewed_at);
     if (show_time) setShowTime(show_time);
-  }, [viewed_at, show_time]); // ✅ props 값이 변경되면 상태 업데이트
+  }, [viewed_at, show_time]);
 
   useEffect(() => {
     async function initTossPayments() {
@@ -48,7 +53,7 @@ export default function CheckoutClient({
       }
 
       try {
-        const toss = await loadTossPayments(CLIENT_KEY); // ✅ SDK 로드
+        const toss = await loadTossPayments(CLIENT_KEY);
         setTossPayments(toss);
       } catch (error) {
         console.error('❌ TossPayments 로드 실패:', error);
@@ -56,7 +61,7 @@ export default function CheckoutClient({
     }
 
     initTossPayments();
-  }, []); // ✅ CLIENT_KEY 변경 시 다시 실행
+  }, []);
 
   if (isLoading) return <p className="text-white">로딩 중...</p>;
 
@@ -70,11 +75,11 @@ export default function CheckoutClient({
       seats: seatIds,
       total_price: totalPrice,
       viewed_at: formattedViewedAt,
-      show_time: formattedShowTime, // ✅ "16:00" 형식으로 변환
+      show_time: formattedShowTime,
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/reservation/create`, {
+      const response = await fetch(`${getBaseUrl()}/api/reservation/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData),
@@ -104,11 +109,13 @@ export default function CheckoutClient({
         return;
       }
 
-      const orderId = uuidv4(); // ✅ UUID로 orderId 생성
+      const orderId = uuidv4();
       const theaterName = theaterData?.name || '이름 없음';
       const showTime = theaterData?.show_time || '시간대 없음';
-      const successUrl = `${API_URL}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${encodeURIComponent(name)}&userPhone=${encodeURIComponent(phone)}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
-      const failUrl = `${API_URL}/payment/fail`;
+      const baseUrl = getBaseUrl();
+
+      const successUrl = `${baseUrl}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${encodeURIComponent(name)}&userPhone=${encodeURIComponent(phone)}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
+      const failUrl = `${baseUrl}/payment/fail`;
 
       await tossPayments.requestPayment('카드', {
         amount: totalPrice,

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import CheckoutClient from './CheckoutClient';
 import { serverSupabase } from '@/supabase/supabase-server';
+import { headers } from 'next/headers'; // ✅ 추가
 
 interface CheckoutPageProps {
   params: { id: string; theaterId: string };
@@ -14,15 +15,20 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data?.user) {
-    return redirect('/sign-in'); // 로그인 안 되어 있으면 리다이렉트
+    return redirect('/sign-in');
   }
 
   const userId = data.user.id;
 
+  // ✅ 요청 origin 추출 (http or https 자동 감지)
+  const headersList = headers();
+  const host = headersList.get('host');
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+  const baseUrl = `${protocol}://${host}`;
+
   // ✅ 좌석 정보 가져오기
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
   const seatRes = await fetch(
-    `${API_URL}/api/getSeats?theaterId=${params.theaterId}&seats=${seatIds.join(',')}`,
+    `${baseUrl}/api/getSeats?theaterId=${params.theaterId}&seats=${seatIds.join(',')}`,
     {
       headers: { Authorization: `Bearer ${userId}` },
       cache: 'no-store',
@@ -35,23 +41,21 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
   const { reservations, totalPrice } = await seatRes.json();
 
-  // ✅ `viewed_at`과 `show_time`을 가져오기
   if (!reservations || reservations.length === 0) {
     throw new Error('🚨 예약된 좌석 정보를 찾을 수 없습니다.');
   }
 
-  const viewedAt = reservations[0]?.viewed_at; // ✅ 첫 번째 예약의 날짜
-  const showTime = reservations[0]?.show_time; // ✅ 첫 번째 예약의 상영 시간
+  const viewedAt = reservations[0]?.viewed_at;
+  const showTime = reservations[0]?.show_time;
 
-  // ✅ 클라이언트 컴포넌트로 데이터 전달
   return (
     <CheckoutClient
       userId={userId}
       seatIds={seatIds}
       theaterId={params.theaterId}
       totalPrice={totalPrice}
-      viewed_at={viewedAt} // ✅ 추가
-      show_time={showTime} // ✅ 추가
+      viewed_at={viewedAt}
+      show_time={showTime}
     />
   );
 }
