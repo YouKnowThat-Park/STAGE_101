@@ -54,7 +54,7 @@ export default function Home() {
             { href: '/notion/feature-decisions', label: '기능 선택 이유' },
             { href: '/notion/feature-history', label: '기능적 문제 히스토리' },
             { href: '/notion/trouble-shooting', label: '트러블 슈팅' },
-            { href: '/notion/trouble-shooting', label: '회고' },
+            { href: '/notion/retrospective', label: '회고' },
           ].map(({ href, label }) => (
             <Link key={label} href={href}>
               <div className="h-[86px] w-full bg-[#2A2A2A]/80 border border-[#444] rounded-md hover:bg-[#3A3A3A]/90 transition duration-200 flex items-center justify-center px-4">
