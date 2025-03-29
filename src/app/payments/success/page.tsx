@@ -46,6 +46,8 @@ const PaymentSuccessPage = () => {
     // ✅ 결제 성공 리다이렉트는 항상 paymentKey가 있음
     const isSuccessRedirect = searchParams.get('paymentKey');
 
+    if (paymentKey === null) return;
+
     if (!isSuccessRedirect) {
       alert('잘못된 접근입니다.');
       router.replace('/');
