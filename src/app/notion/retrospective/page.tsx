@@ -131,11 +131,12 @@ export default function PageSlider() {
   const prev = () => setPageIndex((prev) => Math.max(prev - 1, 0));
 
   return (
-    <div className="w-[800px] h-[700px] flex flex-col items-center justify-center px-6 text-center bg-white text-black mx-auto">
-      <div className="mb-4 text-sm text-gray-500">
+    <div className="w-full max-w-screen-md mx-auto px-4 py-6 text-center bg-white text-black flex flex-col items-center justify-center">
+      <div className="mb-2 text-xs sm:text-sm text-gray-500">
         Page {pageIndex + 1} / {pages.length} · {pages[pageIndex].title}
       </div>
-      <div className="w-full max-w-2xl h-[60vh] overflow-y-auto">
+
+      <div className="w-full max-h-[60vh] min-h-[250px] overflow-y-auto px-1 sm:px-2">
         <AnimatePresence mode="wait">
           <motion.div
             key={pageIndex}
@@ -144,24 +145,25 @@ export default function PageSlider() {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.4 }}
           >
-            <p className="whitespace-pre-wrap text-lg leading-relaxed">
+            <p className="whitespace-pre-wrap text-base sm:text-lg leading-relaxed text-left">
               {pages[pageIndex].content}
             </p>
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="flex gap-4 mt-8">
+
+      <div className="flex justify-center gap-2 sm:gap-4 mt-6 flex-wrap">
         <button
           onClick={prev}
           disabled={pageIndex === 0}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-40"
+          className="px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-40 transition"
         >
           ← 이전
         </button>
         <button
           onClick={next}
           disabled={pageIndex === pages.length - 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-40"
+          className="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-40 transition"
         >
           다음 →
         </button>

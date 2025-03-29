@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Noto_Serif_KR } from 'next/font/google';
+import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import Providers from './_providers/providers';
 import Footer from './Footer';
 import Header from './Header';
 
-const notoSerif = Noto_Serif_KR({
-  subsets: ['latin'],
-  weight: ['600', '700'],
+const notoSans = Noto_Sans_KR({
+  subsets: ['latin'], // 'latin'만 넣어도 한글 포함됨
+  weight: ['400', '700'], // 필요 시 300, 500도 추가 가능
   display: 'swap',
 });
 
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className={`${notoSerif.className} min-h-screen bg-black`}>
+      <body className={`${notoSans.className} min-h-screen bg-black`}>
         <Providers>
           <div className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 2xl:px-56">
             <Header />
