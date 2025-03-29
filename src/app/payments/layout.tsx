@@ -11,8 +11,14 @@ export default function PaymentsLayout({ children }: { children: React.ReactNode
     if (hasCheckedAccess.current) return;
     hasCheckedAccess.current = true;
 
-    // 💡 여기서 약간 지연시켜 sessionStorage 준비 기다림
     const timeout = setTimeout(() => {
+      const pathname = window.location.pathname;
+
+      // ✅ 결제 완료 페이지는 접근 차단 안 함 (토스 리다이렉트 대응)
+      if (pathname === '/payments/success') {
+        return;
+      }
+
       const allowed = sessionStorage.getItem('allowPaymentsAccess');
       const paymentDone = sessionStorage.getItem('paymentDone');
 
@@ -29,7 +35,7 @@ export default function PaymentsLayout({ children }: { children: React.ReactNode
       }
 
       sessionStorage.removeItem('allowPaymentsAccess');
-    }, 10); // 10ms면 충분함
+    }, 10); // 약간 지연시킴: sessionStorage 준비 타이밍 대응
 
     return () => clearTimeout(timeout);
   }, [router]);
