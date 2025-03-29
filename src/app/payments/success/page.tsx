@@ -43,12 +43,13 @@ const PaymentSuccessPage = () => {
 
   // ✅ 진입 조건 체크 및 뒤로가기 방지 등록
   useEffect(() => {
-    // ✅ 결제 성공 리다이렉트는 항상 paymentKey가 있음
-    const isSuccessRedirect = searchParams.get('paymentKey');
+    const paymentKey = searchParams.get('paymentKey');
 
+    // 🔁 hydration 전 초기 null 상태는 무시
     if (paymentKey === null) return;
 
-    if (!isSuccessRedirect) {
+    // ❌ 진짜 없는 경우만 처리
+    if (!paymentKey || paymentKey === 'undefined') {
       alert('잘못된 접근입니다.');
       router.replace('/');
       return;
