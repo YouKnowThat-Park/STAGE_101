@@ -15,12 +15,19 @@ const formatPhoneNumber = (phone: string | null) => {
 const blockBackNavigation = () => {
   history.pushState(null, '', location.href);
 
+  let hasPushed = false; // ✅ 최초 popstate 무시용 플래그
+
   const handler = () => {
+    if (!hasPushed) {
+      hasPushed = true; // ✅ 첫 popstate는 무시
+      return;
+    }
+
     const paid = sessionStorage.getItem('paymentDone');
-    if (!paid) return; // ✅ 결제 안 된 경우에는 무시
+    if (!paid) return;
 
     alert('이미 결제가 완료된 세션입니다.');
-    history.pushState(null, '', location.href);
+    history.pushState(null, '', location.href); // 다시 막기
   };
 
   window.addEventListener('popstate', handler);
