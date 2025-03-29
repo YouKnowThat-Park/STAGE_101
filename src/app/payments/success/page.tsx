@@ -49,16 +49,15 @@ const PaymentSuccessPage = () => {
 
   // ✅ 결제 파라미터 검증 및 세션 체크
   useEffect(() => {
-    if (paymentKey === null) return;
+    const paymentKey = searchParams.get('paymentKey');
 
-    if (!paymentKey || paymentKey === 'undefined') {
-      alert('잘못된 접근입니다.');
-      router.replace('/');
-      return;
+    // ❌ 완전 차단하지 않음 → 경고만 출력
+    if (paymentKey === null || paymentKey === 'undefined') {
+      console.warn('⚠️ paymentKey가 없지만 결제 페이지 접근 허용');
     }
 
     setAccessAllowed(true);
-  }, [router, paymentKey]);
+  }, [router, searchParams]);
 
   // ✅ 결제 확인 요청
   useEffect(() => {
