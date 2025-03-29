@@ -14,10 +14,15 @@ const formatPhoneNumber = (phone: string | null) => {
 
 const blockBackNavigation = () => {
   history.pushState(null, '', location.href);
-  const handler = () => {
+
+  const handler = (e: PopStateEvent) => {
+    // ✅ history 길이가 1이면 더 이상 뒤로 갈 수 없다는 뜻 → 이때는 알림 안 띄움
+    if (history.length <= 1) return;
+
     alert('이미 결제가 완료된 세션입니다.');
     history.pushState(null, '', location.href);
   };
+
   window.addEventListener('popstate', handler);
   return () => window.removeEventListener('popstate', handler);
 };
@@ -45,21 +50,23 @@ const PaymentSuccessPage = () => {
   useEffect(() => {
     const paymentKey = searchParams.get('paymentKey');
 
-    // 🔁 hydration 전 초기 null 상태는 무시
     if (paymentKey === null) return;
 
-    // ❌ 진짜 없는 경우만 처리
     if (!paymentKey || paymentKey === 'undefined') {
       alert('잘못된 접근입니다.');
       router.replace('/');
       return;
     }
 
-    sessionStorage.setItem('paymentDone', 'true');
-    setAccessAllowed(true);
+    const alreadyPaid = sessionStorage.getItem('paymentDone');
 
-    const cleanup = blockBackNavigation();
-    return cleanup;
+    if (!alreadyPaid) {
+      sessionStorage.setItem('paymentDone', 'true');
+      const cleanup = blockBackNavigation();
+      return cleanup;
+    }
+
+    setAccessAllowed(true);
   }, [router, searchParams]);
 
   // ✅ 결제 확인 요청
