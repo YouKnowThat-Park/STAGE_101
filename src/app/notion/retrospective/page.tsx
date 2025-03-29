@@ -131,7 +131,7 @@ export default function PageSlider() {
   const prev = () => setPageIndex((prev) => Math.max(prev - 1, 0));
 
   return (
-    <div className="w-[800px] h-[700px] flex flex-col items-center justify-center px-6 text-center bg-white text-black">
+    <div className="w-[800px] h-[700px] flex flex-col items-center justify-center px-6 text-center bg-white text-black mx-auto">
       <div className="mb-4 text-sm text-gray-500">
         Page {pageIndex + 1} / {pages.length} · {pages[pageIndex].title}
       </div>
