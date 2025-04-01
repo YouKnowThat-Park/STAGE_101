@@ -11,10 +11,8 @@
 
 > [모바일 & 데스크탑 화면]
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/ba8ece85-2bd3-4b0c-abae-76c268e6aeb6" width="15%" />
-  <img src="https://github.com/user-attachments/assets/d405da89-9339-4aef-994d-eef8f4787d5a" width="45%" />
-</p>
+![Frame 2 (2)](https://github.com/user-attachments/assets/26c4aa3e-da2a-4131-85d9-22d49a66d467)
+
 
 
 ## 👨‍💻 담당 역할
