@@ -31,7 +31,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="py-20 bg-black text-white flex items-center justify-center px-4 min-h-screen">
+    <div className="py-20 bg-black text-white flex items-center justify-center px-4 ">
       <div className="bg-[#1C1C1C]/80 border border-gray-700 rounded-xl px-10 py-10 shadow-md backdrop-blur w-[420px] flex flex-col gap-6">
         {/* 🔄 상단 라인: 버튼 + 타이틀 */}
         <div className="relative h-10 mb-4">

@@ -35,25 +35,28 @@ export async function GET(req: NextRequest) {
 
     const reviews = data as unknown as ReviewWithUser[];
 
-    const theaterCounts: Record<string, { count: number; nickname: string; profile_img: string }> =
-      {};
+    const userCounts: Record<string, { count: number; nickname: string; profile_img: string }> = {};
 
     reviews.forEach((review) => {
-      const theaterId = review.theater_id;
-      const user = review.users ?? { nickname: '익명', profile_img: '/default.png' };
+      const userId = review.user_id;
+      const user = review.users ?? {
+        nickname: '익명',
+        profile_img: '/default.png',
+      };
 
-      if (!theaterCounts[theaterId]) {
-        theaterCounts[theaterId] = {
+      if (!userCounts[userId]) {
+        userCounts[userId] = {
           count: 0,
           nickname: user.nickname ?? '익명',
           profile_img: user.profile_img ?? '/default.png',
         };
       }
-      theaterCounts[theaterId].count++;
+
+      userCounts[userId].count++;
     });
 
-    const ranking = Object.entries(theaterCounts)
-      .map(([theater_id, data]) => ({ theater_id, ...data }))
+    const ranking = Object.entries(userCounts)
+      .map(([user_id, data]) => ({ user_id, ...data }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 3);
 
