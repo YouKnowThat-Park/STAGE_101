@@ -10,8 +10,15 @@ import MypageReview from './_components/MypageReview';
 
 import MypageFooter from './_components/MypageFooter';
 import { useRouter } from 'next/navigation';
+import { Noto_Serif_KR } from 'next/font/google';
 
 const defaultProfileImg = '/default.png'; // ✅ public 폴더 이미지 경로
+
+const notoSerif = Noto_Serif_KR({
+  subsets: ['latin'],
+  weight: ['600', '700'], // 필요에 따라 추가
+  variable: '--font-noto-serif',
+});
 
 const buttonTabs = [
   {
@@ -50,7 +57,9 @@ const MyPage = () => {
 
   const router = useRouter();
   return (
-    <div className="flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative ">
+    <div
+      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative`}
+    >
       {/* 📱 상단 로고 (모바일 전용) */}
       <div
         onClick={() => router.push('/')}
