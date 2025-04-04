@@ -59,7 +59,6 @@ const MypageTicket = () => {
                       <div className="hidden max-[431px]:flex flex-row text-xs leading-[12px] whitespace-pre-wrap font-bold text-gray-700 text-center items-start gap-10">
                         {/* 가로로 정렬된 항목 */}
                         <div className="flex flex-col items-center gap-2">
-                          <p>봤던날짜</p>
                           <p>{ticket.type}</p>
                           <p>{ticket.seat_number}</p>
                         </div>
@@ -78,13 +77,18 @@ const MypageTicket = () => {
 
                       {/* 📌 가로 텍스트 (PC 전용) */}
                       <div className="flex gap-4 text-sm justify-center items-center mt-1 font-black max-[431px]:hidden">
-                        <p>봤던 날짜</p>
+                        <div className="text-[10px]">
+                          <p>{ticket.start_date}</p>
+                          <p className="ml-7">~</p>
+                          <p>{ticket.end_date}</p>
+                        </div>
+
                         <p>{ticket.type}</p>
                         <p>{ticket.seat_number}</p>
                       </div>
 
                       {/* QR 코드 */}
-                      <div className="flex justify-center mt-2 max-[431px]:hidden">
+                      <div className="flex justify-center mt-2 md:mr-10 max-[431px]:hidden">
                         <Image
                           src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${ticket.qr_token}`}
                           alt="QR Code"
@@ -107,7 +111,7 @@ const MypageTicket = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2 text-xs mt-3 justify-between items-center">
-                  <div>
+                  <div className="flex gap-2">
                     <p>✅ 결제 금액: {ticket.total_price.toLocaleString()}원</p>
                     <p>✅ 결제 시간: {formatTime(ticket.created_at)}</p>
                   </div>

@@ -41,7 +41,8 @@ export async function fetchSeats(
     .select('seat_number')
     .eq('theater_id', validTheaterId)
     .eq('viewed_at', viewedAt) // 날짜 필터 추가
-    .eq('show_time', showTime); // 시간 필터 추가
+    .eq('show_time', showTime) // 시간 필터 추가
+    .in('status', ['pending', 'confirmed']);
 
   if (error || !data) {
     console.error(`🚨 ${theaterId} 좌석 불러오기 실패:`, error);

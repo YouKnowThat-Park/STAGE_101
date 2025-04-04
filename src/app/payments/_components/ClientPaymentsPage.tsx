@@ -164,7 +164,7 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-lg">선택된 좌석: {selectedSeats.join(', ') || '없음'}</p>
+            <p className="text-lg text-white">선택된 좌석: {selectedSeats.join(', ') || '없음'}</p>
             <div className="flex gap-4 justify-center mt-4">
               <button
                 onClick={() => setStep(1)}
