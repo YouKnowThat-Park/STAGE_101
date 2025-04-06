@@ -42,5 +42,5 @@ export async function middleware(req: NextRequest) {
 
 // ✅ 미들웨어 적용할 경로 (로그인 & 회원가입 페이지에서만 실행)
 export const config = {
-  matcher: ['/sign-in', '/sign-up', '/payments/:path*'],
+  matcher: ['/sign-in', '/sign-up', '/payments/:path*', '/mypage'],
 };
