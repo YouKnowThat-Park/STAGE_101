@@ -30,6 +30,15 @@ const Logout = () => {
     }
   };
 
+  const handleMyPageClick = () => {
+    if (!id) {
+      alert('로그인이 필요한 기능입니다.');
+      router.push('/sign-in');
+      return;
+    }
+    router.push('/mypage');
+  };
+
   return (
     <div
       className="
@@ -62,9 +71,9 @@ const Logout = () => {
       <Link href="/cart" className="hover:underline flex-shrink-0">
         CART
       </Link>
-      <Link href="/mypage" className="hover:underline flex-shrink-0">
+      <button onClick={handleMyPageClick} className="hover:underline flex-shrink-0">
         MYPAGE
-      </Link>
+      </button>
     </div>
   );
 };

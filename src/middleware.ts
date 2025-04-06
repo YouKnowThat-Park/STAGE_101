@@ -33,6 +33,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
+  if (!user && pathname.startsWith('/mypage')) {
+    return NextResponse.redirect(new URL('/sign-in', req.url));
+  }
+
   return NextResponse.next(); // ✅ 요청을 계속 진행
 }
 
