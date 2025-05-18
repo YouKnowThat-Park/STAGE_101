@@ -266,7 +266,13 @@
 >   실제 서비스와 유사한 사용자 보호 경험을 제공합니다.
 
 > [마이페이지 기능]
-> 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/0a569b78-f08d-4121-9d05-b541d4e78f48" width="250"/>
+  <img src="https://github.com/user-attachments/assets/218ecda7-49a4-4d58-94a8-4179b2825905" width="250"/>
+  <img src="https://github.com/user-attachments/assets/fc7a1bf8-611c-41e2-8842-e7cb41c1a8ba" width="250"/>
+</p>
+
+
 > - 사용자는 마이페이지를 통해 자신의 **예매 내역, 작성한 리뷰, 상점 구매 이력**을 한눈에 확인할 수 있습니다.
 > - 각 콘텐츠는 탭(Ticket / Review / History)으로 분리되어 있으며, 선택 시 **페이지 전환 없이 부드럽게 렌더링**됩니다.
 > - 콘텐츠는 모두 **티켓 스타일 카드 UI**로 구성되어 있어, 시각적으로 일관된 사용자 경험을 제공합니다.
