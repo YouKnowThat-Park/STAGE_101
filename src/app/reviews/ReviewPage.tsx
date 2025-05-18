@@ -90,7 +90,7 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
           </button>
 
           <div className="text-black flex flex-col justify-center items-center relative">
-            <div className="mb-4 p-5 bg-white flex justify-between gap-5 w-full">
+            <div className="mb-4 p-5 flex justify-between gap-5 w-full">
               <button onClick={() => setSortOption('newest')}>최신 순</button>
               <button onClick={() => setSortOption('oldest')}>오래된 순</button>
               <button
