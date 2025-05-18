@@ -1,3 +1,5 @@
+'use client';
+
 import { useUserStore } from '@/store/userStore';
 import { CartHistory } from '@/types/cart-history-type';
 import NoHistoryIcon from '@/ui/icon/NoHistoryIcon';
@@ -6,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 
 const MypageHistory = () => {
   const [history, setHistory] = useState<CartHistory[]>([]);
+  const [loading, setLoading] = useState(true);
   const userId = useUserStore((state) => state.id);
 
   useEffect(() => {
@@ -13,6 +16,7 @@ const MypageHistory = () => {
 
     const fetchHistory = async () => {
       try {
+        setLoading(true);
         const res = await fetch(`/api/cart/history?userId=${userId}`);
         const data = await res.json();
 
@@ -21,6 +25,8 @@ const MypageHistory = () => {
         }
       } catch (error) {
         console.error('❌ 거래 내역 불러오기 실패:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -32,7 +38,6 @@ const MypageHistory = () => {
 
     try {
       const targetHistory = history.find((item) => item.payment_key === paymentKey);
-
       if (!targetHistory) return;
 
       if (targetHistory.status === 'completed') {
@@ -69,22 +74,51 @@ const MypageHistory = () => {
   };
 
   return (
-    <section className="flex flex-col items-center bg-white h-[500px] gap-5 ">
-      {history.length === 0 ? (
+    <section className="flex flex-col items-center bg-white h-[500px] gap-5">
+      {loading ? (
+        // ✅ Skeleton UI
+        <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex flex-row border p-4 rounded-lg bg-white shadow-lg gap-4 mb-2 animate-pulse"
+            >
+              {/* 왼쪽 텍스트 영역 */}
+              <div className="flex flex-col flex-grow gap-2">
+                <div className="h-5 w-1/3 bg-gray-300 rounded" />
+                <div className="h-3 w-2/3 bg-gray-300 rounded" />
+                <div className="space-y-1 text-xs">
+                  <div className="h-2 w-full bg-gray-300 rounded" />
+                  <div className="h-2 w-5/6 bg-gray-300 rounded" />
+                  <div className="h-2 w-4/6 bg-gray-300 rounded" />
+                </div>
+                <div className="flex gap-2 text-sm mt-3">
+                  <div className="h-3 w-20 bg-gray-300 rounded" />
+                  <div className="h-3 w-20 bg-gray-300 rounded" />
+                  <div className="h-3 w-24 bg-gray-300 rounded" />
+                </div>
+              </div>
+
+              {/* 오른쪽 이미지 */}
+              <div className="w-28 h-28 bg-gray-300 rounded-lg" />
+            </div>
+          ))}
+        </div>
+      ) : history.length === 0 ? (
+        // ✅ 거래 내역 없음
         <div className="flex flex-col items-center mt-8">
           <NoHistoryIcon />
           <p>You have no transaction history yet.</p>
         </div>
       ) : (
-        // ✅ 아이템 목록에 스크롤 적용 (높이 고정)
-        // ✅ 예약 내역이 있을 때
+        // ✅ 거래 내역 있음
         <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           {history.map((item, index) => (
             <div
               key={index}
               className="flex flex-row border p-4 rounded-lg bg-white shadow-lg gap-4 mb-2"
             >
-              {/* 🔹 왼쪽 텍스트 영역 */}
+              {/* 왼쪽 텍스트 영역 */}
               <div className="flex flex-col flex-grow">
                 <h2 className="text-lg font-semibold mb-1">{item.name || '상품명 없음'}</h2>
                 <hr className="border-gray-300 mb-2" />
@@ -95,7 +129,6 @@ const MypageHistory = () => {
                   <p>모든 상품은 소비자 보호법 및 회사 정책에 따라 적용됩니다.</p>
                 </div>
 
-                {/* ✅ 텍스트 줄바꿈 + 겹침 방지 */}
                 <div className="flex flex-wrap justify-between items-start mt-3 gap-y-1">
                   <div className="flex flex-wrap gap-x-3 text-sm text-gray-800">
                     <span>✅ {new Date(item.created_at).toISOString().split('T')[0]}</span>
@@ -111,7 +144,7 @@ const MypageHistory = () => {
                 </div>
               </div>
 
-              {/* 🔹 이미지 오른쪽에 고정 + 반응형 사이즈 조절 */}
+              {/* 오른쪽 이미지 영역 */}
               <div className="flex flex-col items-center gap-2 shrink-0">
                 <div className="relative rounded-lg overflow-hidden border w-28 h-28 max-[420px]:w-24 max-[420px]:h-24">
                   <Image
