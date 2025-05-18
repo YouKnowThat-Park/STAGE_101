@@ -28,7 +28,7 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery<
     FetchAllReviewsResponse,
     Error
   >({
@@ -102,6 +102,23 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
             </div>
 
             <div className="reviews w-full space-y-4">
+              {isLoading && (
+                <div className="space-y-4 w-full">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div
+                      key={`skeleton-${i}`}
+                      className="bg-gray-100 border border-gray-300 rounded-lg p-4 flex gap-4 animate-pulse"
+                    >
+                      <div className="flex-1 space-y-3">
+                        <div className="h-5 bg-gray-300 rounded w-1/2" />
+                        <div className="h-4 bg-gray-300 rounded w-full" />
+                        <div className="h-4 bg-gray-300 rounded w-2/3" />
+                      </div>
+                      <div className="w-[100px] h-[150px] bg-gray-300 rounded-lg" />
+                    </div>
+                  ))}
+                </div>
+              )}
               {reviews.map((review: ReviewsType, index: number) => {
                 const reviewImgUrl = review.image_url || '/next.svg';
                 const isBlurred = !userId && index >= 5;
