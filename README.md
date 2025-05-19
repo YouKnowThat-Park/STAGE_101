@@ -290,6 +290,13 @@
 
 ---
 
+## ERD
+![위](https://github.com/user-attachments/assets/dfaef0bb-2486-4c4e-bbc3-bd57a008d671)
+![아래](https://github.com/user-attachments/assets/04fb9610-8738-4b1f-8a57-fde7bb8dbe1a)
+
+
+---
+
 ## 🔗 배포 링크 & 데모
 
 - **배포 주소:** [https://stage-101.vercel.app/](https://stage-101.vercel.app/)  
