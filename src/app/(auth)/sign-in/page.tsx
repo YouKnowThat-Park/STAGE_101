@@ -56,7 +56,7 @@ const Page = () => {
             <input type="checkbox" id="checkbox" className="accent-[#C9A66B]" />
             이메일 저장
           </label>
-          <button className="underline hover:text-white">비밀번호 찾기</button>
+          {/* <button className="underline hover:text-white">비밀번호 찾기</button> */}
         </div>
 
         {/* 소셜 로그인 */}
