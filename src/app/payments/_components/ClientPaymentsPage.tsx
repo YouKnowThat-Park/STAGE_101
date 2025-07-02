@@ -65,6 +65,31 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
     });
   };
 
+  // Supabase Realtime 리팩토링 과정에서 누락된 코드 복구
+  useEffect(() => {
+    if (!theaterId || !viewedAt || !theaterData?.show_time) return;
+
+    const channel = supabase
+      .channel('realtime:reservations')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reservations',
+        },
+        async () => {
+          const seats = await fetchSeats(theaterId, viewedAt, theaterData.show_time);
+          setReservedSeats(seats);
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [theaterId, viewedAt, theaterData?.show_time]);
+
   // ✅ 결제하기
   const handlePayment = async () => {
     if (
