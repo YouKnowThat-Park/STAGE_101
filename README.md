@@ -176,7 +176,7 @@
 ### Payments
 ![TossPayments](https://img.shields.io/badge/Toss%20Payments-0064FF?style=for-the-badge)
 
-### Utilities
+### LIB
 ![Day.js](https://img.shields.io/badge/Day.js-FF2D20?style=for-the-badge)
 ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=for-the-badge)
 ![Zod](https://img.shields.io/badge/Zod-2C2C2C?style=for-the-badge)
