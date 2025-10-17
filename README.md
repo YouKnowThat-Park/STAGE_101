@@ -1,3 +1,14 @@
+##
+```
+해당 플랫폼은 리팩터링중입니다.
+결제 완료 페이지 :  CSR > SSR
+백엔드 및 DB : Supabase > FastAPI & PostgreSQL
+QR 페이지 : QR 페이지 생성
+배포 : Vercel > AWS ES2
+함수 & 면수 명 : 좀 더 직관적으로 변경
+```
+
+
 #  STAGE_101
 
 
