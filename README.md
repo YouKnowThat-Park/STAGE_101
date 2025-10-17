@@ -210,7 +210,7 @@ QR 페이지 : QR 페이지 생성
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/7b97bc7e-5a64-4ee6-981e-ecea2f6d7eba" width="40%" />
-  <img src="https://github.com/user-attachments/assets/3d9b3611-ec37-46e5-bfa1-abbe2d4c09f9" width="40%" />
+  <img src="https://github.com/user-attachments/assets/3d9b3611-ec37-46e5-bfa1-abbe2d4c09f9" width="38%" />
 </p>
 
 
