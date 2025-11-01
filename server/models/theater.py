@@ -4,7 +4,7 @@ from server.database import Base
 from datetime import datetime
 import uuid
 
-from models.enums import TheaterDaysEnum
+from .enums import TheaterDaysEnum
 
 class Theater(Base):
     __tablename__ = "theaters"

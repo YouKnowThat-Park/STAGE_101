@@ -4,7 +4,7 @@ from server.database import Base
 from datetime import datetime
 import uuid
 
-from models.enums import CartStatusEnum
+from .enums import CartStatusEnum
 
 class CartHistory(Base):
     __tablename__ = "cart_histories"

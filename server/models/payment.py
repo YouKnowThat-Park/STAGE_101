@@ -14,5 +14,5 @@ class Payment(Base):
     amount = Column(Integer, nullable=False)
     point_earned = Column(Integer)
     status = Column(Text, nullable=False)
-    payment_key = Column(Text, nullable=False, unique=True)
+    payment_key = Column(UUID, nullable=False, unique=True)
     payment_method = Column(Text, nullable=False)
