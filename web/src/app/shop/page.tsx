@@ -1,13 +1,14 @@
 'use client';
 
-import useShopHook from '../../hooks/useShopHook';
+import useShopHook from '../../hooks/useShop';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getValidImageUrl } from './_components/getValidImageUrl';
+import useShop from '../../hooks/useShop';
 
 const ShopPage = () => {
   const router = useRouter();
-  const { items, loading, error } = useShopHook();
+  const { items, loading, error } = useShop();
 
   const HandleDetailPage = (id: string) => {
     router.push(`/shop/${id}`);
@@ -17,7 +18,7 @@ const ShopPage = () => {
     <div className="min-h-screen bg-black text-white py-10 px-6">
       <h1 className="text-3xl font-bold text-center text-[#C9A66B] mb-10">상점</h1>
 
-      {error && <p className="text-red-500 text-center mt-10">❌ {error}</p>}
+      {error && <p className="text-red-500 text-center mt-10">❌</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {loading

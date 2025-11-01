@@ -13,22 +13,25 @@ import os
 # 장고로 치면 settings.py 역할이구나
 
 env_path = Path(__file__).resolve().parent / ".env"
-print("🔎 .env path:", env_path)
 load_dotenv(dotenv_path=env_path)
 # → env 불러오기
 
-
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 # → 환경변수에서 DATABASE_URL를 읽을 수 있도록
-print("DEBUG : : DATABASE_URL", os.getenv("DATABASE_URL"))
 
 engine = create_engine(DATABASE_URL)
 # → SQLALchemy 엔진을 생성 해서 DB랑 연결
-# → SQL올케미?
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # → 요청마다 세션을 만들고 요청이 끝나면 정리
 
 Base = declarative_base()
 # →  모델들이 상속받을 베이스 클래스 (테이블 정리용)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+# → FastAPI 의존성 주입
