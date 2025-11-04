@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 const HomeImageSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const images = ['/main.jpg', '/main0.jpg', '/lesmiserables.jpg', '/main2.jpg'];
+  const images = [];
 
   useEffect(() => {
     const interval = setInterval(() => {

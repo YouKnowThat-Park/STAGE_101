@@ -6,30 +6,58 @@ import signUp from './actions';
 import SignUpForm from './_components/SignUpForm';
 import { SignUpFormData } from '../_components/SignUpSchema';
 import { useCallback, useState } from 'react';
+import { useUserStore } from 'src/store/userStore';
 
 const SignUpPage = () => {
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const setUser = useUserStore((s) => s.setUser);
 
   const goBack = useCallback(() => {
     router.push('/sign-in');
   }, [router]);
-
   const submitForm = async (data: SignUpFormData) => {
     try {
       const signUpResult = await signUp(data);
 
       if (signUpResult.success) {
-        setIsRedirecting(true); // ✅ 로딩 상태로 전환
-        window.location.href = '/'; // ✅ 전체 페이지 새로고침
+        // ✅ 회원가입 성공 → 쿠키 안에 JWT 존재
+        console.log('회원가입 성공 → JWT 쿠키 있음');
+
+        // ✅ 바로 /users/me 요청 보내기
+        const meRes = await fetch('http://localhost:8000/users/me', {
+          method: 'GET',
+          credentials: 'include', // 쿠키 포함해서 요청
+        });
+
+        if (!meRes.ok) {
+          throw new Error('서버로부터 사용자 정보를 가져오지 못했습니다.');
+        }
+
+        const meData = await meRes.json();
+        console.log('서버에서 받은 내 정보:', meData);
+
+        // ✅ Zustand 저장
+        setUser({
+          id: meData.id,
+          nickname: meData.nickname,
+          profile_img: meData.profile_img,
+          point: meData.point,
+        });
+
+        // ✅ 페이지 이동 (Zustand 세팅 끝난 후)
+        setIsRedirecting(true);
+        setTimeout(() => {
+          router.replace('/'); // 새로고침 대신 클라이언트 라우팅
+        }, 500);
       } else {
         alert(`❌ 회원가입 실패: ${signUpResult.message}`);
       }
     } catch (error) {
+      console.error(error);
       alert('🚨 서버 오류 발생. 다시 시도해주세요.');
     }
   };
-
   return (
     <div className="py-20 bg-black text-white flex items-center justify-center px-4 ">
       <div className="bg-[#1C1C1C]/80 border border-gray-700 rounded-xl px-10 py-10 shadow-md backdrop-blur w-[420px] flex flex-col gap-6">

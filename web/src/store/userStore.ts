@@ -12,7 +12,8 @@ export interface SafeUserType {
 }
 
 interface UserState extends SafeUserType {
-  setUser: (user: SafeUserType | null) => void;
+  token: string | null;
+  setUser: (user: SafeUserType | null, token?: string | null) => void;
   clearUser: () => void;
 }
 
@@ -24,7 +25,8 @@ export const useUserStore = create<UserState>()(
       nickname: '',
       profile_img: '',
       point: null,
-      setUser: (user) => {
+      token: null,
+      setUser: (user, token = null) => {
         if (user) {
           set({ ...user });
         } else {
@@ -33,6 +35,7 @@ export const useUserStore = create<UserState>()(
             nickname: '',
             profile_img: '',
             point: null,
+            token: null,
           });
         }
       },
@@ -42,6 +45,7 @@ export const useUserStore = create<UserState>()(
           nickname: '',
           profile_img: '',
           point: null,
+          token: null,
         });
       },
     }),
@@ -53,6 +57,7 @@ export const useUserStore = create<UserState>()(
         nickname: state.nickname,
         profile_img: state.profile_img,
         point: state.point,
+        token: state.token,
       }),
     },
   ),
