@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from server.database import engine
 from server.database import Base
-from server.routes import shop
+from server.routes import shop, user
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -17,6 +17,7 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)
 
 app.include_router(shop.router)
+app.include_router(user.router)
 
 
 @app.get("/")

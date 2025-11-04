@@ -15,3 +15,5 @@ class User(Base):
     name = Column(Text, nullable=False)
     point = Column(Integer)
     profile_img = Column(Text)
+    password = Column(Text)
+    # 일단 null을 열어두고 db 마이그레이션 진행 한 후 데이터를 추가하고 다시 닫을것.
