@@ -3,6 +3,7 @@
 해당 플랫폼은 리팩터링중입니다.
 결제 완료 페이지 :  CSR > SSR
 백엔드 및 DB : Supabase > FastAPI & PostgreSQL
+모든 Storage > 세션 id만 받아서 내려주고 데이터는 서버에 저장하는 식으로 변경
 QR 페이지 : QR 페이지 생성
 배포 : Vercel > AWS ES2
 함수 & 면수 명 : 좀 더 직관적으로 변경
