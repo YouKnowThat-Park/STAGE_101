@@ -50,7 +50,7 @@ export const useUserStore = create<UserState>()(
       },
     }),
     {
-      name: 'user-storage',
+      name: 'stage101',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         id: state.id,

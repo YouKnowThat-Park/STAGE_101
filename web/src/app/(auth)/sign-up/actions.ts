@@ -46,8 +46,10 @@ export default async function signUp({
     const data = await res.json();
 
     if (!res.ok) {
-      const errorData = await res.json();
-      return { success: false, message: errorData.detail || '회원가입 실패' };
+      return {
+        success: false,
+        message: data.detail || '회원가입 실패',
+      };
     }
 
     return { success: true, message: `${name} 회원가입에 성공했습니다.`, user: data };

@@ -1,7 +1,3 @@
-'use server';
-
-import { cookies } from 'next/headers';
-
 export default async function signIn(email: string, password: string) {
   try {
     if (!email || !password) {
@@ -28,24 +24,10 @@ export default async function signIn(email: string, password: string) {
 
     const { user } = data;
 
-    let cleanProfileImg = user.profile_img;
-    if (typeof cleanProfileImg === 'string') {
-      cleanProfileImg = cleanProfileImg.replace(/^"|"$/g, '').trim();
-    } else {
-      cleanProfileImg = null;
-    }
-
     const cleanedUser = {
       ...user,
-      profile_img: cleanProfileImg,
+      profile_img: user.profile_img || null,
     };
-
-    cookies().set('user_id', user.id || '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-    });
 
     return {
       success: true,

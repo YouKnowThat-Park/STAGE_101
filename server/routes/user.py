@@ -44,7 +44,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         },
     })
     response.set_cookie(
-        key="access_token",
+        key="__stage__",
         value=access_token,
         httponly=True,
         secure=False,  # 배포시 True
@@ -56,8 +56,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/signin")
-def signin(user_data: UserSignIn, db: Session = Depends(get_db), response: Response = None):
-    """ 로그인 API """
+def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user_data.email).first()
 
     if not user or not verify_password(user_data.password, user.password):
@@ -65,26 +64,31 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db), response: Respo
 
     access_token = create_access_token({"sub": user.email})
 
-    response = JSONResponse(content={"message": "로그인 성공", "user": {
-        "id": str(user.id),
-        "nickname": user.nickname,
-        "profile_img": user.profile_img,
-        "point": user.point,
-    }})
+    response = JSONResponse(content={
+        "message": "로그인 성공",
+        "user": {
+            "id": str(user.id),
+            "nickname": user.nickname,
+            "profile_img": user.profile_img,
+            "point": user.point,
+        }
+    })
+
     response.set_cookie(
-        key="access_token",
+        key="__stage__",
         value=access_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=60 * 60
+        secure=False,  # 배포 시 True
+        samesite="none",
+        max_age=60 * 60,
     )
+
     return response
 
 @router.get("/me")
 def get_current_user(request: Request, db: Session = Depends(get_db)):
     """ JWT 쿠키로 현재 로그인 유저 정보 반환 """
-    token = request.cookies.get("access_token")
+    token = request.cookies.get("__stage__")
     if not token:
         raise HTTPException(status_code=401, detail="인증 토큰이 없습니다.")
     
