@@ -15,8 +15,14 @@ const Page = () => {
 
   const handleSignIn = async (data: EmailPasswordFormData) => {
     try {
-      const user = await signIn(data.email, data.password);
-      useUserStore.getState().setUser(user);
+      const result = await signIn(data.email, data.password);
+
+      if (!result.success) {
+        alert(result.message);
+        return;
+      }
+
+      useUserStore.getState().setUser(result.user);
 
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
@@ -27,10 +33,9 @@ const Page = () => {
 
       router.push('/');
     } catch (error: any) {
-      alert(error.message);
+      alert(error.message || '로그인 중 오류가 발생했습니다.');
     }
   };
-
   const handleSignUpPage = () => {
     router.push('/sign-up');
   };
