@@ -7,8 +7,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useUserStore } from '../../../store/userStore';
 import LoginModal from '../../../ui/modal/LoginModal';
-import useAddToCart from '../../../hooks/useAddToCart';
 import useShop from '../../../hooks/useShop';
+import useAddToCart from 'src/hooks/cart/useAddCartData';
+import ShopDetailSkeleton from '../_components/ShopDetailSkeleton';
 
 const Page = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -39,14 +40,12 @@ const Page = () => {
     }
 
     addToCart.mutate({
-      userId,
-      shopId,
-      item: {
-        name: item.name ?? '고객센터 문의',
-        point: item.point ?? 0,
-        image_url: getValidImageUrl(item.image_url),
-        quantity,
-      },
+      user_id: userId,
+      shop_id: shopId,
+      name: item.name ?? '고객센터 문의',
+      point: item.point ?? 0,
+      quantity,
+      image_url: getValidImageUrl(item.image_url),
     });
   };
 
@@ -56,27 +55,7 @@ const Page = () => {
 
   return (
     <div className="bg-black text-white min-h-screen py-10 px-6 flex flex-col items-center">
-      <div
-        className="bg-[#1C1C1C] p-8 rounded-xl shadow-lg w-full max-w-2xl animate-pulse"
-        hidden={!loading}
-      >
-        <div className="w-full flex justify-center mb-6">
-          <div className="w-[300px] h-[300px] bg-gray-700 rounded-lg" />
-        </div>
-        <div className="h-6 w-1/2 bg-gray-600 mx-auto rounded mb-3" />
-        <div className="h-5 w-1/3 bg-gray-600 mx-auto rounded mb-6" />
-        <div className="bg-gray-700 p-4 rounded mb-6 space-y-2">
-          <div className="h-3 bg-gray-600 rounded w-full" />
-          <div className="h-3 bg-gray-600 rounded w-5/6" />
-          <div className="h-3 bg-gray-600 rounded w-4/6" />
-        </div>
-        <div className="flex justify-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-gray-600 rounded-full" />
-          <div className="w-14 h-10 bg-gray-700 rounded" />
-          <div className="w-10 h-10 bg-gray-600 rounded-full" />
-        </div>
-        <div className="w-40 h-10 bg-gray-500 mx-auto rounded" />
-      </div>
+      <ShopDetailSkeleton loading={loading} />
 
       {!loading && item && (
         <>

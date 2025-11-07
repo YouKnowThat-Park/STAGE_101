@@ -1,5 +1,5 @@
-import { fetchCartData } from '../app/api/cart/cart';
-import { CartType } from '../types/cart.type';
+import { fetchCartData } from 'src/lib/api/cart/cart';
+import { CartType } from '../../types/cart.type';
 import { useQuery } from '@tanstack/react-query';
 
 const useFetchCartData = (userId: string | null | undefined) => {
