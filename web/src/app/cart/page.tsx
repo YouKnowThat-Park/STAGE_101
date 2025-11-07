@@ -1,16 +1,17 @@
 'use client';
 
-import useFetchCartData from '../../hooks/useFetchCartData';
+import useFetchCartData from '../../hooks/cart/useFetchCartData';
 import { useUserStore } from '../../store/userStore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { deleteCartData } from '../api/cart/cart';
 import { useQueryClient } from '@tanstack/react-query';
 import DeleteIcon from '../../ui/icon/DeleteIcon';
 import MinusIcon from '../../ui/icon/MinusIcon';
 import PlusIcon from '../../ui/icon/PlusIcon';
-import useUpdateCartQuantity from '../../hooks/useUpdateCartQuantity';
+import useUpdateCartQuantity from '../../hooks/cart/useUpdateCartQuantity';
+import { useDeleteCartItem } from 'src/hooks/cart/useDeleteCartItem';
+import CartSkeleton from './_components/CartSkeleton';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -18,45 +19,13 @@ const CartPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const updateQuantityMutation = useUpdateCartQuantity();
+  const deleteMutation = useDeleteCartItem(userId);
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItemsList = cartItems ?? [];
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black text-white py-10 px-6 flex flex-col md:flex-row items-center sm:items-start justify-center gap-12 animate-pulse">
-        <div className="w-full max-w-[700px]">
-          <h1 className="text-3xl font-bold text-[#C9A66B] mb-8 text-center">🛒 장바구니</h1>
-          <ul className="flex flex-col gap-6">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <li
-                key={i}
-                className="relative flex bg-[#1C1C1C] lg:flex-row flex-col rounded-xl p-4 shadow-md gap-4"
-              >
-                <div className="w-5 h-5 bg-gray-700 rounded-sm" />
-                <div className="w-[100px] h-[100px] bg-gray-700 rounded-lg" />
-                <div className="flex-1 space-y-3">
-                  <div className="h-5 bg-gray-600 rounded w-2/3" />
-                  <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-600" />
-                    <div className="w-10 h-10 rounded bg-gray-600" />
-                    <div className="w-10 h-10 rounded-full bg-gray-600" />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="w-full md:w-[280px] bg-[#1C1C1C]/80 border border-gray-600 rounded-xl flex flex-col items-center p-6 shadow-lg">
-          <div className="w-full border-b border-gray-500 text-center pb-3 space-y-2">
-            <div className="h-4 bg-gray-600 w-1/2 mx-auto rounded" />
-            <div className="h-6 bg-gray-600 w-2/3 mx-auto rounded" />
-          </div>
-          <div className="mt-4 w-full h-10 bg-gray-700 rounded" />
-        </div>
-      </div>
-    );
+    return <CartSkeleton />;
   }
 
   if (error) {
@@ -65,16 +34,14 @@ const CartPage = () => {
 
   const handleQuantityChange = (shopId: string, newQuantity: number) => {
     if (!userId || newQuantity < 1) return;
-    updateQuantityMutation.mutate({ userId, shopId, quantity: newQuantity });
+    updateQuantityMutation.mutate({ user_id: userId, shop_id: shopId, quantity: newQuantity });
   };
 
   const handleDeleteItem = async (shopId: string) => {
     if (!userId || !shopId) return;
+
     try {
-      await deleteCartData(userId, shopId);
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['cart', userId] });
-      }, 500);
+      deleteMutation.mutate({ shop_id: shopId }); // 🟢 옳은 사용 방식
     } catch (error) {
       console.error('error', error);
       alert('삭제 중 오류가 발생했습니다.');
@@ -132,21 +99,17 @@ const CartPage = () => {
     }
   };
 
-  const handleDeleteSelectedItems = async () => {
+  const handleDeleteSelectedItems = () => {
     if (!userId || !selectedItems.length) {
       alert('삭제할 항목을 선택하세요.');
       return;
     }
-    try {
-      await Promise.all(selectedItems.map((shopId) => deleteCartData(userId, shopId)));
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['cart', userId] });
-      }, 500);
-      setSelectedItems([]);
-    } catch (error) {
-      console.error('error', error);
-      alert('삭제 중 오류가 발생했습니다.');
-    }
+
+    selectedItems.forEach((shopId) => {
+      deleteMutation.mutate({ shop_id: shopId });
+    });
+
+    setSelectedItems([]);
   };
 
   const totalPoint =

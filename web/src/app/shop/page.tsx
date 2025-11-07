@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getValidImageUrl } from './_components/getValidImageUrl';
 import useShop from '../../hooks/useShop';
+import ShopSkeleton from './_components/ShopSkeleton';
 
 const ShopPage = () => {
   const router = useRouter();
@@ -22,18 +23,7 @@ const ShopPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {loading
-          ? Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={`skeleton-${i}`}
-                className="bg-[#1C1C1C] border border-gray-700 rounded-xl shadow-md animate-pulse"
-              >
-                <div className="bg-gray-700 w-full h-[200px] rounded-t-xl" />
-                <div className="p-4 space-y-2">
-                  <div className="h-4 w-1/2 bg-gray-600 rounded" />
-                  <div className="h-5 w-3/4 bg-gray-600 rounded" />
-                </div>
-              </div>
-            ))
+          ? Array.from({ length: 8 }).map((_, i) => <ShopSkeleton key={`skeleton-${i}`} />)
           : items?.map((item) => (
               <div
                 key={item.id}
