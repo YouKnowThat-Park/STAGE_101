@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ShopType } from '../types/shop-type';
+import { ShopType } from '../../types/shop-type';
 import { fetchShopById, fetchShops } from 'src/lib/api/shop/shop';
 
 const useShop = (shopId?: string) => {

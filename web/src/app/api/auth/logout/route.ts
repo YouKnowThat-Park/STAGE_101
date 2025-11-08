@@ -5,11 +5,11 @@ export async function GET() {
     const allCookies = cookies();
 
     allCookies.getAll().forEach(({ name }) => {
-      if (name.startsWith('sb-')) {
+      if (name.startsWith('stage')) {
         allCookies.delete(name);
       }
 
-      if (name.startsWith('user')) {
+      if (name.startsWith('__')) {
         allCookies.delete(name);
       }
     });

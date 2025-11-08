@@ -5,7 +5,9 @@ export const useUserHook = (id: string | null) => {
     queryKey: ['userData', id],
     queryFn: async () => {
       if (!id) throw new Error('No user ID provided');
-      const res = await fetch(`/api/user?id=${id}`);
+      const res = await fetch(`http://localhost:8000/users/me`, {
+        credentials: 'include',
+      });
       if (!res.ok) throw new Error('Failed to fetch user data');
       return res.json();
     },

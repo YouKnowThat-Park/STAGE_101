@@ -11,7 +11,7 @@ const Logout = () => {
 
   // ✅ 로그인 상태 확인 (예: 로컬스토리지에서 가져오기)
   useEffect(() => {
-    const storedUser = localStorage.getItem('user'); // 예제: 로컬스토리지 활용
+    const storedUser = localStorage.getItem('__'); // 예제: 로컬스토리지 활용
     if (storedUser) {
       setUser(JSON.parse(storedUser)); // ✅ 유저 상태 업데이트
     }
@@ -22,7 +22,7 @@ const Logout = () => {
 
     if (res.ok) {
       clearUser();
-      localStorage.removeItem('user'); // ✅ 로그아웃 시 유저 정보 제거
+      localStorage.removeItem('__'); // ✅ 로그아웃 시 유저 정보 제거
       alert('로그아웃 성공!');
       router.push('/');
     } else {

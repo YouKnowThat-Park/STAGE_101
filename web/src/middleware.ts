@@ -1,39 +1,22 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
 
 export async function middleware(req: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-  // ✅ 환경 변수 체크 (올바르게 설정되지 않으면 오류 방지)
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('🚨 Supabase 환경 변수가 설정되지 않았습니다.');
-    return NextResponse.next();
-  }
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: { get: (name) => req.cookies.get(name)?.value || '' },
-  });
-
   // ✅ 현재 로그인된 사용자 정보 가져오기
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+  const token = req.cookies.get('__stage__')?.value;
 
   const pathname = req.nextUrl.pathname;
 
   // ✅ 유저가 로그인된 상태라면 `/sign-in`, `/sign-up` 접근 차단 후 `/`로 리다이렉트
-  if (user && (req.nextUrl.pathname === '/sign-in' || req.nextUrl.pathname === '/sign-up')) {
+  if (token && (req.nextUrl.pathname === '/sign-in' || req.nextUrl.pathname === '/sign-up')) {
     return NextResponse.redirect(new URL('/', req.url)); // ✅ `/`로 강제 이동
   }
 
-  if (!user && pathname.startsWith('/payments')) {
+  if (!token && pathname.startsWith('/payments')) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
-  if (!user && pathname.startsWith('/mypage')) {
+  if (!token && pathname.startsWith('/mypage')) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 

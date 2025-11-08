@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useUserStore } from '../../../store/userStore';
 import LoginModal from '../../../ui/modal/LoginModal';
-import useShop from '../../../hooks/useShop';
+import useShop from '../../../hooks/shop/useShop';
 import useAddToCart from 'src/hooks/cart/useAddCartData';
 import ShopDetailSkeleton from '../_components/ShopDetailSkeleton';
 

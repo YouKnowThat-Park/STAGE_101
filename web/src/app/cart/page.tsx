@@ -12,6 +12,8 @@ import PlusIcon from '../../ui/icon/PlusIcon';
 import useUpdateCartQuantity from '../../hooks/cart/useUpdateCartQuantity';
 import { useDeleteCartItem } from 'src/hooks/cart/useDeleteCartItem';
 import CartSkeleton from './_components/CartSkeleton';
+import { usePostCartHistory } from 'src/hooks/cart_history/usePostCartHistory';
+import { v4 as uuidv4 } from 'uuid';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -20,6 +22,7 @@ const CartPage = () => {
   const router = useRouter();
   const updateQuantityMutation = useUpdateCartQuantity();
   const deleteMutation = useDeleteCartItem(userId);
+  const { mutate: createCartHistory } = usePostCartHistory();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItemsList = cartItems ?? [];
@@ -63,28 +66,35 @@ const CartPage = () => {
     );
     const totalQuantity = selectedCartItems.reduce((total, item) => total + item.quantity, 0);
 
-    try {
-      const response = await fetch('/api/cart/history', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, totalPrice, quantity: totalQuantity }),
-      });
+    const paymentKey = uuidv4(); // UUID 생성
 
-      const result = await response.json();
-      if (result.success && result.order?.id) {
-        router.push(`/cart/${result.order.id}`);
-        setTimeout(() => {
-          queryClient.invalidateQueries({ queryKey: ['cart', userId] });
-        }, 500);
-      } else {
-        alert(result.message);
-      }
-    } catch (error) {
-      console.error('❌ 결제 오류:', error);
-      alert('결제 중 오류가 발생했습니다.');
-    }
+    // 여러 항목을 단일 거래로 묶어서 기록
+    const item = selectedCartItems[0]; // 대표 상품으로 보여줄 하나만 선택
+
+    createCartHistory(
+      {
+        payment_key: paymentKey,
+        total_price: totalPrice,
+        quantity: totalQuantity,
+        status: 'pending',
+        name: item.name,
+        image_url: item.image_url,
+        cart_id: item.id,
+      },
+      {
+        onSuccess: (data) => {
+          router.push(`/cart/${data.id}`);
+          setTimeout(() => {
+            queryClient.invalidateQueries({ queryKey: ['cart', userId] });
+          }, 500);
+        },
+        onError: (err: any) => {
+          alert('결제 실패: ' + err.message);
+          console.error('❌ 결제 실패:', err);
+        },
+      },
+    );
   };
-
   const handleToggleSelect = (id: string) => {
     setSelectedItems((prev) =>
       prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id],

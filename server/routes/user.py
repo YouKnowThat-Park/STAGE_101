@@ -25,7 +25,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         email=user_data.email,
         phone=user_data.phone,
         password=hashed_pw,
-        point=1000,
+        point=10000,
     )
 
     db.add(new_user)
@@ -79,7 +79,7 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
         value=access_token,
         httponly=True,
         secure=False,  # 배포 시 True
-        samesite="none",
+        samesite="lax", # 배포 시 none? 
         max_age=60 * 60,
     )
 
@@ -103,6 +103,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
     
     return {
         "id": str(user.id),
+        "name": user.name,
         "nickname": user.nickname,
         "profile_img": user.profile_img,
         "point": user.point
