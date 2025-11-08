@@ -4,7 +4,7 @@ from server.database import Base
 from datetime import datetime
 import uuid
 
-class QRSession(Base):
+class QrSession(Base):
     __tablename__ = "qr_sessions"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)

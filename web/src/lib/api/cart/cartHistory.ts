@@ -1,0 +1,38 @@
+import { CartHistory } from 'src/types/cart-history-type';
+
+export const postCartHistory = async (payload: {
+  payment_key: string;
+  total_price: number;
+  quantity: number;
+  status: 'pending' | 'completed' | 'canceled';
+  image_url?: string;
+  name?: string;
+  cart_id?: string;
+}) => {
+  const res = await fetch('http://localhost:8000/cart-histories', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || '거래 기록 생성 실패');
+  }
+
+  return res.json();
+};
+
+export const fetchCartHistory = async (): Promise<CartHistory[]> => {
+  const res = await fetch('http://localhost:8000/cart-histories/me', {
+    credentials: 'include',
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || '거래 내역 조회 실패');
+  }
+
+  return res.json();
+};

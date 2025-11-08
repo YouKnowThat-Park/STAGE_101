@@ -22,7 +22,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 # → SQLALchemy 엔진을 생성 해서 DB랑 연결
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 # → 요청마다 세션을 만들고 요청이 끝나면 정리
 
 Base = declarative_base()

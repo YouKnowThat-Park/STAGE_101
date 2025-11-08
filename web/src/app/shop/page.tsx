@@ -1,10 +1,10 @@
 'use client';
 
-import useShopHook from '../../hooks/useShop';
+import useShopHook from '../../hooks/shop/useShop';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getValidImageUrl } from './_components/getValidImageUrl';
-import useShop from '../../hooks/useShop';
+import useShop from '../../hooks/shop/useShop';
 import ShopSkeleton from './_components/ShopSkeleton';
 
 const ShopPage = () => {
