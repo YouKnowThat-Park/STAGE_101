@@ -66,10 +66,8 @@ const CartPage = () => {
     );
     const totalQuantity = selectedCartItems.reduce((total, item) => total + item.quantity, 0);
 
-    const paymentKey = uuidv4(); // UUID 생성
-
-    // 여러 항목을 단일 거래로 묶어서 기록
-    const item = selectedCartItems[0]; // 대표 상품으로 보여줄 하나만 선택
+    const paymentKey = uuidv4(); // ✅ 같은 결제 묶음 키(여러 히스토리가 공유)
+    const representative = selectedCartItems[0];
 
     createCartHistory(
       {
@@ -77,24 +75,29 @@ const CartPage = () => {
         total_price: totalPrice,
         quantity: totalQuantity,
         status: 'pending',
-        name: item.name,
-        image_url: item.image_url,
-        cart_id: item.id,
+        name: representative.name,
+        image_url: representative.image_url,
+        cart_item_ids: selectedCartItems.map((i) => i.id),
       },
       {
-        onSuccess: (data) => {
-          router.push(`/cart/${data.id}`);
-          setTimeout(() => {
-            queryClient.invalidateQueries({ queryKey: ['cart', userId] });
-          }, 500);
+        // ✅ 서버가 CartHistory[] 배열을 반환함
+        onSuccess: (histories) => {
+          if (!histories || histories.length === 0) {
+            alert('생성된 결제 내역이 없습니다.');
+            return;
+          }
+          const firstId = histories[0].id; // 단건 히스토리 id
+          router.push(`/cart/${firstId}`); // /cart/[id] 로 이동 (success 폴더 필요 없음)
+          queryClient.invalidateQueries({ queryKey: ['cart', userId] });
         },
         onError: (err: any) => {
-          alert('결제 실패: ' + err.message);
+          alert('결제 실패: ' + (err?.message ?? '알 수 없는 오류'));
           console.error('❌ 결제 실패:', err);
         },
       },
     );
   };
+
   const handleToggleSelect = (id: string) => {
     setSelectedItems((prev) =>
       prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id],

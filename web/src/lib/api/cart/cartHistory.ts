@@ -8,7 +8,8 @@ export const postCartHistory = async (payload: {
   image_url?: string;
   name?: string;
   cart_id?: string;
-}) => {
+  cart_item_ids: string[];
+}): Promise<CartHistory[]> => {
   const res = await fetch('http://localhost:8000/cart-histories', {
     method: 'POST',
     credentials: 'include',
@@ -17,7 +18,7 @@ export const postCartHistory = async (payload: {
   });
 
   if (!res.ok) {
-    const err = await res.json();
+    const err = await res.json().catch(() => ({}) as any);
     throw new Error(err.detail || '거래 기록 생성 실패');
   }
 
@@ -34,5 +35,17 @@ export const fetchCartHistory = async (): Promise<CartHistory[]> => {
     throw new Error(err.detail || '거래 내역 조회 실패');
   }
 
+  return res.json();
+};
+
+export const fetchCartHistoriesByPayment = async (paymentKey: string): Promise<CartHistory[]> => {
+  const res = await fetch(`http://localhost:8000/cart-histories/by-payment/${paymentKey}`, {
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}) as any);
+    throw new Error(err.detail || '해당 결제의 히스토리가 없습니다.');
+  }
   return res.json();
 };
