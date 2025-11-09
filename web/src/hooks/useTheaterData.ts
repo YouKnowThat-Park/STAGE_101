@@ -1,5 +1,5 @@
-import { fetchTheaterData } from '../utils/api/fetchTheaterData';
 import { useQuery } from '@tanstack/react-query';
+import { fetchTheaterData } from 'src/lib/api/theater/theater';
 
 export const useTheaterData = (theaterId: string) => {
   return useQuery({
