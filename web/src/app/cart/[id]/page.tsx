@@ -1,8 +1,8 @@
-// app/cart/[id]/page.tsx
 import { notFound } from 'next/navigation';
 import { headers, cookies } from 'next/headers';
 import Image from 'next/image';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
+import HomeCountdownText from '../_components/HomeCountdownText';
 
 const API = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
 
@@ -60,7 +60,7 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
           <p>
             총 수량 {totalQty} • {totalPrice.toLocaleString()} 포인트
           </p>
-          <p className="text-gray-500">10초 후 메인 페이지로 자동 이동합니다.</p>
+          <HomeCountdownText />
         </div>
 
         {/* 구매한 항목 목록 (이름/이미지/수량/가격만) */}

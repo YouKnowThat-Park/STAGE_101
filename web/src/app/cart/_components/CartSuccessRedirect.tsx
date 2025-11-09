@@ -1,20 +1,27 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import React from 'react';
 
 const CartSuccessRedirect = () => {
   const router = useRouter();
+  const [count, setCount] = useState(10);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      router.push('/');
-    }, 10000);
+    const countdown = setInterval(() => {
+      setCount((prev) => prev - 1);
+    }, 1000);
 
-    return () => clearTimeout(timeout);
-  }, [router]);
+    return () => clearInterval(countdown);
+  }, []);
+
+  useEffect(() => {
+    if (count === 0) {
+      router.push('/');
+    }
+  }, [count, router]);
 
   return (
     <button
