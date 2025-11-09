@@ -3,7 +3,7 @@ from server.database import engine
 from server.database import Base
 from server.routes import shop, user, cart, cart_history
 from fastapi.middleware.cors import CORSMiddleware
-
+from server import models
 
 app = FastAPI()
 
