@@ -1,18 +1,29 @@
-'use client';
+import { notFound } from 'next/navigation';
+import { CartHistory } from 'src/types/cart-history-type';
+import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+export interface CartSuccessProps {
+  params: { id: string };
+}
 
-const CartSuccessPage = ({ params }: { params: { id: string } }) => {
-  const router = useRouter();
-  const orderId = params.id;
+export interface CartSuccessHistory {
+  payment_key: string;
+  name: string;
+  total_price: number;
+  quantity: number;
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push('/');
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [router]);
+const CartSuccessPage = async ({ params }: CartSuccessProps) => {
+  const res = await fetch(`http://localhost:8000/cart-histories/${params.id}`, {
+    method: 'GET',
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    return notFound();
+  }
+
+  const data: CartHistory = await res.json();
 
   return (
     <div className="flex flex-col items-center justify-center py-14 px-4">
@@ -25,17 +36,12 @@ const CartSuccessPage = ({ params }: { params: { id: string } }) => {
         <div className="text-sm text-gray-600">
           <p className="mb-2">
             <span className="font-medium text-gray-800">주문번호:</span>{' '}
-            <span className="font-mono text-blue-600 break-all">{orderId}</span>
+            <span className="font-mono text-blue-600 break-all">{data.payment_key}</span>
           </p>
           <p>10초 후 메인 페이지로 자동 이동합니다.</p>
         </div>
 
-        <button
-          onClick={() => router.push('/')}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
-        >
-          홈으로 즉시 이동
-        </button>
+        <CartSuccessRedirect />
       </div>
     </div>
   );
