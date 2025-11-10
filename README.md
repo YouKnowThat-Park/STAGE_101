@@ -5,7 +5,7 @@
 백엔드 및 DB : Supabase > FastAPI & PostgreSQL
 모든 Storage > 세션 id만 받아서 내려주고 데이터는 서버에 저장하는 식으로 변경
 QR 페이지 : QR 페이지 생성
-배포 : Vercel > AWS ES2
+배포 : Vercel > AWS ES2 (결제 오류 오열중)
 함수 & 면수 명 : 좀 더 직관적으로 변경
 ```
 
