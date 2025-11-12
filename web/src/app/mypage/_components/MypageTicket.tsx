@@ -1,5 +1,6 @@
 'use client';
 
+import { useCancelReservation } from 'src/hooks/reservation/useCancelReservation';
 import { useTicketHistory } from '../../../hooks/useTicketHistory';
 import { useUserStore } from '../../../store/userStore';
 import NoTicketIcon from '../../../ui/icon/NoTicketIcon';
@@ -18,28 +19,9 @@ const MypageTicket = () => {
     refetchHistory,
     isLoading: loadingTickets,
   } = useTicketHistory(userId ?? '');
-  console.log('history 나오나요', history);
+  const { mutate: cancelReservation } = useCancelReservation(userId);
+
   const [loadingCancel, setLoadingCancel] = useState(false);
-
-  const cancelReservation = async (reservationId: string) => {
-    setLoadingCancel(true);
-    try {
-      const response = await fetch('/api/reviews/delete-review', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reservation_id: reservationId }),
-      });
-
-      if (!response.ok) throw new Error('예약 취소 실패');
-      await refetchHistory();
-      alert('예약이 취소되었습니다.');
-    } catch (error) {
-      console.error(error);
-      alert('예약 취소 중 오류가 발생했습니다.');
-    } finally {
-      setLoadingCancel(false);
-    }
-  };
 
   return (
     <section className="flex flex-col items-center bg-white h-[500px] gap-5">
