@@ -4,7 +4,7 @@ import { useTicketHistory } from '../../../hooks/useTicketHistory';
 import { useUserStore } from '../../../store/userStore';
 import NoTicketIcon from '../../../ui/icon/NoTicketIcon';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const formatTime = (isoString: string) => {
   const date = new Date(isoString);
@@ -18,6 +18,7 @@ const MypageTicket = () => {
     refetchHistory,
     isLoading: loadingTickets,
   } = useTicketHistory(userId ?? '');
+  console.log('history 나오나요', history);
   const [loadingCancel, setLoadingCancel] = useState(false);
 
   const cancelReservation = async (reservationId: string) => {
