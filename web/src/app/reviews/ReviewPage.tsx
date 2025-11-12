@@ -1,14 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import BronzeCrownIcon from '../../ui/icon/BronzeCrownIcon';
 import Image from 'next/image';
 import { ReviewsType } from '../../types/review.type';
 import { useUserStore } from '../../store/userStore';
-import fetchAllReviews, { FetchAllReviewsResponse } from '../../lib/fetchAllReviews';
 import ReviewAddModal from './_components/ReviewAddModal';
+import { useInfiniteReviews } from 'src/hooks/review/useReviewsData';
 
 const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(true);
@@ -28,26 +27,12 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery<
-    FetchAllReviewsResponse,
-    Error
-  >({
-    queryKey: ['reviews', { sort: sortOption }],
-    queryFn: async ({ pageParam = 1 }) => {
-      return await fetchAllReviews({
-        pageParam: pageParam as number,
-        sort: sortOption,
-        order: sortOption === 'newest' ? 'desc' : 'asc',
-        userId: userId || undefined,
-      });
-    },
-    getNextPageParam: (lastPage, allPages) => {
-      const totalCount = lastPage.totalCount;
-      const currentCount = allPages.flatMap((page) => page.reviews).length;
-      return currentCount < totalCount ? lastPage.nextPage : undefined;
-    },
-    initialPageParam: 1,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteReviews(
+    sortOption,
+    userId,
+  );
+
+  console.log('data', data);
 
   useEffect(() => {
     if (isOpenReviewModal) {
@@ -64,7 +49,9 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
     };
   }, [isOpenReviewModal]);
 
-  const reviews = data?.pages.flatMap((page) => page.reviews) || [];
+  const reviews = data?.pages.flatMap((page) => page.reviews ?? []) ?? [];
+  console.log('pages', data?.pages);
+  console.log('review', reviews);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-50">
@@ -119,8 +106,9 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                   ))}
                 </div>
               )}
-              {reviews.map((review: ReviewsType, index: number) => {
-                const reviewImgUrl = review.image_url || '/next.svg';
+              {reviews.filter(Boolean).map((review: ReviewsType, index: number) => {
+                if (!review) return null;
+                const reviewImgUrl = review?.image_url || '/next.svg';
                 const isBlurred = !userId && index >= 5;
 
                 return (
@@ -132,7 +120,7 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                       <div className="flex items-start gap-4">
                         <div className="flex-1">
                           <h4 className="text-lg font-black border-b border-black pb-1">
-                            {review.theaters?.name || '공연 제목'}
+                            {review?.theaters?.name || '공연 제목'}
                           </h4>
                           <p className="text-sm mt-3 text-gray-600 break-words">{review.comment}</p>
                         </div>
@@ -148,7 +136,12 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                       </div>
 
                       <div className="flex gap-4 text-xs mt-2">
-                        <p>✅ {new Date(review.created_at).toISOString().split('T')[0]}</p>
+                        <p>
+                          ✅
+                          {review.created_at
+                            ? new Date(review.created_at).toISOString().split('T')[0]
+                            : '날짜 없음'}
+                        </p>{' '}
                         <p>✅ {review.display_name || '이름 없음'}</p>
                       </div>
                     </div>

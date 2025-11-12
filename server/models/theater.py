@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, Text, DateTime, Boolean, Date, Enum
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from server.database import Base
 from datetime import datetime
@@ -24,3 +25,4 @@ class Theater(Base):
     start_date = Column(Date)
     end_date = Column(Date)
     allowed_days = Column(Enum(TheaterDaysEnum, name="theaters_days"), nullable=True)
+    reservations = relationship("Reservation", back_populates="theater")

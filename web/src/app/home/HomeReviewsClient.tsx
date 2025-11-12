@@ -20,7 +20,7 @@ const HomeReviewsClient = () => {
       </div>
       {isReviewModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="relative bg-white w-[90%] max-w-[600px] max-h-[80vh] overflow-y-auto p-6 rounded-lg shadow-lg">
+          <div className="relative  w-[90%] max-w-[600px] max-h-[80vh] overflow-y-auto p-6 rounded-lg shadow-lg">
             <ReviewPage closeModal={() => setIsReviewModalOpen(false)} />
           </div>
         </div>

@@ -49,3 +49,16 @@ export const fetchCartHistoriesByPayment = async (paymentKey: string): Promise<C
   }
   return res.json();
 };
+
+export const DeleteCartHistory = async (id: string) => {
+  const res = await fetch('http://localhost:8000/cart-histories/cancel', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ id }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.detail || '해당 상품은 취소할 수 없습니다.');
+  }
+};

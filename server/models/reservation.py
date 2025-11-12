@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from server.database import Base
 from datetime import datetime
@@ -16,3 +17,4 @@ class Reservation(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     viewed_at = Column(DateTime)
     show_time = Column(Text)
+    theater = relationship("Theater", back_populates="reservations")

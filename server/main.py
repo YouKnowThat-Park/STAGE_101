@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from server.database import engine
 from server.database import Base
-from server.routes import shop, user, cart, cart_history, theater
+from server.routes import shop, user, cart, cart_history, theater, reservation, review
 from fastapi.middleware.cors import CORSMiddleware
 from server import models
 
@@ -22,6 +22,8 @@ app.include_router(user.router)
 app.include_router(cart.router)
 app.include_router(cart_history.router)
 app.include_router(theater.router)
+app.include_router(reservation.router)
+app.include_router(review.router)
 
 
 @app.get("/")
