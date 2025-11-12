@@ -114,28 +114,34 @@ def get_my_cart_histories(
 
 
 @router.patch("/cancel", response_model=CartHistoryResponse)
-def cancel_cart_history(
+async def cancel_cart_history(
     request: Request,
-    data: dict,
     db: Session = Depends(get_db)
 ):
-    history_id = data.get("id")
-    if not history_id:
-        raise HTTPException(status_code=400, detail="ID가 필요합니다.")
+    try:
+        data = await request.json()  # ✅ JSON 파싱
+        history_id = data.get("id")
+        if not history_id:
+            raise HTTPException(status_code=400, detail="ID가 필요합니다.")
 
-    history = db.query(CartHistory).filter(CartHistory.id == history_id).first()
-    if not history:
-        raise HTTPException(status_code=404, detail="기록을 찾을 수 없습니다.")
+        history = db.query(CartHistory).filter(CartHistory.id == history_id).first()
+        if not history:
+            raise HTTPException(status_code=404, detail="기록을 찾을 수 없습니다.")
 
-    if history.status == "canceled":
-        raise HTTPException(status_code=400, detail="이미 취소된 거래입니다.")
-    if history.status == "completed":
-        raise HTTPException(status_code=400, detail="수령된 거래는 취소할 수 없습니다.")
+        if history.status == "canceled":
+            raise HTTPException(status_code=400, detail="이미 취소된 거래입니다.")
+        if history.status == "completed":
+            raise HTTPException(status_code=400, detail="수령된 거래는 취소할 수 없습니다.")
 
-    history.status = "canceled"
-    db.commit()
-    db.refresh(history)
-    return history
+        history.status = "canceled"
+        db.commit()
+        db.refresh(history)
+        return history
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="결제 취소 중 오류 발생")
 
 
 @router.get("/{id}", response_model=CartHistoryResponse)
