@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 from server.database import Base
 from datetime import datetime
 import uuid
@@ -16,3 +17,5 @@ class Review(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     dislike_count = Column(Integer)
     image_url = Column(Text)
+
+    theater = relationship("Theater", back_populates="reviews")

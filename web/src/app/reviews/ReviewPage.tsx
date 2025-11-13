@@ -27,10 +27,8 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteReviews(
-    sortOption,
-    userId,
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteReviews(sortOption);
 
   useEffect(() => {
     if (isOpenReviewModal) {
@@ -116,7 +114,7 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
                       <div className="flex items-start gap-4">
                         <div className="flex-1">
                           <h4 className="text-lg font-black border-b border-black pb-1">
-                            {review?.theaters?.name || '공연 제목'}
+                            {review?.theater?.name || '공연 제목'}
                           </h4>
                           <p className="text-sm mt-3 text-gray-600 break-words">{review.comment}</p>
                         </div>

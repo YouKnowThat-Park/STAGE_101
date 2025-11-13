@@ -26,3 +26,4 @@ class Theater(Base):
     end_date = Column(Date)
     allowed_days = Column(Enum(TheaterDaysEnum, name="theaters_days"), nullable=True)
     reservations = relationship("Reservation", back_populates="theater")
+    reviews = relationship("Review", back_populates="theater")

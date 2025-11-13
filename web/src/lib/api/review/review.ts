@@ -22,6 +22,8 @@ export interface UserReviewRanking {
   count: number;
 }
 
+const API_BASE = 'http://localhost:8000';
+
 export const fetchAllReviews = async ({
   pageParam,
   sort = 'newest',
@@ -35,16 +37,19 @@ export const fetchAllReviews = async ({
     ...(userId ? { user_id: userId } : {}),
   });
 
-  const res = await fetch(`http://localhost:8000/reviews?${query.toString()}`, {});
+  const res = await fetch(`${API_BASE}/reviews?${query.toString()}`, {
+    method: 'GET',
+    credentials: 'include', // 있어도 되고 없어도 됨
+  });
 
   if (!res.ok) throw new Error('리뷰 데이터를 불러오지 못했습니다.');
 
-  const data = await res.json();
+  const data = await res.json(); // { data, totalCount, nextPage }
 
   return {
     reviews: data.data ?? [],
-    totalCount: data.length,
-    nextPage: null,
+    totalCount: data.totalCount ?? 0,
+    nextPage: data.nextPage ?? null,
   };
 };
 
@@ -58,19 +63,17 @@ export const fetchReviewsRanking = async (): Promise<UserReviewRanking[]> => {
   return res.json();
 };
 
-export const fetchMyReviews = async () => {
+export const fetchMyReviews = async (): Promise<FetchAllReviewsResponse> => {
   const { id } = useUserStore.getState();
 
   if (!id) {
     throw new Error('로그인이 필요합니다.');
   }
 
-  const res = await fetch(`http://localhost:8000/reviews?user_id=${id}&page=1&sort=newest`, {
-    method: 'GET',
-    credentials: 'include',
+  return fetchAllReviews({
+    pageParam: 1,
+    sort: 'newest',
+    order: 'desc',
+    userId: id, // ⭐ 여기서만 user_id 필터
   });
-
-  if (!res.ok) throw new Error('내 리뷰 내역을 가져오지 못했습니다.');
-  const data = await res.json();
-  return data;
 };

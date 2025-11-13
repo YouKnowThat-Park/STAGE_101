@@ -5,6 +5,6 @@ export const useMyReviews = () => {
   return useQuery({
     queryKey: ['user-my-reviews'],
     queryFn: fetchMyReviews,
-    select: (data) => data.data ?? [],
+    select: (data) => data.reviews ?? [],
   });
 };
