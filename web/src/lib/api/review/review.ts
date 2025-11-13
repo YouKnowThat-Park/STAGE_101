@@ -35,8 +35,6 @@ export const fetchAllReviews = async ({
     ...(userId ? { user_id: userId } : {}),
   });
 
-  console.log(query.toString());
-
   const res = await fetch(`http://localhost:8000/reviews?${query.toString()}`, {});
 
   if (!res.ok) throw new Error('리뷰 데이터를 불러오지 못했습니다.');

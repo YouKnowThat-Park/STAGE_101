@@ -82,11 +82,6 @@ const SignUpForm = ({ onSubmit }: SignUpFormProps) => {
           name={field.name}
           control={control}
           render={({ field: { value, onChange, ref }, fieldState }) => {
-            // 🔍 에러 콘솔 확인
-            if (fieldState.error) {
-              console.log(`🔥 field: ${field.name}`, fieldState.error);
-            }
-
             return (
               <div>
                 <AuthInputField

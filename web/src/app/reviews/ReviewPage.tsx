@@ -32,8 +32,6 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
     userId,
   );
 
-  console.log('data', data);
-
   useEffect(() => {
     if (isOpenReviewModal) {
       document.body.style.overflow = 'hidden';
@@ -50,8 +48,6 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   }, [isOpenReviewModal]);
 
   const reviews = data?.pages.flatMap((page) => page.reviews ?? []) ?? [];
-  console.log('pages', data?.pages);
-  console.log('review', reviews);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-50">

@@ -155,7 +155,6 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
           <select
             value={selectedTheater || ''}
             onChange={(e) => {
-              console.log('✅ 선택한 극장 ID:', e.target.value);
               setSelectedTheater(e.target.value);
             }}
             className="w-full border border-gray-300 rounded-md p-2 text-black"
