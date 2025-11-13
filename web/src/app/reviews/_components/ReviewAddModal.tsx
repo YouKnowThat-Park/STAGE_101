@@ -2,34 +2,20 @@ import { useUserStore } from '../../../store/userStore';
 import { ReviewModalProps } from '../../../types/modal/modal-type';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import BronzeCrownIcon from '../../../ui/icon/BronzeCrownIcon';
-
-interface WatchedTheaterType {
-  id: string;
-  user_id: string;
-  theater_id: string;
-  viewed_at: string;
-  theaters: {
-    id: string;
-    name: string;
-    main_img: string;
-  };
-  users: {
-    profile_img: string;
-  };
-}
+import { useTicketHistory } from 'src/hooks/reservation/useTicketHistory';
+import { ReservationType } from 'src/lib/api/reservation/reservationHistory';
+import { useCreateReview } from 'src/hooks/review/useCreateReview';
+import { ReviewImageType } from 'src/lib/api/review/review';
 
 const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
-  const userId = useUserStore((state) => state.id);
+  const { id: userId, nickname, profile_img } = useUserStore();
 
-  // ✅ 상태값 선언 (기본값 설정)
   const [comment, setComment] = useState('');
-  const [imageType, setImageType] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<'name' | 'nickname'>('nickname');
+  const [imageType, setImageType] = useState<ReviewImageType | null>(null);
+  const [displayName, setDisplayName] = useState<'nickname'>('nickname');
   const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
-  const [watchedTheaters, setWatchedTheaters] = useState<WatchedTheaterType[]>([]);
 
-  // ✅ 미리보기 데이터 (실시간 업데이트)
+  // 미리보기 데이터 (실시간 업데이트)
   const [previewReview, setPreviewReview] = useState<{
     theater: string;
     comment: string;
@@ -48,53 +34,47 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
     pastViews: 0,
   });
 
-  useEffect(() => {
-    const fetchAvailableTheaters = async () => {
-      if (!userId) return; // 🚫 유저 ID 없으면 요청하지 않음
-
-      try {
-        const response = await fetch(`/api/reviews/watched-theaters?userId=${userId}`);
-        const data = await response.json();
-
-        if (!response.ok) throw new Error(data.error || '데이터를 불러오지 못했습니다.');
-        setWatchedTheaters(data.theaters || []);
-      } catch (error) {
-        console.error('❌ [ERROR] 극장 목록 불러오기 실패:', error);
-      }
-    };
-
-    fetchAvailableTheaters();
-  }, [isOpen, userId]);
-
+  const { data: watchedTheaters = [] } = useTicketHistory(userId);
+  const createReviewMutation = useCreateReview();
   // ✅ 입력 값이 변경될 때마다 미리보기 업데이트
   useEffect(() => {
     if (!selectedTheater) return;
 
-    const fetchUserAndTheaterInfo = async () => {
-      try {
-        const res = await fetch(
-          `/api/reviews/user-theater-info?userId=${userId}&theaterId=${selectedTheater}`,
-        );
-        const data = await res.json();
+    const ticketForTheater = watchedTheaters.filter((t) => t.theater_id === selectedTheater);
 
-        if (!res.ok) throw new Error(data.error || '정보를 불러올 수 없습니다.');
+    if (ticketForTheater.length === 0) {
+      setPreviewReview((prev) => ({
+        ...prev,
+        theater: '극장 선택 안됨',
+        pastViews: 0,
+      }));
+      return;
+    }
 
-        setPreviewReview({
-          theater: data.theater_name || '극장 선택 안됨',
-          comment,
-          image: imageType === 'poster' ? data.theater_main_img : '/default.png',
-          profileImg: imageType === 'profile' ? data.profile_img : '/default.png',
-          date: new Date().toISOString().split('T')[0],
-          displayName: displayName === 'name' ? data.name : data.nickname,
-          pastViews: data.past_views || 0,
-        });
-      } catch (error) {
-        console.error('❌ [ERROR] 사용자 및 극장 정보 불러오기 실패:', error);
-      }
-    };
+    const ticket = ticketForTheater[0];
 
-    fetchUserAndTheaterInfo();
-  }, [selectedTheater, imageType, displayName, comment, userId]);
+    const pastViews = ticketForTheater.length;
+
+    setPreviewReview({
+      theater: ticket.theater_name || '극장 선택 안됨',
+      comment,
+      image: imageType === 'poster' ? ticket.main_img || '/default.png' : '/default.png',
+      profileImg: imageType === 'profile' ? profile_img || '/default.png' : '/default.png',
+      date: new Date().toISOString().split('T')[0],
+      // TODO: name 필드를 userStore에 추가해두면 여기서 진짜 이름 쓸 수 있음
+      displayName: nickname,
+      pastViews,
+    });
+  }, [
+    selectedTheater,
+    imageType,
+    displayName,
+    comment,
+    userId,
+    watchedTheaters,
+    nickname,
+    profile_img,
+  ]);
 
   const handleSubmit = async () => {
     if (!selectedTheater) {
@@ -107,28 +87,28 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
       return;
     }
 
-    try {
-      const response = await fetch('/api/reviews/add-review', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          comment,
-          display_name: displayName,
-          useRealName: displayName === 'name',
-          type: imageType,
-          theater_id: selectedTheater,
-        }),
-      });
-
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || '리뷰 저장 실패');
-
-      onSubmit();
-      onClose();
-    } catch (error) {
-      console.error('❌ [ERROR] 리뷰 저장 실패:', error);
-      alert('리뷰 작성 중 오류가 발생했습니다.');
+    if (!imageType) {
+      alert('이미지 타입을 선택해주세요.');
+      return;
     }
+
+    createReviewMutation.mutate(
+      {
+        comment,
+        type: imageType,
+        theaterId: selectedTheater,
+      },
+      {
+        onSuccess: () => {
+          onSubmit();
+          onClose();
+        },
+        onError: (error) => {
+          console.error('❌ [ERROR] 리뷰 저장 실패:', error);
+          alert('리뷰 작성 중 오류가 발생했습니다.');
+        },
+      },
+    );
   };
 
   return !isOpen ? null : (
@@ -155,16 +135,15 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
           <select
             value={selectedTheater || ''}
             onChange={(e) => {
-              console.log('✅ 선택한 극장 ID:', e.target.value);
               setSelectedTheater(e.target.value);
             }}
             className="w-full border border-gray-300 rounded-md p-2 text-black"
           >
             <option value="">리뷰를 작성할 극장을 선택하세요</option>
             {watchedTheaters.length > 0 ? (
-              watchedTheaters.map((theater, index) => (
-                <option key={theater.id} value={theater.theaters.id}>
-                  {theater.theaters?.name ?? '이름 없음'}
+              watchedTheaters?.map((ticket: ReservationType) => (
+                <option key={ticket.id} value={ticket.theater_id}>
+                  {ticket.theater_name ?? '이름 없음'}
                 </option>
               ))
             ) : (
@@ -188,15 +167,6 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
         {/* 실명 / 닉네임 선택 */}
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <label className="flex items-center space-x-2">
-            <input
-              type="radio"
-              name="displayName"
-              checked={displayName === 'name'}
-              onChange={() => setDisplayName('name')}
-            />
-            <span>실명</span>
-          </label>
           <label className="flex items-center space-x-2">
             <input
               type="radio"

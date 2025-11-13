@@ -21,10 +21,6 @@ const SignUpPage = () => {
       const signUpResult = await signUp(data);
 
       if (signUpResult.success) {
-        // ✅ 회원가입 성공 → 쿠키 안에 JWT 존재
-        console.log('회원가입 성공 → JWT 쿠키 있음');
-
-        // ✅ 바로 /users/me 요청 보내기
         const meRes = await fetch('http://localhost:8000/users/me', {
           method: 'GET',
           credentials: 'include', // 쿠키 포함해서 요청
@@ -35,7 +31,6 @@ const SignUpPage = () => {
         }
 
         const meData = await meRes.json();
-        console.log('서버에서 받은 내 정보:', meData);
 
         // ✅ Zustand 저장
         setUser({

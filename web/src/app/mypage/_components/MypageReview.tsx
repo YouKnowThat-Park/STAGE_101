@@ -1,13 +1,13 @@
 'use client';
 
-import { useReviews } from '../../../hooks/useReviews';
 import { ReviewsType } from '../../../types/review.type';
 import Image from 'next/image';
 import NoReviewIcon from '../../../ui/icon/NoReviewIcon';
 import { useUserStore } from '../../../store/userStore';
+import { useMyReviews } from 'src/hooks/review/useMyReviews';
 
 const MypageReview = () => {
-  const { data: reviews } = useReviews();
+  const { data: reviews } = useMyReviews();
   const { profile_img } = useUserStore();
 
   const formatDateToKST = (dateString: string) =>
@@ -44,7 +44,7 @@ const MypageReview = () => {
           // ✅ 리뷰 목록
           <ul className="space-y-4 p-5">
             {reviews.map((review: ReviewsType) => {
-              const theaterName = review.theaters?.name || '공연 제목';
+              const theaterName = review.theater?.name || '공연 제목';
               const reviewImgUrl = review.image_url || '/default.jpg';
               const displayName = review.display_name || '익명';
               const userProfileImg = profile_img || '/default.png';

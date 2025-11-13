@@ -1,7 +1,7 @@
 'use client';
 
 import { useCancelReservation } from 'src/hooks/reservation/useCancelReservation';
-import { useTicketHistory } from '../../../hooks/useTicketHistory';
+import { useTicketHistory } from '../../../hooks/reservation/useTicketHistory';
 import { useUserStore } from '../../../store/userStore';
 import NoTicketIcon from '../../../ui/icon/NoTicketIcon';
 import Image from 'next/image';
