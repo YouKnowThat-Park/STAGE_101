@@ -1,4 +1,4 @@
-import { fetchTicketHistory } from '../lib/api/reservation/reservationHistory';
+import { fetchTicketHistory } from '../../lib/api/reservation/reservationHistory';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useTicketHistory = (userId: string) => {

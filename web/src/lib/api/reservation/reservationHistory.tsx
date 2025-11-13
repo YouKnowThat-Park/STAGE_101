@@ -1,5 +1,6 @@
-interface Reservation {
+export interface ReservationType {
   id: string;
+  theater_id: string;
   seat_number: string;
   total_price: number;
   status: string;
@@ -13,7 +14,7 @@ interface Reservation {
   qr_token: string | null;
 }
 
-export const fetchTicketHistory = async (userId: string): Promise<Reservation[]> => {
+export const fetchTicketHistory = async (userId: string): Promise<ReservationType[]> => {
   const res = await fetch('http://localhost:8000/reservations/me', {
     credentials: 'include',
   });
