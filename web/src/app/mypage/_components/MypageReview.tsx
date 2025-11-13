@@ -1,13 +1,13 @@
 'use client';
 
-import { useReviews } from '../../../hooks/useReviews';
 import { ReviewsType } from '../../../types/review.type';
 import Image from 'next/image';
 import NoReviewIcon from '../../../ui/icon/NoReviewIcon';
 import { useUserStore } from '../../../store/userStore';
+import { useMyReviews } from 'src/hooks/review/useMyReviews';
 
 const MypageReview = () => {
-  const { data: reviews } = useReviews();
+  const { data: reviews } = useMyReviews();
   const { profile_img } = useUserStore();
 
   const formatDateToKST = (dateString: string) =>

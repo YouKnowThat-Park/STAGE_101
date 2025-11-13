@@ -1,3 +1,4 @@
+import { useUserStore } from 'src/store/userStore';
 import { ReviewsType } from 'src/types/review.type';
 
 export interface FetchAllReviewsResponse {
@@ -21,7 +22,7 @@ export interface UserReviewRanking {
   count: number;
 }
 
-const fetchAllReviews = async ({
+export const fetchAllReviews = async ({
   pageParam,
   sort = 'newest',
   order = 'desc',
@@ -49,8 +50,6 @@ const fetchAllReviews = async ({
   };
 };
 
-export default fetchAllReviews;
-
 export const fetchReviewsRanking = async (): Promise<UserReviewRanking[]> => {
   const res = await fetch('http://localhost:8000/reviews/ranking');
 
@@ -59,4 +58,21 @@ export const fetchReviewsRanking = async (): Promise<UserReviewRanking[]> => {
   }
 
   return res.json();
+};
+
+export const fetchMyReviews = async () => {
+  const { id } = useUserStore.getState();
+
+  if (!id) {
+    throw new Error('로그인이 필요합니다.');
+  }
+
+  const res = await fetch(`http://localhost:8000/reviews?user_id=${id}&page=1&sort=newest`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!res.ok) throw new Error('내 리뷰 내역을 가져오지 못했습니다.');
+  const data = await res.json();
+  return data;
 };
