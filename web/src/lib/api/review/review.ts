@@ -6,11 +6,19 @@ export interface FetchAllReviewsResponse {
   nextPage: number | null;
 }
 
-interface FetchAllReviewsParams {
+export interface FetchAllReviewsParams {
   pageParam: number;
   sort?: 'newest' | 'oldest';
   order?: 'asc' | 'desc';
   userId?: string;
+}
+
+export interface UserReviewRanking {
+  user_id: string;
+  theater_id: string;
+  nickname: string;
+  profile_img: string;
+  count: number;
 }
 
 const fetchAllReviews = async ({
@@ -42,3 +50,13 @@ const fetchAllReviews = async ({
 };
 
 export default fetchAllReviews;
+
+export const fetchReviewsRanking = async (): Promise<UserReviewRanking[]> => {
+  const res = await fetch('http://localhost:8000/reviews/ranking');
+
+  if (!res.ok) {
+    throw new Error('리뷰 랭킹 데이터를 불러오는데 실패했습니다.');
+  }
+
+  return res.json();
+};

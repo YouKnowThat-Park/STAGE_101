@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, TypedDict
 from datetime import datetime
 from uuid import UUID
 
@@ -32,4 +32,14 @@ class AuthResponse(BaseModel):
     access_token: str
     user: UserResponse
 
+class UserReviewRanking(BaseModel):
+    user_id: UUID
+    nickname: str
+    profile_img: str
+    count: int
 
+class UserReviewRow(TypedDict):
+    user_id: UUID
+    nickname: str | None
+    profile_img: str | None
+    count: int

@@ -1,15 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-
-interface TheaterRanking {
-  theater_id: string;
-  count: number;
-  nickname: string;
-  profile_img: string | null;
-}
+import { useReviewRanking } from 'src/hooks/review/useReviewsRanking';
 
 const crownIcons = ['👑', '🥈', '🥉'];
 
@@ -23,25 +17,7 @@ const fadeUp = {
 };
 
 const HomeReviews = () => {
-  const [ranking, setRanking] = useState<TheaterRanking[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRanking = async () => {
-      try {
-        const res = await fetch('/api/reviews/count-review');
-        const data = await res.json();
-        setRanking(data.ranking || []);
-      } catch (error) {
-        console.error('리뷰 랭킹 로딩 실패', error);
-        setRanking([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchRanking();
-  }, []);
+  const { data: ranking, isLoading } = useReviewRanking();
 
   return (
     <div className="bg-[#1C1C1C] max-w-md  rounded-xl shadow-xl px-6 py-8 text-white">
@@ -49,7 +25,7 @@ const HomeReviews = () => {
 
       {isLoading ? (
         <p className="text-center text-gray-400 italic">⏳ 랭킹 로딩 중...</p>
-      ) : ranking.length === 0 ? (
+      ) : ranking?.length === 0 ? (
         <p className="text-center text-gray-500 italic">리뷰가 아직 없습니다.</p>
       ) : (
         <motion.ul
@@ -58,7 +34,7 @@ const HomeReviews = () => {
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
           className="space-y-4"
         >
-          {ranking.map((user, index) => (
+          {ranking?.map((user, index) => (
             <motion.li
               key={user.theater_id}
               className={`flex items-center gap-4 p-4 rounded-lg ${

@@ -1,12 +1,16 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from sqlalchemy import func
+from typing import Optional, List, cast
 
 from server.database import get_db
 from server.models.review import Review
 from server.schemas.review import ReviewsListResponse
+from server.schemas.user import UserReviewRanking, UserReviewRow
+from server.models.user import User
 
 router = APIRouter(prefix="/reviews", tags=["Reviews"])
+
 
 @router.get("/", response_model=ReviewsListResponse)
 def get_all_reviews(
@@ -43,3 +47,30 @@ def get_all_reviews(
         "totalCount": total_count,
         "nextPage": next_page,
     }
+
+
+@router.get("/ranking", response_model=List[UserReviewRanking])
+def get_user_review_ranking(db: Session = Depends(get_db)):
+    result = (
+        db.query(
+            Review.user_id,
+            func.count(Review.id),
+            User.nickname,
+            User.profile_img,
+        )
+        .join(User, User.id == Review.user_id)
+        .group_by(Review.user_id, User.nickname, User.profile_img)
+        .order_by(func.count(Review.id).desc())
+        .limit(3)
+        .all()
+    )
+
+    return [
+        UserReviewRanking(
+            user_id=row[0],
+            count=row[1],
+            nickname=row[2] or "익명",
+            profile_img=row[3] or "/default.png",
+        )
+        for row in result
+    ]
