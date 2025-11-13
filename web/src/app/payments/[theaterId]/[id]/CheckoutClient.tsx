@@ -2,9 +2,9 @@
 
 import { loadTossPayments, TossPaymentsInstance } from '@tosspayments/payment-sdk';
 import { useEffect, useState } from 'react';
-import { useUserHook } from '../../../../hooks/useUserHook';
+import { useUserHook } from '../../../../hooks/user/useUserHook';
 import { v4 as uuidv4 } from 'uuid';
-import { useTheaterData } from '../../../../hooks/useTheaterData';
+import { useTheaterData } from '../../../../hooks/theater/useTheaterData';
 
 const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 

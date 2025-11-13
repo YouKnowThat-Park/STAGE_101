@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import MypageHistory from './_components/MypageHistory';
 import MypageTicket from './_components/MypageTicket';
 import MypageProfile from './_components/MypageProfile';
-import { useUserHook } from '../../hooks/useUserHook';
+import { useUserHook } from '../../hooks/user/useUserHook';
 
 import MypageReview from './_components/MypageReview';
 

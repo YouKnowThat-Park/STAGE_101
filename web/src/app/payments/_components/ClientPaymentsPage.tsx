@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { fetchSeats } from '../../../supabase/supabaseSubscription'; // 좌석 정보 가져오는 로직
 import { useReserveSeats } from '../../../hooks/useReserveSeats';
 import { browserSupabase } from '../../../supabase/supabase-client';
-import { useTheaterData } from '../../../hooks/useTheaterData';
+import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 import TheaterCalendar from '../../theater/_components/TheaterCalendar';
 
 interface ClientPaymentsPageProps {

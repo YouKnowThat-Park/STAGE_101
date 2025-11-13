@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useTheaterData } from '../../../hooks/useTheaterData';
+import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 // import CinemaA from '@/app/theater/_components/CinemaA';
 // import CinemaB from '@/app/theater/_components/CinemaB';
 import MusicalA from '../_components/MusicalA';
