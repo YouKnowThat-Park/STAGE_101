@@ -43,3 +43,6 @@ class UserReviewRow(TypedDict):
     nickname: str | None
     profile_img: str | None
     count: int
+
+class DeleteUserRequest(BaseModel):
+    password: str
