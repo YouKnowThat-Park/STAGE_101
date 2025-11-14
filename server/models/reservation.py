@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from server.database import Base
 from datetime import datetime
 import uuid
@@ -11,7 +11,7 @@ class Reservation(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"),  nullable=False)
     theater_id = Column(UUID(as_uuid=True), ForeignKey("theaters.id"), nullable=False)
-    seat_number = Column(Text, nullable=False)
+    seat_number = Column(ARRAY(Text), nullable=False)
     total_price = Column(Integer, nullable=False)
     status = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
