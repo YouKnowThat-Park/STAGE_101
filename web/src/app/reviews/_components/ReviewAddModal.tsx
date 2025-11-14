@@ -36,7 +36,8 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
   const { data: watchedTheaters = [] } = useTicketHistory(userId);
   const createReviewMutation = useCreateReview();
-  // ✅ 입력 값이 변경될 때마다 미리보기 업데이트
+
+  //  입력 값이 변경될 때마다 미리보기 업데이트
   useEffect(() => {
     if (!selectedTheater) return;
 
@@ -221,7 +222,7 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
           <div className="flex gap-4 text-xs">
             <p>✅ {previewReview.date || '날짜'}</p>
-            <p>✅ {previewReview.displayName || '실명/닉네임'}</p>
+            <p>✅ {previewReview.displayName || '닉네임'}</p>
           </div>
         </div>
 
