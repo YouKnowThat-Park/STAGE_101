@@ -11,7 +11,10 @@ from server.database import get_db
 from server.models.user import User
 from server.models.reservation import Reservation
 from server.models.payment import Payment
-from server.schemas.user import UserCreate, AuthResponse, UserSignIn
+from server.models.review import Review
+from server.models.cart import Cart
+from server.models.cart_history import CartHistory
+from server.schemas.user import UserCreate, AuthResponse, UserSignIn, DeleteUserRequest
 from server.security import hash_password, create_access_token, verify_password, verify_access_token
 
 router = APIRouter(prefix="/users", tags=["User"])
@@ -176,3 +179,39 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         "profile_img": user.profile_img,
         "point": user.point
     }
+
+@router.delete("/delete", status_code=204)
+def delete_user(data:DeleteUserRequest, request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get("__stage__")
+    if not token:
+        raise HTTPException(status_code=401, detail="인증 토큰이 없습니다.")
+    
+    payload = verify_access_token(token)
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=401, detail="토큰 정보가 올바르지 않습니다.")
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
+    
+    if not verify_password(data.password, user.password):
+        raise HTTPException(status_code=403, detail="비밀번호가 일치하지 않습니다.")
+    
+    try:
+
+            db.query(Payment).filter(Payment.user_id == user.id).delete()
+            db.query(Reservation).filter(Reservation.user_id == user.id).delete()
+            db.query(Review).filter(Review.user_id == user.id).delete()
+            db.query(CartHistory).filter(CartHistory.user_id == user.id).delete()
+            db.query(Cart).filter(Cart.user_id == user.id).delete()
+            db.delete(user)
+            db.commit()
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"회원 탈퇴 처리 중 오류 발생: {str(e)}")
+
+    response = Response(status_code=204)
+    response.delete_cookie("__stage__")
+    return response

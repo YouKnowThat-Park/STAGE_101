@@ -1,12 +1,14 @@
+import { useDeleteUser } from 'src/hooks/user/useDeleteUser';
 import { ModalProps } from '../../../types/modal/modal-type';
 import React, { useState } from 'react';
 
 const SettingModal = ({ isOpen, onClose }: ModalProps) => {
-  const [loading, setLoading] = useState(false);
   const [checks, setChecks] = useState({ reservation: false, review: false, user: false });
   const [showErrors, setShowErrors] = useState(false);
-
+  const [password, setPassword] = useState('');
   const allChecked = Object.values(checks).every(Boolean);
+
+  const { mutate, isPending } = useDeleteUser();
 
   const handleChange = (key: keyof typeof checks) => {
     setChecks((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -18,22 +20,22 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
       alert('필수 항목에 모두 동의해야 합니다.');
       return;
     }
+    if (!password) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
     const confirmDelete = confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
     if (!confirmDelete) return;
 
-    setLoading(true);
-
-    const response = await fetch('/api/auth/delete-user', { method: 'DELETE' });
-
-    if (response.ok) {
-      alert('회원 탈퇴가 완료되었습니다.');
-      window.location.href = '/';
-    } else {
-      const data = await response.json();
-      alert(`탈퇴 실패: ${data.error}`);
-    }
-
-    setLoading(false);
+    mutate(password, {
+      onSuccess: () => {
+        alert('탈퇴 완료');
+        window.location.href = '/';
+      },
+      onError: (err: Error) => {
+        alert(err.message);
+      },
+    });
   };
 
   if (!isOpen) return null;
@@ -108,6 +110,20 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
           </label>
         </div>
 
+        <div className="w-full mb-4">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            탈퇴 확인을 위해 비밀번호를 입력해주세요
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+            placeholder="비밀번호 입력"
+          />
+        </div>
+
         <p className="text-gray-600 mb-6">
           회원 탈퇴를 진행하면 계정과 관련된 모든 데이터가 즉시 삭제됩니다. 이 작업은 되돌릴 수
           없습니다.
@@ -116,9 +132,9 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
         <button
           className="w-full mb-4 py-2 px-4 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none"
           onClick={handleDeleteAccount}
-          disabled={loading}
+          disabled={isPending}
         >
-          {loading ? '탈퇴 중...' : '회원 탈퇴'}
+          {isPending ? '탈퇴 중...' : '회원 탈퇴'}
         </button>
 
         <button
