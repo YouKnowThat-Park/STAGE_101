@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from server.database import Base
 from datetime import datetime
 import uuid
+from sqlalchemy.orm import relationship
 
 class QrSession(Base):
     __tablename__ = "qr_sessions"
@@ -14,3 +15,4 @@ class QrSession(Base):
     qr_token = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     expires_at = Column(DateTime)
+    reservation = relationship("Reservation", back_populates="qr_session")

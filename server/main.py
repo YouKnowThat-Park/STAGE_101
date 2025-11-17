@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from server.database import engine
 from server.database import Base
-from server.routes import shop, user, cart, cart_history, theater, reservation, review
+from server.routes import shop, user, cart, payment, qr_session, cart_history, theater, reservation, review
 from fastapi.middleware.cors import CORSMiddleware
 from server import models
+from server.cleanup import delete_expired_reservations_loop
+import asyncio
 
 app = FastAPI()
 
@@ -24,6 +26,8 @@ app.include_router(cart_history.router)
 app.include_router(theater.router)
 app.include_router(reservation.router)
 app.include_router(review.router)
+app.include_router(payment.router)
+app.include_router(qr_session.router)
 
 
 @app.get("/")
@@ -31,9 +35,5 @@ def root():
     return {"message": "FastAPI 및 PostgreSQL 마이그레이션 완료"}
 
 @app.on_event("startup")
-def show_routes():
-    from fastapi.routing import APIRoute
-    print("\n📦 [라우트 목록]")
-    for route in app.routes:
-        if isinstance(route, APIRoute):
-            print(f"➡️ {route.path} ({route.methods})")
+async def startup_event():
+    asyncio.create_task(delete_expired_reservations_loop())

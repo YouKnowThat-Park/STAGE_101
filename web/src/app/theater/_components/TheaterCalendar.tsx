@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 import 'react-calendar/dist/Calendar.css';
-import '@/ui/calendar/calendar.css';
+import '../../../ui/calendar/calendar.css';
 
 interface Props {
   theaterId: string;
