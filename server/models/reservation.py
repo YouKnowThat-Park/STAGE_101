@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from server.database import Base
@@ -14,7 +14,7 @@ class Reservation(Base):
     seat_number = Column(ARRAY(Text), nullable=False)
     total_price = Column(Integer, nullable=False)
     status = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=func.now(), nullable=False)
     viewed_at = Column(DateTime)
     show_time = Column(Text)
     theater = relationship("Theater", back_populates="reservations")

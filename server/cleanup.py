@@ -1,18 +1,18 @@
 import asyncio
-from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
 from server.database import SessionLocal
 from server.models.reservation import Reservation
+from sqlalchemy import func, text
+
 
 async def delete_expired_reservations_loop():
     while True:
         try:
-            with SessionLocal() as db:  # SessionLocal은 get_db에서 쓰는 거랑 같은 팩토리
-                threshold = datetime.utcnow() - timedelta(minutes=30)
+            with SessionLocal() as db:  
+                threshold_expr = func.now() - text("interval '30 minutes'")
 
                 db.query(Reservation).filter(
                     Reservation.status == "pending",
-                    Reservation.created_at < threshold,
+                    Reservation.created_at < threshold_expr,
                 ).delete(synchronize_session=False)
 
                 db.commit()
