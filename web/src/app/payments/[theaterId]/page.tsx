@@ -1,4 +1,4 @@
-import ClientPaymentsPage from '../_components/ClientPaymentsPage';
+import ClientPaymentsPage from '../[Seats]/ClientPaymentsPage';
 
 export default async function PaymentsPage({ params }: { params: { theaterId: string } }) {
   if (!params.theaterId) {
@@ -6,5 +6,5 @@ export default async function PaymentsPage({ params }: { params: { theaterId: st
   }
 
   // ✅ 특정 좌석이 아닌 전체 예매 정보를 불러오도록 구성 가능
-  return <ClientPaymentsPage theaterId={params.theaterId} initialSeats={[]} />;
+  return <ClientPaymentsPage theaterType={params.theaterId} initialSeats={[]} />;
 }

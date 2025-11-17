@@ -1,7 +1,8 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, Field, validator
 from uuid import UUID
 from datetime import datetime, date
 from typing import Optional, List
+import re
 
 class TheaterInfo(BaseModel):
     name: str
@@ -31,10 +32,23 @@ class ReservationResponse(BaseModel):
     class Config:
         orm_mode = True
 
+
+
+SEAT_RE = re.compile(r"^[A-Z][1-9]\d?$")  # A1~Z99
+
 class ReservationCreate(BaseModel):
     user_id: UUID4
     theater_id: UUID4
-    seat_number: List[str]
-    total_price: int
-    viewed_at: Optional[datetime]
-    show_time: Optional[str]
+    seat_number: List[str] = Field(min_items=1, max_items=4)
+    total_price: int = Field(gt=0)
+    viewed_at: date
+    show_time: str = Field(pattern=r"^\d{2}:\d{2}(:\d{2})?$")  # "HH:MM" or "HH:MM:SS"
+
+    @validator("seat_number")
+    def validate_seats(cls, v: List[str]) -> List[str]:
+        if len(set(v)) != len(v):
+            raise ValueError("좌석 목록에 중복이 있습니다.")
+        for s in v:
+            if not SEAT_RE.match(s):
+                raise ValueError(f"좌석 형식이 올바르지 않습니다: {s}")
+        return v

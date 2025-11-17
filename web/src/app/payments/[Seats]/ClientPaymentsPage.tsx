@@ -2,51 +2,59 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchSeats } from '../../../supabase/supabaseSubscription'; // 좌석 정보 가져오는 로직
-import { useReserveSeats } from '../../../hooks/useReserveSeats';
-import { browserSupabase } from '../../../supabase/supabase-client';
 import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 import TheaterCalendar from '../../theater/_components/TheaterCalendar';
+import { useUserHook } from 'src/hooks/user/useUserHook';
+import { useReservedSeatsSocket } from 'src/hooks/reservation/useSeatsSocket';
+import { fetchTheaterData } from 'src/lib/api/theater/theater';
+import { useReservedSeats } from 'src/hooks/reservation/useReservedSeats';
 
 interface ClientPaymentsPageProps {
   initialSeats: string[];
-  theaterId: string;
+  theaterType: string;
 }
 
-const supabase = browserSupabase();
-
-export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPaymentsPageProps) {
+const ClientPaymentsPage = ({ initialSeats, theaterType }: ClientPaymentsPageProps) => {
   const [step, setStep] = useState(1);
-  const [viewedAt, setViewedAt] = useState<string>(''); // ✅ 빈 문자열로 초기화하여 안정성 확보
-  const { data: theaterData, isLoading, error } = useTheaterData(theaterId);
-  const [reservedSeats, setReservedSeats] = useState<string[]>(initialSeats);
+  const [theaterId, setTheaterId] = useState<string>('');
+  const [viewedAt, setViewedAt] = useState<string>('');
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const { reserveSeats, loading, error: reserveError } = useReserveSeats();
-  const [userId, setUserId] = useState<string | null>(null);
+  const { data: user } = useUserHook();
+  const { data: theaterData, isLoading, error } = useTheaterData(theaterId);
+  const {
+    reserveSeats,
+    loading,
+    error: reserveError,
+  } = useReservedSeats(theaterId || null, viewedAt, theaterData?.show_time ?? null);
   const router = useRouter();
 
-  // ✅ 사용자 정보 불러오기
+  const userId = user?.id ?? '';
+
   useEffect(() => {
-    async function fetchUser() {
-      const { data: session } = await supabase.auth.getSession();
-      setUserId(session.session?.user?.id || null);
-    }
-    fetchUser();
-  }, []);
+    const loadTheaterId = async () => {
+      try {
+        const data = await fetchTheaterData(theaterType); // ✅ 문자열로 UUID 조회
+        setTheaterId(data.id); // ✅ UUID 세팅
+      } catch (error) {
+        console.error('극장 정보를 불러오는 데 실패했습니다:', error);
+      }
+    };
+
+    loadTheaterId();
+  }, [theaterType]);
 
   // ✅ 좌석 정보 불러오기
-  useEffect(() => {
-    async function fetchData() {
-      if (!theaterId || !viewedAt || !theaterData?.show_time) return;
-      const seats = await fetchSeats(theaterId, viewedAt, theaterData.show_time);
-      setReservedSeats(seats);
-    }
-    fetchData();
-  }, [theaterId, viewedAt, theaterData?.show_time]);
+  const reservedSeats = useReservedSeatsSocket({
+    enabled: step === 2 && !!viewedAt && !!theaterData?.show_time,
+    theaterId,
+    viewedAt,
+    showTime: theaterData?.show_time ?? '',
+    initialSeats,
+  });
 
   // ✅ 날짜 선택 후 Step 변경
   const handleCalendarNext = (date: Date) => {
-    setViewedAt(date.toISOString().split('T')[0]); // ✅ viewedAt만 저장
+    setViewedAt(date.toISOString().split('T')[0]); // viewedAt만 저장
     setStep(2);
   };
 
@@ -64,31 +72,6 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
       return updatedSeats;
     });
   };
-
-  // Supabase Realtime 리팩토링 과정에서 누락된 코드 복구
-  useEffect(() => {
-    if (!theaterId || !viewedAt || !theaterData?.show_time) return;
-
-    const channel = supabase
-      .channel('realtime:reservations')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'reservations',
-        },
-        async () => {
-          const seats = await fetchSeats(theaterId, viewedAt, theaterData.show_time);
-          setReservedSeats(seats);
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [theaterId, viewedAt, theaterData?.show_time]);
 
   // ✅ 결제하기
   const handlePayment = async () => {
@@ -116,7 +99,7 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
     const totalPrice = selectedSeats.length * theaterData.price;
 
     const success = await reserveSeats({
-      seats: selectedSeats,
+      seat_number: selectedSeats,
       user_id: userId,
       theater_id: theaterId,
       viewed_at: viewedAt,
@@ -137,7 +120,7 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
   if (!theaterId) {
     return <div className="text-white text-center p-6">🚨 극장 정보가 없습니다.</div>;
   }
-  if (isLoading) {
+  if (isLoading || !theaterData) {
     return <p className="text-center text-gray-500">🎭 데이터 로딩 중...</p>;
   }
   if (error) {
@@ -215,4 +198,6 @@ export default function ClientPaymentsPage({ initialSeats, theaterId }: ClientPa
       )}
     </div>
   );
-}
+};
+
+export default ClientPaymentsPage;

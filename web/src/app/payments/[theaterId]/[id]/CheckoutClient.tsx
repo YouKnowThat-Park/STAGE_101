@@ -10,10 +10,7 @@ const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 
 // ✅ 현재 브라우저 origin 추출
 const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  return 'https://stage-101.vercel.app'; // fallback (필요하면 바꿔도 됨)
+  return 'http://localhost:8000'; // fallback (필요하면 바꿔도 됨)
 };
 
 interface CheckoutClientProps {
@@ -33,7 +30,7 @@ export default function CheckoutClient({
   viewed_at,
   show_time,
 }: CheckoutClientProps) {
-  const { name, phone, isLoading } = useUserHook(userId);
+  const { data: userData, isLoading } = useUserHook();
   const { data: theaterData } = useTheaterData(theaterId);
 
   const [tossPayments, setTossPayments] = useState<TossPaymentsInstance | null>(null);
@@ -72,24 +69,23 @@ export default function CheckoutClient({
     const requestData = {
       user_id: userId,
       theater_id: theaterId,
-      seats: seatIds,
+      seat_number: seatIds,
       total_price: totalPrice,
       viewed_at: formattedViewedAt,
       show_time: formattedShowTime,
     };
 
     try {
-      const response = await fetch(`${getBaseUrl()}/api/reservation/create`, {
+      const response = await fetch(`http://localhost:8000/reservations/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(requestData),
       });
 
       const data = await response.json();
-
       if (!response.ok) throw new Error(data.message || '예약 생성 실패');
-
-      return data.reservationId;
+      return data[0]?.id || null; // ✅ 배열 반환 처리
     } catch (error) {
       console.error('🚨 예약 생성 실패:', error);
       return null;
@@ -114,7 +110,9 @@ export default function CheckoutClient({
       const showTime = theaterData?.show_time || '시간대 없음';
       const baseUrl = getBaseUrl();
 
-      const successUrl = `${baseUrl}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${encodeURIComponent(name)}&userPhone=${encodeURIComponent(phone)}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
+      const userName = encodeURIComponent(userData?.name ?? '');
+      const userPhone = encodeURIComponent(userData?.phone ?? '');
+      const successUrl = `${baseUrl}/payments/success?reservationId=${reservationId}&userId=${userId}&orderId=${orderId}&amount=${totalPrice}&userName=${userName}&userPhone=${userPhone}&theaterName=${encodeURIComponent(theaterName)}&showTime=${encodeURIComponent(showTime)}`;
       const failUrl = `${baseUrl}/payment/fail`;
 
       await tossPayments.requestPayment('카드', {
@@ -147,10 +145,10 @@ export default function CheckoutClient({
             {seatIds.join(', ') || '없음'}
           </p>
           <p>
-            <span className="font-medium text-gray-900">예매자:</span> {name}
+            <span className="font-medium text-gray-900">예매자:</span> {userData?.name}
           </p>
           <p>
-            <span className="font-medium text-gray-900">연락처:</span> {phone}
+            <span className="font-medium text-gray-900">연락처:</span> {userData?.phone}
           </p>
           <p className="text-lg font-bold text-right mt-4">
             총 결제 금액: <span className="text-blue-600">{totalPrice.toLocaleString()}원</span>
