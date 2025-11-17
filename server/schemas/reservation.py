@@ -3,7 +3,7 @@ from uuid import UUID
 from datetime import datetime, date
 from typing import Optional, List
 import re
-
+from .qr_session import QrSessionSimple
 class TheaterInfo(BaseModel):
     name: str
     start_date: Optional[date]
@@ -29,7 +29,7 @@ class ReservationResponse(BaseModel):
 
     #  관계 필드
     theater: Optional[TheaterInfo] = None
-
+    qr_session: Optional[QrSessionSimple] = None
     class Config:
         orm_mode = True
 

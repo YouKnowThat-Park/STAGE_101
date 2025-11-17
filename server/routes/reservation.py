@@ -149,7 +149,7 @@ def get_my_reservations(request: Request, db: Session = Depends(get_db)):
 
     reservations = (
         db.query(Reservation)
-        .options(joinedload(Reservation.theater))
+        .options(joinedload(Reservation.theater), joinedload(Reservation.qr_session))
         .filter(Reservation.user_id == user.id)
         .all()
     )

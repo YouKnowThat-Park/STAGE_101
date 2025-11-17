@@ -2,7 +2,6 @@ from sqlalchemy import Column, Text, Integer, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from server.database import Base
-from datetime import datetime
 import uuid
 
 class Reservation(Base):
@@ -18,3 +17,4 @@ class Reservation(Base):
     viewed_at = Column(DateTime)
     show_time = Column(Text)
     theater = relationship("Theater", back_populates="reservations")
+    qr_session = relationship("QrSession", uselist=False, back_populates="reservation")

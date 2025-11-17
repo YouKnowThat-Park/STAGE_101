@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, ConfigDict
 from datetime import datetime
 from typing import Optional
 
@@ -8,9 +8,8 @@ class PaymentCreate(BaseModel):
     reservation_id: UUID4
     amount: int
     point_earned: Optional[int]
-    payment_key: UUID4
+    payment_key: str
     payment_method: str
-    status: str
 
 
 class PaymentResponse(BaseModel):
@@ -20,9 +19,8 @@ class PaymentResponse(BaseModel):
     reservation_id: UUID4
     amount: int
     point_earned: Optional[int]
-    payment_key: UUID4
+    payment_key: str
     payment_method: str
     status: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

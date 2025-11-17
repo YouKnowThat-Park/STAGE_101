@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from server.database import engine
 from server.database import Base
-from server.routes import shop, user, cart, payment, cart_history, theater, reservation, review
+from server.routes import shop, user, cart, payment, qr_session, cart_history, theater, reservation, review
 from fastapi.middleware.cors import CORSMiddleware
 from server import models
 from server.cleanup import delete_expired_reservations_loop
@@ -27,6 +27,7 @@ app.include_router(theater.router)
 app.include_router(reservation.router)
 app.include_router(review.router)
 app.include_router(payment.router)
+app.include_router(qr_session.router)
 
 
 @app.get("/")
