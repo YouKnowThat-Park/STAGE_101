@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, Request
 from fastapi.responses import JSONResponse
+from sqlalchemy import literal, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timezone
@@ -34,10 +35,13 @@ def _generate_unique_seat(db: Session, theater_id: uuid.UUID) -> str:
         number = random.randint(1, 50)                  # 1..50
         seat = f"{letter}{number}"
         exists = (
-            db.query(Reservation)
-            .filter(Reservation.theater_id == theater_id, Reservation.seat_number == seat)
-            .first()
+        db.query(Reservation)
+        .filter(
+            Reservation.theater_id == theater_id,
+            text(f"'{seat}' = ANY(seat_number)")
         )
+        .first()
+    )
         if not exists:
             return seat
     # 좌석 풀이 부족하거나 이상 상황
@@ -75,7 +79,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
                 id=uuid.uuid4(),
                 user_id=new_user.id,
                 theater_id=theater_id,
-                seat_number=seat,
+                seat_number=[seat],
                 total_price=1,           # 트리거와 동일
                 status="confirmed",      # enum이면 맞춰서 사용
                 created_at=now,
