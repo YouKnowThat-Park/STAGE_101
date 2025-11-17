@@ -12,6 +12,7 @@ import { useTheaterId } from 'src/hooks/payment/useTheaterId';
 import { useSeatSelection } from 'src/hooks/payment/useSeatSelection';
 import { usePaymentHandler } from 'src/hooks/payment/usePaymentHandler';
 import formatDateToYYYYMMDD from 'src/utils/formatDateToYYYYMMDD';
+import formatDateToYMD from 'src/utils/formatDateToYYYYMMDD';
 
 interface ClientPaymentsPageProps {
   initialSeats: string[];
@@ -51,7 +52,7 @@ const ClientPaymentsPage = ({ initialSeats, theaterType }: ClientPaymentsPagePro
 
   // 날짜 선택 후 Step 변경
   const handleCalendarNext = (date: Date) => {
-    setViewedAt(formatDateToYYYYMMDD(date));
+    setViewedAt(formatDateToYMD(date));
     setStep(2);
   };
 
