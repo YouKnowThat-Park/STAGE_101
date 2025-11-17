@@ -15,6 +15,7 @@ class TheaterInfo(BaseModel):
         orm_mode = True
 
 
+
 class ReservationResponse(BaseModel):
     id: UUID
     user_id: UUID
@@ -32,6 +33,10 @@ class ReservationResponse(BaseModel):
     class Config:
         orm_mode = True
 
+class CheckoutSummaryResponse(BaseModel):
+    """결제 페이지에서 사용할 요약 응답"""
+    reservations: List[ReservationResponse]
+    total_price: int
 
 
 SEAT_RE = re.compile(r"^[A-Z][1-9]\d?$")  # A1~Z99
@@ -52,3 +57,5 @@ class ReservationCreate(BaseModel):
             if not SEAT_RE.match(s):
                 raise ValueError(f"좌석 형식이 올바르지 않습니다: {s}")
         return v
+    
+    

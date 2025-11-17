@@ -8,9 +8,11 @@ import { useTheaterData } from '../../../../hooks/theater/useTheaterData';
 
 const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 
-// ✅ 현재 브라우저 origin 추출
 const getBaseUrl = () => {
-  return 'http://localhost:8000'; // fallback (필요하면 바꿔도 됨)
+  if (typeof window !== 'undefined') {
+    return window.location.origin; // 예: http://localhost:3000
+  }
+  return 'http://localhost:3000'; // SSR fallback
 };
 
 interface CheckoutClientProps {
@@ -20,6 +22,7 @@ interface CheckoutClientProps {
   totalPrice: number;
   viewed_at: string;
   show_time: string;
+  reservationId: string;
 }
 
 export default function CheckoutClient({
@@ -29,6 +32,7 @@ export default function CheckoutClient({
   totalPrice,
   viewed_at,
   show_time,
+  reservationId,
 }: CheckoutClientProps) {
   const { data: userData, isLoading } = useUserHook();
   const { data: theaterData } = useTheaterData(theaterId);
@@ -62,36 +66,6 @@ export default function CheckoutClient({
 
   if (isLoading) return <p className="text-white">로딩 중...</p>;
 
-  const createReservation = async () => {
-    const formattedViewedAt = new Date(viewed_at).toISOString();
-    const formattedShowTime = show_time.length === 8 ? show_time.slice(0, 5) : show_time;
-
-    const requestData = {
-      user_id: userId,
-      theater_id: theaterId,
-      seat_number: seatIds,
-      total_price: totalPrice,
-      viewed_at: formattedViewedAt,
-      show_time: formattedShowTime,
-    };
-
-    try {
-      const response = await fetch(`http://localhost:8000/reservations/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(requestData),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || '예약 생성 실패');
-      return data[0]?.id || null; // ✅ 배열 반환 처리
-    } catch (error) {
-      console.error('🚨 예약 생성 실패:', error);
-      return null;
-    }
-  };
-
   const handleTossPayment = async () => {
     if (!tossPayments) {
       console.error('🚨 토스 결제 모듈이 로드되지 않았습니다.');
@@ -99,12 +73,6 @@ export default function CheckoutClient({
     }
 
     try {
-      const reservationId = await createReservation();
-      if (!reservationId) {
-        console.error('🚨 예약 생성 실패, 결제 진행 불가');
-        return;
-      }
-
       const orderId = uuidv4();
       const theaterName = theaterData?.name || '이름 없음';
       const showTime = theaterData?.show_time || '시간대 없음';

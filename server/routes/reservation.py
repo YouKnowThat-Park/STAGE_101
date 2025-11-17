@@ -17,11 +17,12 @@ import json
 from server.database import get_db
 from server.models.reservation import Reservation
 from server.models.user import User
-from server.schemas.reservation import ReservationResponse, ReservationCreate
+from server.models.theater import Theater
+from server.schemas.reservation import ReservationResponse, ReservationCreate, CheckoutSummaryResponse
 from server.models.payment import Payment
 from server.security import verify_access_token
 from server.websocket_manager import manager
-
+from .user import get_current_user
 router = APIRouter(prefix="/reservations", tags=["Reservations"])
 
 
@@ -283,3 +284,31 @@ async def cancel_reservation(reservation_id: UUID, db: Session = Depends(get_db)
         )
 
     return {"message": "예약이 취소 되었습니다."}
+
+@router.get("/checkout-summary", response_model=CheckoutSummaryResponse)
+def get_checkout_summary(
+    theater_id: UUID = Query(..., description="극장 ID"),
+    seats: str =Query(..., description="콤마로 구분된 좌석 목록"),
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    seat_list: List[str] = [s.strip() for s in seats.split(",") if s.strip()]
+
+    if not seat_list:
+        raise HTTPException(status_code=400, detail="좌석 목록이 비어 있습니다.")
+    
+    user_id = current_user["id"]
+    
+    query = ( db.query(Reservation).join(Theater, Theater.id == Reservation.theater_id).filter(Reservation.user_id == user_id,
+            Reservation.theater_id == theater_id,
+            Reservation.status == "pending",
+            Reservation.seat_number.op("&&")(seat_list),))
+    
+    reservations: List[Reservation] = query.all()
+
+    if not reservations:
+        raise HTTPException(status_code=404, detail="해당 조건의 예약을 찾을 수 없습니다.")
+    
+    total_price = sum(r.total_price for r in reservations)
+
+    return {"reservations":reservations, "total_price":total_price}
