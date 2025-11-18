@@ -62,3 +62,12 @@ export const useUserStore = create<UserState>()(
     },
   ),
 );
+
+export const initializeUserStore = (user: SafeUserType | null) => {
+  useUserStore.setState((state) => ({
+    ...state,
+    user,
+    // token을 유지하고 싶으면 아래 줄을 제거
+    token: null,
+  }));
+};
