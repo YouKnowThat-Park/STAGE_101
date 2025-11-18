@@ -1,16 +1,20 @@
 'use client';
-import { useUserStore } from '../../store/userStore';
 import React, { useState } from 'react';
 import MypageHistory from './_components/MypageHistory';
 import MypageTicket from './_components/MypageTicket';
 import MypageProfile from './_components/MypageProfile';
-import { useUserHook } from '../../hooks/user/useUserHook';
+import { UserResponse, useUserHook } from '../../hooks/user/useUserHook';
 
 import MypageReview from './_components/MypageReview';
 
 import MypageFooter from './_components/MypageFooter';
 import { useRouter } from 'next/navigation';
 import { Noto_Serif_KR } from 'next/font/google';
+
+interface MypageUserResponse extends UserResponse {
+  nickname: string;
+  profile_img: string;
+}
 
 const defaultProfileImg = '/default.png'; // ✅ public 폴더 이미지 경로
 
@@ -51,9 +55,9 @@ const buttonTabs = [
 ];
 
 const MyPage = () => {
-  const { id, nickname, profile_img } = useUserStore();
   const [selectedTab, setSelectedTab] = useState('ticket');
-  const { name, point } = useUserHook(id);
+  const { data } = useUserHook();
+  const UserDataType = data as MypageUserResponse;
 
   const router = useRouter();
   return (
@@ -77,10 +81,10 @@ const MyPage = () => {
         <div className="w-full max-w-full lg:max-w-[600px] bg-[#151515] flex flex-col rounded-md shadow-lg">
           {/* 프로필 */}
           <MypageProfile
-            profile_img={profile_img || defaultProfileImg}
-            nickname={nickname}
-            name={name}
-            point={point}
+            profile_img={UserDataType?.profile_img || defaultProfileImg}
+            nickname={UserDataType?.nickname ?? '미지정'}
+            name={UserDataType?.name ?? '미지정'}
+            point={UserDataType?.point ?? '미지정'}
           />
 
           {/* 탭 네비게이션 */}
