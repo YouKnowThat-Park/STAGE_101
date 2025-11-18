@@ -9,7 +9,7 @@ class QrSession(Base):
     __tablename__ = "qr_sessions"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, ondelete="CASCADE")
     theater_id = Column(UUID(as_uuid=True), ForeignKey("theaters.id"), nullable=False)
     reservation_id = Column(UUID(as_uuid=True), ForeignKey("reservations.id"), nullable=False)
     qr_token = Column(Text, nullable=False)
