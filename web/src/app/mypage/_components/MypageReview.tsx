@@ -14,8 +14,8 @@ const MypageReview = () => {
     new Date(dateString).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
 
   return (
-    <section className="flex flex-col items-center bg-white h-[500px] gap-5">
-      <div className="w-full max-w-lg bg-white h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+    <section className="flex flex-col items-center bg-[#151515] h-[500px] gap-5">
+      <div className="w-full max-w-lg bg-[#151515] h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {!reviews ? (
           // ✅ Skeleton UI
           <ul className="space-y-4 p-5">

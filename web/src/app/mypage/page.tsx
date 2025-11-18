@@ -62,7 +62,7 @@ const MyPage = () => {
   const router = useRouter();
   return (
     <div
-      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative`}
+      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative `}
     >
       {/* 📱 상단 로고 (모바일 전용) */}
       <div
@@ -88,14 +88,14 @@ const MyPage = () => {
           />
 
           {/* 탭 네비게이션 */}
-          <nav className="bg-white flex justify-around lg:justify-center items-center gap-4 lg:gap-20 border-b border-gray-300 px-2">
+          <nav className="bg-[#151515] flex justify-around lg:justify-center items-center gap-4 lg:gap-20 border-b border-gray-300 px-2">
             {buttonTabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setSelectedTab(tab.key)}
                 className={`py-3 text-sm font-semibold border-b-2 ${
                   selectedTab === tab.key
-                    ? 'border-black text-black'
+                    ? 'border-black text-white'
                     : 'border-transparent text-gray-400'
                 }`}
               >
@@ -105,7 +105,7 @@ const MyPage = () => {
           </nav>
 
           {/* 탭 콘텐츠 */}
-          <div className="bg-white w-full p-4 max-[431px]:p-0 overflow-x-hidden">
+          <div className="bg-[#151515] w-full p-4 max-[431px]:p-0 overflow-x-hidden ">
             {selectedTab === 'ticket' && <MypageTicket />}
             {selectedTab === 'review' && <MypageReview />}
             {selectedTab === 'history' && <MypageHistory />}

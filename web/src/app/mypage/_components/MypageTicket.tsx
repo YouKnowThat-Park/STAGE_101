@@ -24,7 +24,7 @@ const MypageTicket = () => {
   const [loadingCancel, setLoadingCancel] = useState(false);
 
   return (
-    <section className="flex flex-col items-center bg-white h-[500px] gap-5">
+    <section className="flex flex-col items-center bbg-[#151515] h-[500px] gap-5">
       {loadingTickets ? (
         // ✅ Skeleton UI
         <div className="w-full max-w-lg h-[480px] p-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">

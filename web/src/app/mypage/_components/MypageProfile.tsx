@@ -36,12 +36,12 @@ const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProp
 
         {/* 유저 정보 */}
         <div className="flex flex-col gap-2 flex-1">
-          <div className="bg-white w-28 px-3 py-1.5 md:px-4 md:py-2 text-[14px] md:text-[15px] rounded-md text-black">
+          <div className="flex flex-col text-center bg-white w-28 px-3 py-1.5 md:px-4 md:py-2 text-[14px] md:text-[15px] rounded-md text-black">
             {nickname}
-            <br />
+            <span className="border" />
             <span className="text-sm">{name}</span>
           </div>
-          <div className="bg-white w-28 flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-md gap-2 text-black text-sm">
+          <div className="bg-white w-28 flex items-center justify-end px-3 py-1.5 md:px-4 md:py-2 rounded-md gap-2 text-black text-sm">
             {point}
             <CoinIcon />
           </div>
