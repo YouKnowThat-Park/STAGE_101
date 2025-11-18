@@ -8,7 +8,7 @@ class Reservation(Base):
     __tablename__ = "reservations"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"),  nullable=False, ondelete="CASCADE")
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"),  nullable=False)
     theater_id = Column(UUID(as_uuid=True), ForeignKey("theaters.id"), nullable=False)
     seat_number = Column(ARRAY(Text), nullable=False)
     total_price = Column(Integer, nullable=False)
