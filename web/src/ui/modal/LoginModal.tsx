@@ -2,11 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React from 'react';
-
-interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { LoginModalProps } from 'src/types/auth/auth-type';
 
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const router = useRouter();

@@ -4,13 +4,9 @@ import Calendar from 'react-calendar';
 import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 import 'react-calendar/dist/Calendar.css';
 import '../../../ui/calendar/calendar.css';
+import { TheaterProps } from 'src/types/theater/theater-type';
 
-interface Props {
-  theaterId: string;
-  onDateTimeSelect: (date: Date, time: string) => void;
-}
-
-const TheaterCalendar = ({ theaterId, onDateTimeSelect }: Props) => {
+const TheaterCalendar = ({ theaterId, onDateTimeSelect }: TheaterProps) => {
   const { data: theaterData, isLoading, error } = useTheaterData(theaterId);
   const [date, setDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);

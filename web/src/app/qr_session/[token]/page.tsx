@@ -1,12 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useQrDetailByToken } from 'src/hooks/qr_session/useQrDetail';
-
-interface QrAdminPageProps {
-  params: {
-    token: string;
-  };
-}
+import { QrAdminPageProps } from 'src/types/qr-session/qr-session-type';
 
 const page = ({ params }: QrAdminPageProps) => {
   const qrToken = params.token;

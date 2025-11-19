@@ -1,9 +1,8 @@
 import { fetchCartData } from 'src/lib/api/cart/cart';
-import { CartType } from '../../types/cart.type';
 import { useQuery } from '@tanstack/react-query';
 
 const useFetchCartData = (userId: string | null | undefined) => {
-  return useQuery<CartType[]>({
+  return useQuery({
     queryKey: ['cart', userId],
     queryFn: () => (userId ? fetchCartData(userId) : Promise.resolve([])), // ✅ userId가 없으면 빈 배열 반환
     enabled: !!userId, // user Id가 있을 경우에만 호출 없으면 queryFn 실행 안함

@@ -2,11 +2,7 @@ import { getValidImageUrl } from '../../shop/_components/getValidImageUrl';
 import { useUserStore } from '../../../store/userStore';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-
-interface ProfileEditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ProfileEditModalProps } from 'src/types/mypage/mypage-type';
 
 const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const user = useUserStore(); // ✅ 전체 유저 정보 가져오기
@@ -48,9 +44,9 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
     try {
       let profileImageUrl = newProfileImg;
 
-      if (selectedFile) {
-        profileImageUrl = await uploadImageToSupabase(selectedFile, user.id);
-      }
+      // if (selectedFile) {
+      //   profileImageUrl = await uploadImageToSupabase(selectedFile, user.id);
+      // }
 
       const res = await fetch('/api/user', {
         method: 'PATCH',

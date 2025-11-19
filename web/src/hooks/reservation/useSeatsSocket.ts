@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
 import { fetchOccupiedSeats } from 'src/lib/api/reservation/reservationHistory';
-
-interface ReservedSeatsMessage {
-  type: 'reserved_seats';
-  seats: string[];
-}
-
-interface UseReservedSeatsSocketOptions {
-  enabled: boolean;
-  theaterId: string;
-  viewedAt: string;
-  showTime: string;
-  initialSeats: string[];
-}
+import {
+  ReservedSeatsMessage,
+  UseReservedSeatsSocketOptions,
+} from 'src/types/reservation/reservation-type';
 
 export const useReservedSeatsSocket = (options: UseReservedSeatsSocketOptions): string[] => {
   const { enabled, theaterId, viewedAt, showTime, initialSeats } = options;

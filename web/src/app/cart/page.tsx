@@ -14,6 +14,7 @@ import { useDeleteCartItem } from 'src/hooks/cart/useDeleteCartItem';
 import CartSkeleton from './_components/CartSkeleton';
 import { usePostCartHistory } from 'src/hooks/cart_history/usePostCartHistory';
 import { v4 as uuidv4 } from 'uuid';
+import { CartItem } from 'src/types/cart/cart-type';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -25,7 +26,7 @@ const CartPage = () => {
   const { mutate: createCartHistory } = usePostCartHistory();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const cartItemsList = cartItems ?? [];
+  const cartItemsList: CartItem[] = cartItems ?? [];
 
   if (isLoading) {
     return <CartSkeleton />;

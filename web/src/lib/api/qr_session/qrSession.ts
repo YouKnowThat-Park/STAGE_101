@@ -1,19 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 
-export interface QrSessionCreatePayload {
-  user_id: string;
-  theater_id: string;
-  reservation_id: string;
-}
-export interface QrDetailResponse {
-  qr_token: string | null;
-  theater_id: string;
-  theater_name: string;
-  main_img: string | null;
-  viewed_at: string | null;
-  show_time: string | null;
-  qr_url: string;
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 export const fetchQrCode = async (reservationId: string): Promise<QrDetailResponse> => {
   const res = await fetch(`${API_BASE_URL}/qr-sessions/by-reservation/${reservationId}`, {

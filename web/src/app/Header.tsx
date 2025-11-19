@@ -2,11 +2,7 @@
 import React from 'react';
 import Logout from './(auth)/_components/Logout';
 import { usePathname } from 'next/navigation';
-import { SafeUserType } from 'src/store/userStore';
-
-export interface HeaderProps {
-  user: SafeUserType | null;
-}
+import { HeaderProps } from 'src/types/common/common-type';
 
 const Header = ({ user }: HeaderProps) => {
   const pathname = usePathname();

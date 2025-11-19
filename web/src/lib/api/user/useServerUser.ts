@@ -1,5 +1,5 @@
 import { headers } from 'next/headers';
-import { SafeUserType } from 'src/store/userStore';
+import { SafeUserType } from 'src/types/user/user-type';
 
 export async function getCurrentUser(): Promise<SafeUserType | null> {
   const cookieHeader = headers().get('cookie') ?? '';

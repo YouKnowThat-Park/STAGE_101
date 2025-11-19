@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { getValidImageUrl } from './_components/getValidImageUrl';
 import useShop from '../../hooks/shop/useShop';
 import ShopSkeleton from './_components/ShopSkeleton';
+import { ShopResponse } from 'src/types/shop/shop-type';
 
 const ShopPage = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const ShopPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <ShopSkeleton key={`skeleton-${i}`} />)
-          : items?.map((item) => (
+          : items?.map((item: ShopResponse) => (
               <div
                 key={item.id}
                 onClick={() => HandleDetailPage(item.id)}

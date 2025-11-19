@@ -1,11 +1,5 @@
 import React, { forwardRef } from 'react';
-
-interface AuthInputFieldProps {
-  label: string;
-  type: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { AuthInputFieldProps } from 'src/types/auth/auth-type';
 
 const AuthInputField = forwardRef<HTMLInputElement, AuthInputFieldProps>(
   ({ label, type, value, onChange }, ref) => {

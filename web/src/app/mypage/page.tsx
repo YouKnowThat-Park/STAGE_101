@@ -3,18 +3,14 @@ import React, { useState } from 'react';
 import MypageHistory from './_components/MypageHistory';
 import MypageTicket from './_components/MypageTicket';
 import MypageProfile from './_components/MypageProfile';
-import { UserResponse, useUserHook } from '../../hooks/user/useUserHook';
+import { useUserHook } from '../../hooks/user/useUserHook';
 
 import MypageReview from './_components/MypageReview';
 
 import MypageFooter from './_components/MypageFooter';
 import { useRouter } from 'next/navigation';
 import { Noto_Serif_KR } from 'next/font/google';
-
-export interface MypageUserResponse extends UserResponse {
-  nickname: string;
-  profile_img: string;
-}
+import { MypageUserResponse } from 'src/types/user/user-type';
 
 const defaultProfileImg = '/default.png'; // ✅ public 폴더 이미지 경로
 

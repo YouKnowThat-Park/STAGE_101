@@ -1,16 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Header from '../Header';
 import Footer from '../Footer';
 import QrLayout from '../qr_session/QrLayout';
-import { SafeUserType } from 'src/store/userStore';
-
-type LayoutSwitcherProps = {
-  children: React.ReactNode;
-  user: SafeUserType | null;
-};
+import { LayoutSwitcherProps } from 'src/types/common/common-type';
 
 export default function LayoutSwitcher({ children, user }: LayoutSwitcherProps) {
   const pathname = usePathname();
@@ -20,10 +15,6 @@ export default function LayoutSwitcher({ children, user }: LayoutSwitcherProps) 
   if (pathname.startsWith('/qr_session')) {
     return <QrLayout>{children}</QrLayout>;
   }
-
-  // useEffect(() => {
-  //   router.refresh();
-  // }, []);
 
   //  나머지 경로에서는 기존 루트 레이아웃 구조 유지
   return (

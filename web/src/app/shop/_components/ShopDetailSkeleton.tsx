@@ -1,8 +1,5 @@
 import React from 'react';
-
-export interface ShopDetailSkeletonProps {
-  loading: boolean;
-}
+import { ShopDetailSkeletonProps } from 'src/types/shop/shop-type';
 
 const ShopDetailSkeleton = ({ loading }: ShopDetailSkeletonProps) => {
   if (!loading) return null;

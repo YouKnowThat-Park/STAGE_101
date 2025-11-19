@@ -3,23 +3,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist, StateStorage } from 'zustand/middleware';
 import { decryptString, encryptString } from 'src/utils/secureStorage';
-
-/** 🔐 암호화에 쓸 키 (포트폴리오라 env 없으면 기본값 사용) */
-const SECRET_KEY = process.env.NEXT_PUBLIC_ZUSTAND_SECRET || 'stage101-dev-secret-key';
-
-/** ✅ 전역 상태용 유저 타입 정의 */
-export interface SafeUserType {
-  id: string;
-  nickname: string;
-  profile_img: string | null;
-  point: number | null;
-}
-
-interface UserState extends SafeUserType {
-  token: string | null;
-  setUser: (user: SafeUserType | null, token?: string | null) => void;
-  clearUser: () => void;
-}
+import { SafeUserType, UserState } from 'src/types/user/user-type';
 
 const encryptedStateStorage: StateStorage = {
   getItem: (name: string): string | null => {

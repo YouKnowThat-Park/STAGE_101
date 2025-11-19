@@ -1,16 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { reserveSeatApi } from 'src/lib/api/reservation/reservationHistory';
 import {
-  fetchReservedSeats,
   ReservationApiResponse,
-  reserveSeatApi,
   ReserveSeatsPayload,
-} from 'src/lib/api/reservation/reservationHistory';
-
-export interface UseReserveSeatsResult {
-  reserveSeats: (payload: ReserveSeatsPayload) => Promise<boolean>;
-  loading: boolean;
-  error: string | null;
-}
+  UseReserveSeatsResult,
+} from 'src/types/reservation/reservation-type';
 
 export const useReservedSeats = (
   _theaterId: string | null,

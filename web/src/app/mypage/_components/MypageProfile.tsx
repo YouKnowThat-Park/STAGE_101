@@ -5,13 +5,7 @@ import GearIcon from '../../../ui/icon/GearIcon';
 import ProfileEditModal from './ProfileEditModal';
 import Image from 'next/image';
 import { useState } from 'react';
-
-interface MypageProfileProps {
-  profile_img: string;
-  nickname: string | null;
-  name: string;
-  point: number;
-}
+import { MypageProfileProps } from 'src/types/mypage/mypage-type';
 
 const MypageProfile = ({ profile_img, nickname, name, point }: MypageProfileProps) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);

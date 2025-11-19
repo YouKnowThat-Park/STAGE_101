@@ -1,13 +1,9 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useRef, useState } from 'react';
-import { SafeUserType, initializeUserStore } from 'src/store/userStore';
-
-interface ProvidersProps {
-  children: ReactNode;
-  initialUser: SafeUserType | null;
-}
+import { useRef, useState } from 'react';
+import { initializeUserStore } from 'src/store/userStore';
+import { ProvidersProps } from 'src/types/auth/auth-type';
 
 const Providers = ({ children, initialUser }: ProvidersProps) => {
   const [queryClient] = useState(() => new QueryClient());
