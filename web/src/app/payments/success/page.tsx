@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { QrDetailResponse } from 'src/lib/api/qr_session/qrSession';
+import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
 
 const formatPhoneNumber = (phone: string | null | undefined) => {
   if (!phone) return '정보 없음';
@@ -166,15 +167,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
 
         <div className="flex justify-center mt-6">
           {qrUrl ? (
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-                qrUrl,
-              )}`}
-              alt="QR Code"
-              width={150}
-              height={150}
-              className="rounded-md border"
-            />
+            <QrCodeImage value={qrUrl} size={100} />
           ) : (
             <p className="text-gray-400">QR 코드 생성 중...</p>
           )}
