@@ -6,9 +6,8 @@ import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
 import signIn from './actions';
-import { useUserStore } from '../../../store/userStore';
-import { startTransition } from 'react';
-import { socialLogin } from './kakao/actions';
+
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 const Page = () => {
   const router = useRouter();
@@ -22,8 +21,6 @@ const Page = () => {
         return;
       }
 
-      useUserStore.getState().setUser(result.user);
-
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
         localStorage.setItem('savedEmail', data.email);
@@ -32,6 +29,7 @@ const Page = () => {
       }
 
       router.push('/');
+      router.refresh();
     } catch (error: any) {
       alert(error.message || '로그인 중 오류가 발생했습니다.');
     }
@@ -41,7 +39,7 @@ const Page = () => {
   };
 
   const handleSocialSignIn = (provider: 'kakao' | 'google') => {
-    startTransition(() => socialLogin(provider));
+    window.location.href = `${apiBase}/users/social/${provider}/signin`;
   };
 
   return (

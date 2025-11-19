@@ -1,5 +1,4 @@
 import { getValidImageUrl } from '../../shop/_components/getValidImageUrl';
-import { uploadImageToSupabase } from '../../../lib/supabaseUplodad';
 import { useUserStore } from '../../../store/userStore';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';

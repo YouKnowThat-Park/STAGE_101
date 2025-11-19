@@ -9,7 +9,7 @@ export async function GET() {
         allCookies.delete(name);
       }
 
-      if (name.startsWith('__')) {
+      if (name.startsWith('')) {
         allCookies.delete(name);
       }
     });
