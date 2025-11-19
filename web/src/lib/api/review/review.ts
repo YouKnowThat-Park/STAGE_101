@@ -1,46 +1,11 @@
 import { useUserStore } from 'src/store/userStore';
-import { ReviewsType } from 'src/types/review.type';
-
-export interface FetchAllReviewsResponse {
-  reviews: ReviewsType[];
-  totalCount: number;
-  nextPage: number | null;
-}
-
-export interface FetchAllReviewsParams {
-  pageParam: number;
-  sort?: 'newest' | 'oldest';
-  order?: 'asc' | 'desc';
-  userId?: string;
-}
-
-export interface UserReviewRanking {
-  user_id: string;
-  theater_id: string;
-  nickname: string;
-  profile_img: string;
-  count: number;
-}
-
-export type ReviewImageType = 'poster' | 'profile';
-
-export interface CreateReviewParams {
-  comment: string;
-  type: ReviewImageType;
-  theaterId: string;
-}
-
-export interface CreatedReview {
-  id: string;
-  user_id: string;
-  theater_id: string;
-  comment: string;
-  created_at: string;
-  display_name: string;
-  type: string;
-  dislike_count: number;
-  image_url: string | null;
-}
+import {
+  CreatedReview,
+  CreateReviewParams,
+  FetchAllReviewsParams,
+  FetchAllReviewsResponse,
+  UserReviewRanking,
+} from 'src/types/review/review-type';
 
 const API_BASE = 'http://localhost:8000';
 

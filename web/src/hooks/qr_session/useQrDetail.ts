@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  fetchQrCode,
-  fetchQrCodeByToken,
-  QrDetailResponse,
-} from 'src/lib/api/qr_session/qrSession';
+import { fetchQrCode, fetchQrCodeByToken } from 'src/lib/api/qr_session/qrSession';
+import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 
 export const useQrDetail = (reservationId: string | null | undefined) => {
   return useQuery<QrDetailResponse, Error>({

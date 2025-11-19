@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createPayment, reserveSeatApi } from 'src/lib/api/reservation/reservationHistory';
+import { PaymentCreatePayload, PaymentResponse } from 'src/types/payment/payment-type';
 import {
-  createPayment,
-  PaymentCreatePayload,
-  PaymentResponse,
   ReservationApiResponse,
-  reserveSeatApi,
   ReserveSeatsPayload,
   UseReserveSeatsResult,
-} from 'src/lib/api/reservation/reservationHistory';
+} from 'src/types/reservation/reservation-type';
 
 export const useCreatePayment = () => {
   const queryClient = useQueryClient();

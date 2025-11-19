@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { ReviewsType } from '../../types/review.type';
 import { useUserStore } from '../../store/userStore';
 import ReviewAddModal from './_components/ReviewAddModal';
 import { useInfiniteReviews } from 'src/hooks/review/useReviewsData';
+import { ReviewsType } from 'src/types/review/review-type';
 
 const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(true);

@@ -1,10 +1,6 @@
 import React from 'react';
 import QRCode from 'react-qr-code';
-
-export interface QrCodeImageProps {
-  value: string | null;
-  size?: number;
-}
+import { QrCodeImageProps } from 'src/types/qr-session/qr-session-type';
 
 const QrCodeImage = ({ value, size }: QrCodeImageProps) => {
   if (!value) {

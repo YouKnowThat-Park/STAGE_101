@@ -1,10 +1,10 @@
 'use client';
 
-import { ReviewsType } from '../../../types/review.type';
 import Image from 'next/image';
 import NoReviewIcon from '../../../ui/icon/NoReviewIcon';
 import { useUserStore } from '../../../store/userStore';
 import { useMyReviews } from 'src/hooks/review/useMyReviews';
+import { ReviewsType } from 'src/types/review/review-type';
 
 const MypageReview = () => {
   const { data: reviews } = useMyReviews();

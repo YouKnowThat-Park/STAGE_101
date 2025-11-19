@@ -1,5 +1,3 @@
-import { CartHistory } from 'src/types/cart-history-type';
-
 export const postCartHistory = async (payload: {
   payment_key: string;
   total_price: number;
@@ -9,7 +7,7 @@ export const postCartHistory = async (payload: {
   name?: string;
   cart_id?: string;
   cart_item_ids: string[];
-}): Promise<CartHistory[]> => {
+}) => {
   const res = await fetch('http://localhost:8000/cart-histories', {
     method: 'POST',
     credentials: 'include',
@@ -25,7 +23,7 @@ export const postCartHistory = async (payload: {
   return res.json();
 };
 
-export const fetchCartHistory = async (): Promise<CartHistory[]> => {
+export const fetchCartHistory = async () => {
   const res = await fetch('http://localhost:8000/cart-histories/me', {
     credentials: 'include',
   });
@@ -38,7 +36,7 @@ export const fetchCartHistory = async (): Promise<CartHistory[]> => {
   return res.json();
 };
 
-export const fetchCartHistoriesByPayment = async (paymentKey: string): Promise<CartHistory[]> => {
+export const fetchCartHistoriesByPayment = async (paymentKey: string) => {
   const res = await fetch(`http://localhost:8000/cart-histories/by-payment/${paymentKey}`, {
     credentials: 'include',
     cache: 'no-store',

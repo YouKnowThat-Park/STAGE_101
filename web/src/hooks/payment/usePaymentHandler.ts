@@ -1,29 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-
-type ReserveSeatsPayload = {
-  seat_number: string[];
-  user_id: string;
-  theater_id: string;
-  viewed_at: string;
-  show_time: string;
-  price: number;
-  total_price: number;
-};
-
-type ReserveSeatsFn = (payload: ReserveSeatsPayload) => Promise<boolean>;
-
-interface Params {
-  selectedSeats: string[];
-  userId: string;
-  theaterId: string;
-  viewedAt: string;
-  showTime: string;
-  price: number;
-  reserveSeats: ReserveSeatsFn;
-  reserveError: string | null;
-}
+import { PaymentsParams } from 'src/types/payment/payment-type';
 
 export const usePaymentHandler = () => {
   const router = useRouter();
@@ -37,7 +15,7 @@ export const usePaymentHandler = () => {
     price,
     reserveSeats,
     reserveError,
-  }: Params) => {
+  }: PaymentsParams) => {
     if (
       !selectedSeats.length ||
       !userId ||

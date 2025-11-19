@@ -1,16 +1,5 @@
 import React from 'react';
-
-export interface SeatsChoiceProps {
-  theaterData: {
-    name?: string;
-  };
-  reservedSeats: string[];
-  selectedSeats: string[];
-  handleSeatClick: (seat: string) => void;
-  setStep: (step: number) => void;
-  handlePayment: () => Promise<void>;
-  loading: boolean;
-}
+import { SeatsChoiceProps } from 'src/types/payment/payment-type';
 
 const SeatsChoice = ({
   theaterData,

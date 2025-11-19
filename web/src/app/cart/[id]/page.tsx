@@ -3,21 +3,9 @@ import { headers, cookies } from 'next/headers';
 import Image from 'next/image';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 import HomeCountdownText from '../_components/HomeCountdownText';
+import { CartHistoryItem, CartSuccessProps } from 'src/types/cart/cart-history-type';
 
 const API = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
-
-type CartHistoryItem = {
-  id: string;
-  payment_key: string;
-  name?: string;
-  image_url?: string;
-  quantity: number;
-  total_price: number;
-};
-
-export interface CartSuccessProps {
-  params: { id: string };
-}
 
 export default async function CartSuccessPage({ params }: CartSuccessProps) {
   //  SSR에서 인증 쿠키를 전달해야 /by-payment가 내 소유만 조회됨

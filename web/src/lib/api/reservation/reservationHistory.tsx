@@ -1,88 +1,9 @@
-import { threadId } from 'worker_threads';
-
-export interface ReservationType {
-  id: string;
-  theater_id: string;
-  seat_number: string;
-  total_price: number;
-  status: string;
-  created_at: string;
-  theater_name: string;
-  start_date: string;
-  end_date: string | null;
-  main_img: string;
-  type: string;
-  payment_method: string;
-  qr_token: string | null;
-}
-
-export interface TheaterResponse {
-  id: string;
-  name: string;
-  start_date: string;
-  end_date: string | null;
-  main_img: string;
-  type: string;
-}
-
-export interface PaymentResponseInner {
-  payment_method: string;
-}
-
-export interface QrSessionResponse {
-  qr_token: string | null;
-}
-
-export interface ReservationApiResponse {
-  id: string;
-  theater_id: string;
-  seat_number: string[];
-  total_price: number;
-  status: string;
-  created_at: string;
-  viewed_at?: string | null;
-  show_time?: string | null;
-  theater?: TheaterResponse | null;
-  payment?: PaymentResponseInner | null;
-  qr_session?: QrSessionResponse | null;
-}
-
-export interface PaymentResponse {
-  id: string;
-  user_id: string;
-  reservation_id: string;
-  amount: number;
-  point_earned: number;
-  payment_key: string;
-  payment_method: string;
-  status: string; // 'paid'
-  created_at: string;
-}
-
-export interface PaymentCreatePayload {
-  user_id: string;
-  reservation_id: string;
-  amount: number;
-  point_earned: number;
-  payment_key: string;
-  payment_method: string;
-}
-
-export interface ReserveSeatsPayload {
-  seat_number: string[];
-  user_id: string;
-  theater_id: string;
-  viewed_at: string;
-  show_time: string;
-  price: number;
-  total_price: number;
-}
-
-export interface UseReserveSeatsResult {
-  reserveSeats: (payload: ReserveSeatsPayload) => Promise<boolean>;
-  loading: boolean;
-  error: string | null;
-}
+import { PaymentCreatePayload, PaymentResponse } from 'src/types/payment/payment-type';
+import {
+  ReservationApiResponse,
+  ReservationType,
+  ReserveSeatsPayload,
+} from 'src/types/reservation/reservation-type';
 
 export const fetchTicketHistory = async (userId: string): Promise<ReservationType[]> => {
   const res = await fetch('http://localhost:8000/reservations/me', {

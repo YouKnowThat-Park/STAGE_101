@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { QrDetailResponse } from 'src/lib/api/qr_session/qrSession';
 import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
+import { PaymentSuccessPageProps } from 'src/types/payment/payment-type';
+import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 
 const formatPhoneNumber = (phone: string | null | undefined) => {
   if (!phone) return '정보 없음';
@@ -11,12 +11,6 @@ const formatPhoneNumber = (phone: string | null | undefined) => {
     ? `${digits.slice(0, 3)}-${digits.slice(3, 4)}**-${digits.slice(7, 9)}**`
     : '유효하지 않은 번호';
 };
-
-type SearchParams = { [key: string]: string | string[] | undefined };
-
-interface PaymentSuccessPageProps {
-  searchParams: SearchParams;
-}
 
 export default async function PaymentSuccessPage({ searchParams }: PaymentSuccessPageProps) {
   const getParam = (key: string): string | undefined => {

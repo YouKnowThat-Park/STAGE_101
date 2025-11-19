@@ -1,11 +1,6 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
+import { MypageButtonProps } from 'src/types/mypage/mypage-type';
 
-interface MypageButtonProps {
-  onClick: () => void;
-  label: string | ReactNode;
-  isActive?: boolean;
-  variant?: 'primary' | 'secondary';
-}
 const MypageButton = ({ onClick, isActive, variant = 'primary', label }: MypageButtonProps) => {
   return (
     <button

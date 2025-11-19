@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTheaterData } from '../../../hooks/theater/useTheaterData';
 import TheaterCalendar from '../../theater/_components/TheaterCalendar';
 import { useUserHook } from 'src/hooks/user/useUserHook';
@@ -11,13 +10,8 @@ import SeatsChoice from './_components/SeatsChoice';
 import { useTheaterId } from 'src/hooks/payment/useTheaterId';
 import { useSeatSelection } from 'src/hooks/payment/useSeatSelection';
 import { usePaymentHandler } from 'src/hooks/payment/usePaymentHandler';
-import formatDateToYYYYMMDD from 'src/utils/formatDateToYYYYMMDD';
 import formatDateToYMD from 'src/utils/formatDateToYYYYMMDD';
-
-interface ClientPaymentsPageProps {
-  initialSeats: string[];
-  theaterType: string;
-}
+import { ClientPaymentsPageProps } from 'src/types/payment/payment-type';
 
 const ClientPaymentsPage = ({ initialSeats, theaterType }: ClientPaymentsPageProps) => {
   const [step, setStep] = useState(1);

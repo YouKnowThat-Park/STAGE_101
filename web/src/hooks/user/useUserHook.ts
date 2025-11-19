@@ -1,13 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MypageUserResponse } from 'src/app/mypage/page';
-
-export interface UserResponse {
-  id: string;
-  name: string | null;
-  phone: string | null;
-  point: number;
-  email?: string;
-}
+import { MypageUserResponse } from 'src/types/user/user-type';
 
 export const useUserHook = () => {
   return useQuery<MypageUserResponse, Error>({

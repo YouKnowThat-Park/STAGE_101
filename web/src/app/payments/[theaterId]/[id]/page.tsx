@@ -2,10 +2,7 @@ import { redirect } from 'next/navigation';
 import CheckoutClient from './CheckoutClient';
 import { headers } from 'next/headers'; // ✅ 추가
 import { fetchCheckoutSummary } from 'src/lib/api/reservation/reservationHistory';
-
-interface CheckoutPageProps {
-  params: { id: string; theaterId: string };
-}
+import { CheckoutPageProps } from 'src/types/payment/payment-type';
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const seatIds = params.id.split('-');

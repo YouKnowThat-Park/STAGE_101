@@ -2,7 +2,7 @@ export const fetchTheaterData = async (theaterType: string) => {
   const res = await fetch(`http://localhost:8000/theaters/by-type/${theaterType}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-    cache: 'no-store', // Next.js에서 캐시 방지
+    cache: 'no-store',
   });
 
   if (!res.ok) {

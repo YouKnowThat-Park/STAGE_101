@@ -3,9 +3,9 @@ import { ReviewModalProps } from '../../../types/modal/modal-type';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTicketHistory } from 'src/hooks/reservation/useTicketHistory';
-import { ReservationType } from 'src/lib/api/reservation/reservationHistory';
 import { useCreateReview } from 'src/hooks/review/useCreateReview';
-import { ReviewImageType } from 'src/lib/api/review/review';
+import { ReviewImageType } from 'src/types/review/review-type';
+import { ReservationType } from 'src/types/reservation/reservation-type';
 
 const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
   const { id: userId, nickname, profile_img } = useUserStore();

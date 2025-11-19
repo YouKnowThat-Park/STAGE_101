@@ -1,14 +1,10 @@
 'use client';
 
-import { SafeUserType } from '../../../store/userStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 import Stage101Logo from 'src/ui/logo/Stage101Logo';
-
-export interface LogoutProps {
-  user: SafeUserType | null;
-}
+import { LogoutProps } from 'src/types/auth/auth-type';
 
 const Logout = ({ user }: LogoutProps) => {
   const router = useRouter();
