@@ -51,95 +51,50 @@ QR 페이지 : QR 페이지 생성
 
 ```
 📦 STAGE_101/
-├── 📁 node_modules/
-├── 📁 public/
-├── 📁 src/
-│   ├── 📁 app/
-│   │   ├── 📁 _components/
-│   │   │   └── 📄 ClientWrapper.tsx
-│   │   ├── 📁 _providers/
-│   │   │   ├── 📄 AuthProvider.tsx
-│   │   │   └── 📄 providers.tsx
-│   │   ├── 📁 (auth)/
-│   │   │   ├── 📁 _components/
-│   │   │   │   ├── 📄 AuthInputField.tsx
-│   │   │   │   ├── 📄 CommonSchemas.ts
-│   │   │   │   ├── 📄 Logout.tsx
-│   │   │   │   └── 📄 SignUpSchema.ts
-│   │   │   ├── 📁 provider/
-│   │   │   │   └── 📄 route.ts
-│   │   │   ├── 📁 sign-in/
-│   │   │   │   ├── 📁 _components/
-│   │   │   │   │   └── 📄 SignInForm.tsx
-│   │   │   │   ├── 📁 kakao/
-│   │   │   │   │   ├── 📄 actions.ts
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   │   ├── 📄 actions.ts
-│   │   │   │   └── 📄 page.tsx
-│   │   │   ├── 📁 sign-up/
-│   │   │   │   ├── 📁 _components/
-│   │   │   │   └── 📄 page.tsx
-│   │   ├── 📁 api/
-│   │   │   ├── 📁 auth/
-│   │   │   │   ├── 📁 callback/
-│   │   │   │   ├── 📁 delete-user/
-│   │   │   │   ├── 📁 logout/
-│   │   │   │   ├── 📁 session/
-│   │   │   │   │   └── 📄 actions.ts
-│   │   │   ├── 📁 cart/
-│   │   │   │   ├── 📁 [id]/
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   │   ├── 📁 home/
-│   │   │   │   │   └── 📄 HomeReviews.tsx
-│   │   │   │   ├── 📁 mypage/
-│   │   │   │   │   ├── 📁 _components/
-│   │   │   │   │   │   └── 📄 page.tsx
-│   │   │   ├── 📁 notion/
-│   │   │   │   ├── 📁 feature-decisions/
-│   │   │   │   ├── 📁 feature-history/
-│   │   │   │   ├── 📁 retrospective/
-│   │   │   │   └── 📁 trouble-shooting/
-│   │   │   ├── 📁 payments/
-│   │   │   │   ├── 📁 _components/
-│   │   │   │   │   └── 📄 ClientPaymentsPage.tsx
-│   │   │   │   ├── 📁 [theaterId]/
-│   │   │   │   │   ├── 📁 [id]/
-│   │   │   │   │   │   ├── 📄 CheckoutClient.tsx
-│   │   │   │   │   │   ├── 📄 page.tsx
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   │   ├── 📁 success/
-│   │   │   │   │   ├── 📄 layout.tsx
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   ├── 📁 reviews/
-│   │   │   │   ├── 📁 _components/
-│   │   │   │   │   ├── 📄 ReviewAddModal.tsx
-│   │   │   │   │   └── 📄 ReviewPage.tsx
-│   │   │   ├── 📁 shop/
-│   │   │   │   ├── 📁 [id]/
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   │   └── 📄 page.tsx
-│   │   │   ├── 📁 theater/
-│   │   │   │   ├── 📁 _components/
-│   │   │   │   │   ├── 📄 CinemaA.tsx
-│   │   │   │   │   ├── 📄 CinemaB.tsx
-│   │   │   │   │   ├── 📄 MusicalA.tsx
-│   │   │   │   │   ├── 📄 MusicalB.tsx
-│   │   │   │   │   ├── 📄 TheaterCalendar.tsx
-│   │   │   │   │   └── 📄 TheaterList.tsx
-│   │   │   │   ├── 📁 [id]/
-│   │   │   │   │   └── 📄 page.tsx
-│   │   │   ├── 📁 hooks/
-│   │   │   ├── 📁 lib/
-│   │   │   ├── 📁 store/
-│   │   │   ├── 📁 supabase/
-│   │   │   ├── 📁 types/
-│   │   │   ├── 📁 ui/
-│   │   │   │   ├── 📁 calendar/
-│   │   │   │   ├── 📁 icon/
-│   │   │   │   └── 📁 modal/
-│   │   │   ├── 📁 utils/
-│   │   │   └── 📄 middleware.ts
-├── 📄 .env.local
+```
+```
+├── alembic/                     # DB 마이그레이션 관련
+├── server/                      # 백엔드 (FastAPI)
+│   ├── api/                     # API 로직 (필요 시 세분화)
+│   ├── models/                  # SQLAlchemy 모델
+│   ├── routes/                  # API 라우트 (엔드포인트)
+│   ├── schemas/                 # Pydantic 스키마 (요청/응답)
+│   ├── cleanup.py               # 유저/데이터 정리 스크립트
+│   ├── database.py              # DB 연결 설정
+│   ├── main.py                  # FastAPI 진입점
+│   ├── qrSession.py             # QR 세션 관련 로직
+│   ├── requirements.txt         # Python 패키지 목록
+│   ├── security.py              # 인증/암호화 유틸
+│   └── websocket_manager.py     # 실시간 WebSocket 핸들러
+```
+```
+└── web/                         # 프론트엔드 (Next.js)
+    ├── public/                  # 정적 리소스 (이미지 등)
+    ├── src/                     # 실제 소스코드
+    │   ├── app/                 # 페이지 및 라우팅
+    │   │   ├── _components/     # 페이지 공통 컴포넌트
+    │   │   ├── _providers/      # 전역 Provider 설정
+    │   │   ├── (auth)/          # 인증 관련 서버 컴포넌트
+    │   │   ├── cart/            # 장바구니 페이지
+    │   │   ├── home/            # 홈 페이지
+    │   │   ├── mypage/          # 마이 페이지
+    │   │   ├── notion/          # Notion 관련
+    │   │   ├── payments/        # 결제 관련
+    │   │   ├── qr_session/      # QR 관련
+    │   │   ├── reviews/         # 리뷰 관련
+    │   │   ├── shop/            # 상품 목록/상세
+    │   │   ├── theater/         # 극장 페이지
+    │   │   ├── layout.tsx       # 공통 레이아웃
+    │   │   ├── page.tsx         # 진입점 페이지
+    │   │   └── globals.css      # 전역 CSS
+    │   ├── hooks/               # 커스텀 훅 (React Query 등)
+    │   ├── lib/                 # API 클라이언트, 유틸 함수 등
+    │   ├── store/               # Zustand 등 글로벌 상태 관리
+    │   ├── types/               # 전역 TypeScript 타입
+    │   ├── ui/                  # 공용 UI 컴포넌트
+    │   └── utils/               # 유틸리티 함수 모음
+    ├── .env.local               # 프론트 환경변수
+    ├── middleware.ts            # Next.js 미들웨어
 ```
 ---
 
@@ -183,10 +138,16 @@ QR 페이지 : QR 페이지 생성
 ![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge)
 
 ### Backend
+![TossPayments](https://img.shields.io/badge/Toss%20Payments-0064FF?style=for-the-badge)
+
+### DB
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
-### Payments
+### API
 ![TossPayments](https://img.shields.io/badge/Toss%20Payments-0064FF?style=for-the-badge)
+![Kakao%20SDK](https://img.shields.io/badge/Kakao%20SDK-FFCD00?style=for-the-badge&logo=kakao&logoColor=000000)
+![Google%20OAuth](https://img.shields.io/badge/Google%20OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
 ### LIB
 ![Day.js](https://img.shields.io/badge/Day.js-FF2D20?style=for-the-badge)
