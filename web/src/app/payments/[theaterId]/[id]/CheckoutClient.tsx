@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useUserHook } from '../../../../hooks/user/useUserHook';
 import { v4 as uuidv4 } from 'uuid';
 import { useTheaterData } from '../../../../hooks/theater/useTheaterData';
+import { formatPhoneNumber } from 'src/utils/formatPhoneNumber';
 
 const CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 
@@ -116,7 +117,8 @@ export default function CheckoutClient({
             <span className="font-medium text-gray-900">예매자:</span> {userData?.name}
           </p>
           <p>
-            <span className="font-medium text-gray-900">연락처:</span> {userData?.phone}
+            <span className="font-medium text-gray-900">연락처:</span>{' '}
+            {formatPhoneNumber(userData?.phone)}
           </p>
           <p className="text-lg font-bold text-right mt-4">
             총 결제 금액: <span className="text-blue-600">{totalPrice.toLocaleString()}원</span>
