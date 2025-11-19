@@ -5,7 +5,7 @@ export async function GET() {
     const allCookies = cookies();
 
     allCookies.getAll().forEach(({ name }) => {
-      if (name.startsWith('stage')) {
+      if (name.startsWith('')) {
         allCookies.delete(name);
       }
 

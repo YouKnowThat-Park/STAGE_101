@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+import { MypageUserResponse } from 'src/app/mypage/page';
 
-interface UserResponse {
+export interface UserResponse {
   id: string;
   name: string | null;
   phone: string | null;
@@ -9,7 +10,7 @@ interface UserResponse {
 }
 
 export const useUserHook = () => {
-  return useQuery<UserResponse, Error>({
+  return useQuery<MypageUserResponse, Error>({
     queryKey: ['userData', 'me'],
     queryFn: async () => {
       const res = await fetch('http://localhost:8000/users/me', {
@@ -18,7 +19,7 @@ export const useUserHook = () => {
       if (!res.ok) {
         throw new Error('유저 정보를 불러올 수 없습니다.');
       }
-      const data = (await res.json()) as UserResponse;
+      const data = (await res.json()) as MypageUserResponse;
       return data;
     },
     staleTime: 1000 * 60 * 5,

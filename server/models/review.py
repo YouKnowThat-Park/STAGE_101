@@ -9,7 +9,7 @@ class Review(Base):
     __tablename__ = "reviews"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     theater_id = Column(UUID(as_uuid=True), ForeignKey("theaters.id"), nullable=False)
     comment = Column(Text, nullable=False)
     display_name = Column(Text, nullable=False)

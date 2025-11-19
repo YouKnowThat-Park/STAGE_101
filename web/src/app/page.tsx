@@ -5,7 +5,7 @@ import HomeReviewsClient from './home/HomeReviewsClient';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 mb-[50px] px-4">
+    <div className="min-h-screen flex flex-col items-center py-10  px-4">
       {/* ✅ 슬라이드 이미지 반응형 */}
       <HomeImageSlider />
 

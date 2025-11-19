@@ -181,6 +181,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         "name": user.name,
         "nickname": user.nickname,
         "profile_img": user.profile_img,
+        "phone": user.phone,
         "point": user.point
     }
 

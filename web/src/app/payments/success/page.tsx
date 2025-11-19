@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { QrDetailResponse } from 'src/lib/api/qr_session/qrSession';
+import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
 
 const formatPhoneNumber = (phone: string | null | undefined) => {
   if (!phone) return '정보 없음';
@@ -43,7 +45,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   const headersList = headers();
   const cookie = headersList.get('cookie') ?? '';
 
-  let qrToken: string | null = null;
+  let qrUrl: string | null = null;
   let seatNumberText: string = '좌석 정보 없음';
 
   try {
@@ -114,8 +116,17 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
 
       if (target) {
         seatNumberText = target.seat_number.join(', ');
-        qrToken = target.qr_session?.qr_token ?? null;
       }
+    }
+
+    const qrRes = await fetch(`${apiBase}/qr-sessions/by-reservation/${reservationId}`, {
+      headers: { cookie },
+      cache: 'no-store',
+    });
+
+    if (qrRes.ok) {
+      const qrData: QrDetailResponse = await qrRes.json();
+      qrUrl = qrData.qr_url; // ⭐ QR 안에 넣을 최종 URL
     }
   } catch (err) {
     console.error('결제 확인 처리 중 오류:', err);
@@ -155,14 +166,8 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
         </div>
 
         <div className="flex justify-center mt-6">
-          {qrToken ? (
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrToken}`}
-              alt="QR Code"
-              width={150}
-              height={150}
-              className="rounded-md border"
-            />
+          {qrUrl ? (
+            <QrCodeImage value={qrUrl} size={100} />
           ) : (
             <p className="text-gray-400">QR 코드 생성 중...</p>
           )}

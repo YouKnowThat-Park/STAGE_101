@@ -9,7 +9,7 @@ class User(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    nickname = Column(Text, nullable=False)
+    nickname = Column(Text, nullable=False, unique=True)
     email = Column(Text, nullable=False)
     phone = Column(Text, nullable=False)
     name = Column(Text, nullable=False)

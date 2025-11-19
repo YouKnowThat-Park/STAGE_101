@@ -1,16 +1,20 @@
 'use client';
-import { useUserStore } from '../../store/userStore';
 import React, { useState } from 'react';
 import MypageHistory from './_components/MypageHistory';
 import MypageTicket from './_components/MypageTicket';
 import MypageProfile from './_components/MypageProfile';
-import { useUserHook } from '../../hooks/user/useUserHook';
+import { UserResponse, useUserHook } from '../../hooks/user/useUserHook';
 
 import MypageReview from './_components/MypageReview';
 
 import MypageFooter from './_components/MypageFooter';
 import { useRouter } from 'next/navigation';
 import { Noto_Serif_KR } from 'next/font/google';
+
+export interface MypageUserResponse extends UserResponse {
+  nickname: string;
+  profile_img: string;
+}
 
 const defaultProfileImg = '/default.png'; // ✅ public 폴더 이미지 경로
 
@@ -51,14 +55,14 @@ const buttonTabs = [
 ];
 
 const MyPage = () => {
-  const { id, nickname, profile_img } = useUserStore();
   const [selectedTab, setSelectedTab] = useState('ticket');
-  const { name, point } = useUserHook(id);
+  const { data } = useUserHook();
+  const UserDataType = data as MypageUserResponse;
 
   const router = useRouter();
   return (
     <div
-      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative`}
+      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative `}
     >
       {/* 📱 상단 로고 (모바일 전용) */}
       <div
@@ -77,21 +81,21 @@ const MyPage = () => {
         <div className="w-full max-w-full lg:max-w-[600px] bg-[#151515] flex flex-col rounded-md shadow-lg">
           {/* 프로필 */}
           <MypageProfile
-            profile_img={profile_img || defaultProfileImg}
-            nickname={nickname}
-            name={name}
-            point={point}
+            profile_img={UserDataType?.profile_img || defaultProfileImg}
+            nickname={UserDataType?.nickname ?? '미지정'}
+            name={UserDataType?.name ?? '미지정'}
+            point={UserDataType?.point ?? '미지정'}
           />
 
           {/* 탭 네비게이션 */}
-          <nav className="bg-white flex justify-around lg:justify-center items-center gap-4 lg:gap-20 border-b border-gray-300 px-2">
+          <nav className="bg-[#151515] flex justify-around lg:justify-center items-center gap-4 lg:gap-20 border-b border-gray-300 px-2">
             {buttonTabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setSelectedTab(tab.key)}
                 className={`py-3 text-sm font-semibold border-b-2 ${
                   selectedTab === tab.key
-                    ? 'border-black text-black'
+                    ? 'border-black text-white'
                     : 'border-transparent text-gray-400'
                 }`}
               >
@@ -101,7 +105,7 @@ const MyPage = () => {
           </nav>
 
           {/* 탭 콘텐츠 */}
-          <div className="bg-white w-full p-4 max-[431px]:p-0 overflow-x-hidden">
+          <div className="bg-[#151515] w-full p-4 max-[431px]:p-0 overflow-x-hidden ">
             {selectedTab === 'ticket' && <MypageTicket />}
             {selectedTab === 'review' && <MypageReview />}
             {selectedTab === 'history' && <MypageHistory />}
