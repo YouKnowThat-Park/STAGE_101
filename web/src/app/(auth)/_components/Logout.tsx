@@ -4,6 +4,7 @@ import { SafeUserType, useUserStore } from '../../../store/userStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
+import Stage101Logo from 'src/ui/logo/Stage101Logo';
 
 export interface LogoutProps {
   user: SafeUserType | null;
@@ -41,9 +42,7 @@ const Logout = ({ user }: LogoutProps) => {
         max-[500px]:scroll-smooth max-[500px]:[&::-webkit-scrollbar]:hidden
       "
     >
-      <Link href="/" className="text-xl font-bold text-[#C9A66B] flex-shrink-0">
-        STAGE_101
-      </Link>
+      <Stage101Logo />
 
       {isLoggedIn ? (
         <button onClick={handleLogout} className="text-red-500 flex-shrink-0">
