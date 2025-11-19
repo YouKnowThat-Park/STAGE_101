@@ -11,7 +11,7 @@ import MypageFooter from './_components/MypageFooter';
 import { useRouter } from 'next/navigation';
 import { Noto_Serif_KR } from 'next/font/google';
 
-interface MypageUserResponse extends UserResponse {
+export interface MypageUserResponse extends UserResponse {
   nickname: string;
   profile_img: string;
 }

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, AnyHttpUrl
 
 class QrSessionBase(BaseModel):
     user_id: UUID
@@ -37,5 +37,6 @@ class QrDetailResponse(BaseModel):
     main_img: Optional[str] = None
     viewed_at: Optional[datetime] = None
     show_time: Optional[str] = None
+    qr_url: AnyHttpUrl
 
     model_config = ConfigDict(from_attributes=True)

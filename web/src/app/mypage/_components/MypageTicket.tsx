@@ -6,6 +6,7 @@ import { useUserStore } from '../../../store/userStore';
 import NoTicketIcon from '../../../ui/icon/NoTicketIcon';
 import Image from 'next/image';
 import { useState } from 'react';
+import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
 
 const formatTime = (isoString: string) => {
   const date = new Date(isoString);
@@ -75,15 +76,6 @@ const MypageTicket = () => {
                           <p>{ticket.type}</p>
                           <p>{ticket.seat_number}</p>
                         </div>
-                        <span className="flex-shrink-0">
-                          <Image
-                            src={`https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=${ticket.qr_token}`}
-                            alt="QR Code"
-                            width={50}
-                            height={50}
-                            className="w-[50px] h-[50px]"
-                          />
-                        </span>
                       </div>
 
                       <div className="flex gap-4 text-sm justify-center items-center mt-1 font-black max-[431px]:hidden">
@@ -98,13 +90,7 @@ const MypageTicket = () => {
                       </div>
 
                       <div className="flex justify-center mt-2 md:mr-10 max-[431px]:hidden">
-                        <Image
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${ticket.qr_token}`}
-                          alt="QR Code"
-                          width={60}
-                          height={60}
-                          className="border"
-                        />
+                        <QrCodeImage value={ticket.qr_token} size={50} />
                       </div>
                     </div>
                   </div>

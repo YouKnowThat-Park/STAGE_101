@@ -12,6 +12,7 @@ from server.models.reservation import Reservation
 from server.models.theater import Theater
 from server.schemas.qr_session import QrSessionCreate, QrSessionResponse, QrDetailResponse
 from .user import get_current_user
+from server.qrSession import settings
 
 router = APIRouter(prefix="/qr-sessions", tags=["QR Sessions"])
 
@@ -106,6 +107,8 @@ def get_qr_by_reservation(
 
     qr, reservation, theater = row
 
+    qr_url = f"{settings.FRONTEND_BASE_URL}/qr_session/{qr.qr_token}"
+
     return QrDetailResponse(
         qr_token=qr.qr_token,
         theater_id=theater.id,
@@ -113,4 +116,48 @@ def get_qr_by_reservation(
         main_img=theater.main_img,
         viewed_at=reservation.viewed_at,
         show_time=reservation.show_time,
+        qr_url=qr_url
+    )
+
+
+@router.get("/by-token/{qr_token}", response_model=QrDetailResponse)
+def get_qr_by_token(
+    qr_token: str,
+    db: Session = Depends(get_db),
+):
+    """
+    QR 코드(카메라 스캔)로 들어오는 전용 조회.
+    - 로그인 없이 qr_token 만으로 조회
+    - 가장 최근 QR 세션 기준으로
+      - qr_token
+      - theater_id, theater_name, main_img
+      - viewed_at, show_time
+      - qr_url
+      을 내려준다.
+    """
+
+    row = (
+        db.query(QrSession, Reservation, Theater)
+        .join(Reservation, Reservation.id == QrSession.reservation_id)
+        .join(Theater, Theater.id == QrSession.theater_id)
+        .filter(QrSession.qr_token == qr_token)
+        .order_by(QrSession.created_at.desc())
+        .first()
+    )
+
+    if not row:
+        raise HTTPException(status_code=404, detail="QR 세션을 찾을 수 없습니다.")
+
+    qr, reservation, theater = row
+
+    qr_url = f"{settings.FRONTEND_BASE_URL}/qr_session/{qr.qr_token}"
+
+    return QrDetailResponse(
+        qr_token=qr.qr_token,
+        theater_id=theater.id,
+        theater_name=theater.name,
+        main_img=theater.main_img,
+        viewed_at=reservation.viewed_at,
+        show_time=reservation.show_time,
+        qr_url=qr_url,
     )

@@ -16,3 +16,4 @@ class QrSession(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     expires_at = Column(DateTime)
     reservation = relationship("Reservation", back_populates="qr_session")
+    theater = relationship("Theater", back_populates="qr_sessions")
