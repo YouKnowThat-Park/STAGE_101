@@ -2,7 +2,6 @@
 
 import { create } from 'zustand';
 import { createJSONStorage, persist, StateStorage } from 'zustand/middleware';
-import CryptoJS from 'crypto-js';
 import { decryptString, encryptString } from 'src/utils/secureStorage';
 
 /** 🔐 암호화에 쓸 키 (포트폴리오라 env 없으면 기본값 사용) */

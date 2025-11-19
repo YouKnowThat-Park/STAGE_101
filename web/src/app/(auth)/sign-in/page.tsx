@@ -1,13 +1,13 @@
 'use client';
 
-// import GoogleLogin from '../../../ui/icon/GoogleLogin';
-// import KakaoLogin from '../../../ui/icon/KakaoLogin';
+import GoogleLogin from '../../../ui/icon/GoogleLogin';
+import KakaoLogin from '../../../ui/icon/KakaoLogin';
 import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
 import signIn from './actions';
-// import { startTransition } from 'react';
-// import { socialLogin } from './kakao/actions';
+
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 const Page = () => {
   const router = useRouter();
@@ -38,9 +38,9 @@ const Page = () => {
     router.push('/sign-up');
   };
 
-  // const handleSocialSignIn = (provider: 'kakao' | 'google') => {
-  //   startTransition(() => socialLogin(provider));
-  // };
+  const handleSocialSignIn = (provider: 'kakao' | 'google') => {
+    window.location.href = `${apiBase}/users/social/${provider}/signin`;
+  };
 
   return (
     <div className=" py-20 bg-black text-white flex items-center justify-center">
@@ -63,14 +63,14 @@ const Page = () => {
         </div>
 
         {/* 소셜 로그인 */}
-        {/* <div className="flex justify-center gap-6 mt-2">
+        <div className="flex justify-center gap-6 mt-2">
           <button onClick={() => handleSocialSignIn('kakao')}>
             <KakaoLogin />
           </button>
           <button onClick={() => handleSocialSignIn('google')}>
             <GoogleLogin />
           </button>
-        </div> */}
+        </div>
 
         {/* 로그인 버튼 */}
         <button
