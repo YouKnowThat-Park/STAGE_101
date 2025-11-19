@@ -13,7 +13,7 @@ const Providers = ({ children, initialUser }: ProvidersProps) => {
   const [queryClient] = useState(() => new QueryClient());
   const initializedRef = useRef(false);
 
-  // ⭐ 첫 클라이언트 렌더에서 한 번만 zustand에 서버 유저 주입
+  // 첫 클라이언트 렌더에서 한 번만 zustand에 서버 유저 주입
   if (!initializedRef.current) {
     initializeUserStore(initialUser);
     initializedRef.current = true;
