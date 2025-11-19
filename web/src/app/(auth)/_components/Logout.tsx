@@ -14,6 +14,7 @@ const Logout = ({ user }: LogoutProps) => {
   const router = useRouter();
   const handleLogout = async () => {
     const res = await fetch('/api/logout', { method: 'GET' });
+    localStorage.clear();
 
     if (res.ok) {
       alert('로그아웃 성공!');
