@@ -1,9 +1,9 @@
 'use client';
 
-import { SafeUserType, useUserStore } from '../../../store/userStore';
+import { SafeUserType } from '../../../store/userStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Stage101Logo from 'src/ui/logo/Stage101Logo';
 
 export interface LogoutProps {
@@ -13,11 +13,12 @@ export interface LogoutProps {
 const Logout = ({ user }: LogoutProps) => {
   const router = useRouter();
   const handleLogout = async () => {
-    const res = await fetch('/api/auth/logout', { method: 'GET' });
+    const res = await fetch('/api/logout', { method: 'GET' });
 
     if (res.ok) {
       alert('로그아웃 성공!');
       router.push('/');
+      router.refresh();
     } else {
       alert('로그아웃 실패');
     }

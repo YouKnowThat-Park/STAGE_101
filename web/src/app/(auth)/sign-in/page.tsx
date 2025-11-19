@@ -1,14 +1,13 @@
 'use client';
 
-import GoogleLogin from '../../../ui/icon/GoogleLogin';
-import KakaoLogin from '../../../ui/icon/KakaoLogin';
+// import GoogleLogin from '../../../ui/icon/GoogleLogin';
+// import KakaoLogin from '../../../ui/icon/KakaoLogin';
 import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
 import signIn from './actions';
-import { useUserStore } from '../../../store/userStore';
-import { startTransition } from 'react';
-import { socialLogin } from './kakao/actions';
+// import { startTransition } from 'react';
+// import { socialLogin } from './kakao/actions';
 
 const Page = () => {
   const router = useRouter();
@@ -22,8 +21,6 @@ const Page = () => {
         return;
       }
 
-      useUserStore.getState().setUser(result.user);
-
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
         localStorage.setItem('savedEmail', data.email);
@@ -32,6 +29,7 @@ const Page = () => {
       }
 
       router.push('/');
+      router.refresh();
     } catch (error: any) {
       alert(error.message || '로그인 중 오류가 발생했습니다.');
     }
@@ -40,9 +38,9 @@ const Page = () => {
     router.push('/sign-up');
   };
 
-  const handleSocialSignIn = (provider: 'kakao' | 'google') => {
-    startTransition(() => socialLogin(provider));
-  };
+  // const handleSocialSignIn = (provider: 'kakao' | 'google') => {
+  //   startTransition(() => socialLogin(provider));
+  // };
 
   return (
     <div className=" py-20 bg-black text-white flex items-center justify-center">
@@ -65,14 +63,14 @@ const Page = () => {
         </div>
 
         {/* 소셜 로그인 */}
-        <div className="flex justify-center gap-6 mt-2">
+        {/* <div className="flex justify-center gap-6 mt-2">
           <button onClick={() => handleSocialSignIn('kakao')}>
             <KakaoLogin />
           </button>
           <button onClick={() => handleSocialSignIn('google')}>
             <GoogleLogin />
           </button>
-        </div>
+        </div> */}
 
         {/* 로그인 버튼 */}
         <button
