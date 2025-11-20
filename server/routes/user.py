@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, Response, Request, UploadFile, File, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy import literal, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timezone
+from botocore.exceptions import BotoCoreError, ClientError
+from typing import Optional
 
 import os
 import uuid
@@ -11,6 +13,7 @@ import random
 import string
 import httpx
 import urllib.parse
+import boto3
 
 from server.database import get_db
 from server.models.user import User
@@ -19,7 +22,7 @@ from server.models.payment import Payment
 from server.models.review import Review
 from server.models.cart import Cart
 from server.models.cart_history import CartHistory
-from server.schemas.user import UserCreate, AuthResponse, UserSignIn, DeleteUserRequest
+from server.schemas.user import UserCreate, AuthResponse, UserSignIn, DeleteUserRequest, UserUpdate
 from server.security import hash_password, create_access_token, verify_password, verify_access_token
 
 FRONTEND_REDIRECT_URL = os.getenv("FRONTEND_REDIRECT_URL", "http://localhost:3000")
@@ -36,6 +39,17 @@ GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.getenv(
     "GOOGLE_REDIRECT_URI",
     "http://localhost:8000/users/social/google/callback",
+)
+
+AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
+S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "stage101")
+S3_PROFILE_PREFIX = os.getenv("S3_PROFILE_PREFIX", "user_profile_img/")
+
+s3_client = boto3.client(
+    "s3",
+    region_name=AWS_REGION,
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 
 router = APIRouter(prefix="/users", tags=["User"])
@@ -204,6 +218,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
+        
     
     return {
         "id": str(user.id),
@@ -454,3 +469,91 @@ async def google_callback(code: str, db: Session =Depends(get_db)):
         max_age=60 * 60,
     )
     return response
+
+@router.post("/me/profile-image")
+async def upload_profile_image(
+    request: Request,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    token = request.cookies.get("__stage__")
+    if not token:
+        raise HTTPException(status_code=401, detail="인증 토큰이 없습니다.")
+    
+    payload = verify_access_token(token)
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=404, detail="토큰 정보가 올바르지 않습니다.")
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
+      
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="이미지 파일만 업로드할 수 있습니다.")
+
+    _, ext = os.path.splitext(file.filename or "")
+    ext = ext.lower()
+    if ext not in [".jpg", ".jpeg", ".png", ".webp"]:
+        ext = ".jpg"
+
+    key = f"{S3_PROFILE_PREFIX}{uuid.uuid4()}{ext}"
+
+    try:
+        content = await file.read()
+
+        s3_client.put_object(
+            Bucket=S3_BUCKET_NAME,
+            Key=key,
+            Body=content,
+            ContentType = file.content_type or "image/jpeg"
+        )
+
+    except (BotoCoreError, ClientError) as e:
+        raise HTTPException(status_code=500, detail=f"S3 업로드 중 오류가 발생했습니다: {str(e)}")
+    
+    profile_url = f"https://{S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{key}"
+    user.profile_img = profile_url
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "프로필 이미지 업로드 완료",
+        "profile_img": user.profile_img
+    }
+
+@router.patch("/me/update")
+def update_user_info(
+    data: UserUpdate,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    token = request.cookies.get("__stage__")
+    if not token:
+        raise HTTPException(status_code=401, detail="인증 토큰이 없습니다.")
+    
+    payload = verify_access_token(token)
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=401, detail="토큰 정보가 올바르지 않습니다.")
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
+    
+    # 업데이트할 항목 반영
+    if data.nickname:
+        user.nickname = data.nickname
+    if data.profile_img:
+        user.phone = data.profile_img
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "유저 정보가 성공적으로 업데이트되었습니다.",
+        "user": {
+            "nickname": user.nickname,
+            "profile_img": user.profile_img,
+        }
+    }

@@ -1,10 +1,23 @@
-export const getValidImageUrl = (image_url: string | string[]) => {
+const DEFAULT_IMAGE = '/default.png';
+
+export const getValidImageUrl = (image_url?: string | null): string => {
+  if (!image_url) return DEFAULT_IMAGE;
+
   try {
-    if (Array.isArray(image_url)) {
-      image_url = image_url[0]; // 배열이면 첫 번째 값 사용
+    const parsed = JSON.parse(image_url);
+    if (typeof parsed === 'string' && parsed.trim() !== '') {
+      return parsed;
     }
-    return JSON.parse(image_url); // `\"https://...\"` 같은 형식이면 변환
-  } catch (error) {
-    return image_url.toString().replace(/^"+|"+$/g, ''); // JSON 파싱 실패 시 앞뒤 따옴표 제거
+  } catch {}
+  const str = image_url.toString().trim();
+  if (!str) return DEFAULT_IMAGE;
+
+  if (str.startsWith('http://') || str.startsWith('https://') || str.startsWith('data:')) {
+    return str;
   }
+
+  if (str.startsWith('/')) {
+    return str;
+  }
+  return `/${str}`;
 };

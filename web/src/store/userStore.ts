@@ -45,11 +45,13 @@ export const useUserStore = create<UserState>()(
       profile_img: null,
       point: null,
       token: null,
+      name: '',
 
       setUser: (user, token = null) => {
         if (user) {
           set({
             id: user.id,
+            name: user.name,
             nickname: user.nickname,
             profile_img: user.profile_img,
             point: user.point,
@@ -62,6 +64,7 @@ export const useUserStore = create<UserState>()(
             profile_img: null,
             point: null,
             token: null,
+            name: '',
           });
         }
       },
@@ -73,6 +76,7 @@ export const useUserStore = create<UserState>()(
           profile_img: null,
           point: null,
           token: null,
+          name: '',
         });
       },
     }),
