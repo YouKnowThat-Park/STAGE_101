@@ -6,6 +6,7 @@ import { useTicketHistory } from 'src/hooks/reservation/useTicketHistory';
 import { useCreateReview } from 'src/hooks/review/useCreateReview';
 import { ReviewImageType } from 'src/types/review/review-type';
 import { ReservationType } from 'src/types/reservation/reservation-type';
+import { getValidImageUrl } from 'src/app/shop/_components/getValidImageUrl';
 
 const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
   const { id: userId, nickname, profile_img } = useUserStore();
@@ -56,10 +57,13 @@ const ReviewAddModal = ({ isOpen, onClose, onSubmit }: ReviewModalProps) => {
 
     const pastViews = ticketForTheater.length;
 
+    const validPoster = ticket.main_img ? getValidImageUrl(ticket.main_img) : '/default.png';
+    const validProfile = profile_img ? getValidImageUrl(profile_img) : '/default.png';
+
     setPreviewReview({
       theater: ticket.theater_name || '극장 선택 안됨',
       comment,
-      image: imageType === 'poster' ? ticket.main_img || '/default.png' : '/default.png',
+      image: imageType === 'poster' ? validPoster : '',
       profileImg: imageType === 'profile' ? profile_img || '/default.png' : '/default.png',
       date: new Date().toISOString().split('T')[0],
       // TODO: name 필드를 userStore에 추가해두면 여기서 진짜 이름 쓸 수 있음
