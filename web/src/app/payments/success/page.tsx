@@ -3,14 +3,7 @@ import { redirect } from 'next/navigation';
 import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
 import { PaymentSuccessPageProps } from 'src/types/payment/payment-type';
 import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
-
-const formatPhoneNumber = (phone: string | null | undefined) => {
-  if (!phone) return '정보 없음';
-  const digits = phone.replace(/\D/g, '');
-  return digits.length === 11
-    ? `${digits.slice(0, 3)}-${digits.slice(3, 4)}**-${digits.slice(7, 9)}**`
-    : '유효하지 않은 번호';
-};
+import { formatPhoneNumber } from 'src/utils/formatPhoneNumber';
 
 export default async function PaymentSuccessPage({ searchParams }: PaymentSuccessPageProps) {
   const getParam = (key: string): string | undefined => {

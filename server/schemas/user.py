@@ -3,15 +3,19 @@ from typing import Optional, TypedDict
 from datetime import datetime
 from uuid import UUID
 
+class UserUpdate(BaseModel):
+    nickname: Optional[str] = None
+    profile_img: Optional[str] = None
+    
 class UserResponse(BaseModel):
     id: UUID
     created_at: datetime
-    nickname: str
+    nickname: Optional[str] = None
     email: EmailStr
     phone: str
     name: str
     point: Optional[int]
-    profile_img: Optional[str]
+    profile_img: Optional[str] = None
 
     class Config:
         orm_mode =True

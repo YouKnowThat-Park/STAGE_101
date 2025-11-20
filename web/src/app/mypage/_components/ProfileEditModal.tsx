@@ -3,10 +3,12 @@ import { useUserStore } from '../../../store/userStore';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { ProfileEditModalProps } from 'src/types/mypage/mypage-type';
+import { updateUserProfileImage } from 'src/lib/api/user/updateUserProfileImage';
 
 const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
-  const user = useUserStore(); // ✅ 전체 유저 정보 가져오기
-  const [newNickname, setNewNickname] = useState<string>(user.nickname ?? '');
+  const user = useUserStore();
+
+  const [newNickname, setNewNickname] = useState<string>('');
   const [newProfileImg, setNewProfileImg] = useState<string>(user.profile_img ?? '');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +23,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
     }
   }, [isOpen, user.nickname, user.profile_img]);
 
-  // ✅ 파일이 변경되면 이미지 미리보기 생성
+  // 파일이 변경되면 이미지 미리보기 생성
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -30,7 +32,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (reader.result) {
-          setNewProfileImg(reader.result.toString()); // ✅ 이미지 미리보기 적용
+          setNewProfileImg(reader.result.toString());
         }
       };
       reader.readAsDataURL(file);
@@ -44,15 +46,17 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
     try {
       let profileImageUrl = newProfileImg;
 
-      // if (selectedFile) {
-      //   profileImageUrl = await uploadImageToSupabase(selectedFile, user.id);
-      // }
+      if (selectedFile) {
+        profileImageUrl = await updateUserProfileImage(selectedFile);
+      }
 
-      const res = await fetch('/api/user', {
+      const nicknameToSave = newNickname.trim() || user.nickname || '';
+
+      const res = await fetch('http://localhost:8000/users/me/update', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
-          id: user.id,
           nickname: newNickname,
           profile_img: profileImageUrl,
         }),
@@ -66,7 +70,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
 
       useUserStore.setState({
         ...user,
-        nickname: newNickname,
+        nickname: nicknameToSave,
         profile_img: profileImageUrl,
       });
 
@@ -79,7 +83,8 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   };
 
   const isDisabled =
-    isLoading || (newNickname === user.nickname && newProfileImg === user.profile_img);
+    isLoading ||
+    (newNickname === (user.nickname ?? '') && newProfileImg === (user.profile_img ?? ''));
 
   if (!isOpen) return null;
 
