@@ -27,8 +27,6 @@ const Page = () => {
         setUser(result.user ?? null);
       }
 
-      console.log('setUser', setUser);
-
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
         localStorage.setItem('savedEmail', data.email);
