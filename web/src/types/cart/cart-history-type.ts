@@ -1,10 +1,16 @@
+export type CartHistoryStatus = 'pending' | 'completed' | 'canceled';
+
 export interface CartHistoryItem {
   id: string;
   payment_key: string;
-  name?: string;
-  image_url?: string;
-  quantity: number;
   total_price: number;
+  quantity: number;
+  status: CartHistoryStatus;
+  image_url?: string;
+  name?: string;
+  cart_id?: string;
+  cart_item_ids: string[];
+  created_at: string;
 }
 
 export interface CartSuccessProps {

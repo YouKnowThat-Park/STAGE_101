@@ -1,3 +1,5 @@
+import { CartHistoryItem } from 'src/types/cart/cart-history-type';
+
 export const postCartHistory = async (payload: {
   payment_key: string;
   total_price: number;
@@ -7,7 +9,7 @@ export const postCartHistory = async (payload: {
   name?: string;
   cart_id?: string;
   cart_item_ids: string[];
-}) => {
+}): Promise<CartHistoryItem> => {
   const res = await fetch('http://localhost:8000/cart-histories', {
     method: 'POST',
     credentials: 'include',
@@ -16,14 +18,13 @@ export const postCartHistory = async (payload: {
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}) as any);
+    const err: { detail?: string } = await res.json().catch(() => ({}));
     throw new Error(err.detail || '거래 기록 생성 실패');
   }
-
   return res.json();
 };
 
-export const fetchCartHistory = async () => {
+export const fetchCartHistory = async (): Promise<CartHistoryItem[]> => {
   const res = await fetch('http://localhost:8000/cart-histories/me', {
     credentials: 'include',
   });
@@ -36,7 +37,9 @@ export const fetchCartHistory = async () => {
   return res.json();
 };
 
-export const fetchCartHistoriesByPayment = async (paymentKey: string) => {
+export const fetchCartHistoriesByPayment = async (
+  paymentKey: string,
+): Promise<CartHistoryItem[]> => {
   const res = await fetch(`http://localhost:8000/cart-histories/by-payment/${paymentKey}`, {
     credentials: 'include',
     cache: 'no-store',
