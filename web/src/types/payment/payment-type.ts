@@ -76,3 +76,14 @@ export type ReservationForPayment = {
   seat_number: string[];
   qr_session?: { qr_token?: string | null } | null;
 };
+
+export type CreateCartHistoryPayload = {
+  payment_key: string;
+  total_price: number;
+  quantity: number;
+  status: 'pending' | 'completed' | 'canceled';
+  image_url?: string;
+  name?: string;
+  cart_id?: string;
+  cart_item_ids: string[];
+};
