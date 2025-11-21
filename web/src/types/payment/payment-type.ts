@@ -62,3 +62,17 @@ export type SearchParams = { [key: string]: string | string[] | undefined };
 export interface PaymentSuccessPageProps {
   searchParams: SearchParams;
 }
+
+export interface PaymentHistoryItem {
+  id: string;
+  reservation_id: string;
+  amount: number;
+  payment_key: string;
+  status: string;
+}
+
+export type ReservationForPayment = {
+  id: string;
+  seat_number: string[];
+  qr_session?: { qr_token?: string | null } | null;
+};

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchCartHistory } from 'src/lib/api/cart/cartHistory';
+import { fetchCartHistory } from 'src/lib/api/cart_history/cartHistory';
 
 export const useCartHistory = () => {
   const { data, isLoading, error } = useQuery({

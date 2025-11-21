@@ -1,35 +1,32 @@
 import { notFound } from 'next/navigation';
-import { headers, cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 import HomeCountdownText from '../_components/HomeCountdownText';
 import { CartHistoryItem, CartSuccessProps } from 'src/types/cart/cart-history-type';
+import { fetchCartHistoryByIdServer } from 'src/lib/api/cart/fetchCartHistoryByIdServer';
+import { fetchCartHistoriesByPaymentKeyServer } from 'src/lib/api/cart/fetchCartHistoriesByPaymentKeyServer';
 
 const API = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
 
 export default async function CartSuccessPage({ params }: CartSuccessProps) {
   //  SSR에서 인증 쿠키를 전달해야 /by-payment가 내 소유만 조회됨
-  const hdrs = new Headers(headers());
-  hdrs.set('cookie', cookies().toString());
+  const headersList = headers();
+  const cookie = headersList.get('cookie') ?? '';
 
-  // 1) 단건 조회 → payment_key 확보
-  const oneRes = await fetch(`${API}/cart-histories/${params.id}`, {
-    method: 'GET',
-    cache: 'no-store',
-    headers: hdrs,
-  });
-  if (!oneRes.ok) return notFound();
-  const one: CartHistoryItem = await oneRes.json();
+  let one: CartHistoryItem;
+  let items: CartHistoryItem[];
 
-  // 2) 같은 payment_key의 전체 히스토리 조회
-  const listRes = await fetch(`${API}/cart-histories/by-payment/${one.payment_key}`, {
-    cache: 'no-store',
-    headers: hdrs,
-  });
+  try {
+    // 1) 단건 조회 → payment_key 확보
+    one = await fetchCartHistoryByIdServer(params.id, { cookie });
 
-  if (!listRes.ok) return notFound();
-
-  const items: CartHistoryItem[] = await listRes.json();
+    // 2) 같은 payment_key의 전체 히스토리 조회
+    items = await fetchCartHistoriesByPaymentKeyServer(one.payment_key, { cookie });
+  } catch (err) {
+    console.error('장바구니 결제 성공 페이지 데이터 조회 실패:', err);
+    return notFound();
+  }
 
   const totalQty = items.reduce((s, i) => s + (i.quantity ?? 0), 0);
   const totalPrice = items.reduce((s, i) => s + (i.total_price ?? 0), 0);

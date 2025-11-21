@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateCartQuantity } from 'src/lib/api/cart/cart';
+import { updateCartQuantity } from 'src/lib/api/cart/updateCartQuantity';
 
 const useUpdateCartQuantity = () => {
   const queryClient = useQueryClient();

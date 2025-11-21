@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchOccupiedSeats } from 'src/lib/api/reservation/reservationHistory';
+import { fetchOccupiedSeats } from 'src/lib/api/reservation/fetchOccupiedSeats';
 import {
   ReservedSeatsMessage,
   UseReservedSeatsSocketOptions,

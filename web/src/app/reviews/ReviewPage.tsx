@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useUserStore } from '../../store/userStore';
 import ReviewAddModal from './_components/ReviewAddModal';
-import { useInfiniteReviews } from 'src/hooks/review/useReviewsData';
+import { useInfiniteReviews } from 'src/hooks/review/useInfiniteReviews';
 import { ReviewsType } from 'src/types/review/review-type';
 
 const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {

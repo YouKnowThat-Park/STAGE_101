@@ -1,5 +1,3 @@
-'use client';
-
 import { useRouter } from 'next/navigation';
 import { PaymentsParams } from 'src/types/payment/payment-type';
 

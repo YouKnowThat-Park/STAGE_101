@@ -545,7 +545,7 @@ def update_user_info(
     if data.nickname:
         user.nickname = data.nickname
     if data.profile_img:
-        user.phone = data.profile_img
+        user.profile_img = data.profile_img
 
     db.commit()
     db.refresh(user)

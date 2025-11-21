@@ -1,5 +1,5 @@
-import { fetchTicketHistory } from '../../lib/api/reservation/reservationHistory';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchTicketHistory } from 'src/lib/api/reservation/fetchTicketHistory';
 
 export const useTicketHistory = (userId: string) => {
   const queryClient = useQueryClient(); // react-query의 queryClient를 가져옵니다.
