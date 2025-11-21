@@ -4,8 +4,8 @@ import Image from 'next/image';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 import HomeCountdownText from '../_components/HomeCountdownText';
 import { CartHistoryItem, CartSuccessProps } from 'src/types/cart/cart-history-type';
-import { fetchCartHistoryByIdServer } from 'src/lib/api/cart/fetchCartHistoryByIdServer';
-import { fetchCartHistoriesByPaymentKeyServer } from 'src/lib/api/cart/fetchCartHistoriesByPaymentKeyServer';
+import { fetchCartHistoryByIdServer } from 'src/lib/api/cart_history/fetchCartHistoryByIdServer';
+import { fetchCartHistoriesByPaymentKeyServer } from 'src/lib/api/cart_history/fetchCartHistoriesByPaymentKeyServer';
 
 const API = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
 
