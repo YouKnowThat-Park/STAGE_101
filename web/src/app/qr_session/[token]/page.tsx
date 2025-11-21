@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useQrDetailByToken } from 'src/hooks/qr_session/useQrDetail';
 import { QrAdminPageProps } from 'src/types/qr-session/qr-session-type';
 
-const page = ({ params }: QrAdminPageProps) => {
+const QrCodepage = ({ params }: QrAdminPageProps) => {
   const qrToken = params.token;
   const { data, error, isPending } = useQrDetailByToken(qrToken);
 
@@ -51,4 +51,4 @@ const page = ({ params }: QrAdminPageProps) => {
   );
 };
 
-export default page;
+export default QrCodepage;
