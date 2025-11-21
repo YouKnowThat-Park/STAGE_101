@@ -3,7 +3,7 @@ import { useUserStore } from '../../../store/userStore';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { ProfileEditModalProps } from 'src/types/mypage/mypage-type';
-import { updateUserProfileImage } from 'src/lib/api/user/updateUserProfileImage';
+import { useUpdateUserProfileImage } from 'src/hooks/user/useUpdateUserProfileImage';
 
 const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const user = useUserStore();
@@ -11,7 +11,9 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const [newNickname, setNewNickname] = useState<string>('');
   const [newProfileImg, setNewProfileImg] = useState<string>(user.profile_img ?? '');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const { mutateAsync: uploadProfileImage, isPending: isUploading } = useUpdateUserProfileImage();
 
   useEffect(() => {
     if (!isOpen) {
@@ -40,34 +42,40 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   };
 
   const handleSave = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
+    if (isSaving || isUploading) return;
+    setIsSaving(true);
 
     try {
       let profileImageUrl = newProfileImg;
 
+      // 1) 이미지 파일이 선택되어 있으면 → 업로드 + URL 반환 + React Query 캐시 업데이트
       if (selectedFile) {
-        profileImageUrl = await updateUserProfileImage(selectedFile);
+        profileImageUrl = await uploadProfileImage(selectedFile);
+        // 미리보기도 실제 URL로 교체
+        setNewProfileImg(profileImageUrl);
       }
 
+      // 2) 닉네임 정리
       const nicknameToSave = newNickname.trim() || user.nickname || '';
 
-      const res = await fetch('http://localhost:8000/users/me/update', {
+      // 3) 닉네임/프로필 정보 서버에 반영
+      const res = await fetch(`http://localhost:8000/users/me/update`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          nickname: newNickname,
+          nickname: nicknameToSave,
           profile_img: profileImageUrl,
         }),
       });
 
-      const result = await res.json();
+      const result = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(result.error || '서버 오류 발생');
+        throw new Error((result as any).error || '서버 오류 발생');
       }
 
+      // 4) Zustand 스토어도 동기화
       useUserStore.setState({
         ...user,
         nickname: nicknameToSave,
@@ -77,13 +85,15 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
       setTimeout(() => onClose(), 300);
     } catch (error) {
       console.error('❌ 프로필 업데이트 오류:', error);
+      alert('프로필 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
   const isDisabled =
-    isLoading ||
+    isSaving ||
+    isUploading ||
     (newNickname === (user.nickname ?? '') && newProfileImg === (user.profile_img ?? ''));
 
   if (!isOpen) return null;
@@ -134,7 +144,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
           onClick={handleSave}
           disabled={isDisabled}
         >
-          {isLoading ? '저장 중...' : '저장'}
+          {isUploading ? '저장 중...' : '저장'}
         </button>
       </div>
     </div>
