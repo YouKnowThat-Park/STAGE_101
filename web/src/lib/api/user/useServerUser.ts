@@ -24,6 +24,7 @@ export async function getCurrentUser(): Promise<SafeUserType | null> {
       nickname: data.name ?? '',
       profile_img: data.profile_img ?? '',
       point: data.point ?? null,
+      name: data.name ?? '',
     };
 
     return user;

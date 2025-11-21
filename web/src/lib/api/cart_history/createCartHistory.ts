@@ -9,7 +9,7 @@ export const createCartHistory = async (payload: {
   name?: string;
   cart_id?: string;
   cart_item_ids: string[];
-}): Promise<CartHistoryItem> => {
+}): Promise<CartHistoryItem[]> => {
   const res = await fetch('http://localhost:8000/cart-histories', {
     method: 'POST',
     credentials: 'include',

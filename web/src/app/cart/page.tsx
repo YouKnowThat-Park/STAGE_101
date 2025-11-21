@@ -12,9 +12,9 @@ import PlusIcon from '../../ui/icon/PlusIcon';
 import useUpdateCartQuantity from '../../hooks/cart/useUpdateCartQuantity';
 import { useDeleteCartItem } from 'src/hooks/cart/useDeleteCartItem';
 import CartSkeleton from './_components/CartSkeleton';
-import { usePostCartHistory } from 'src/hooks/cart_history/usePostCartHistory';
 import { v4 as uuidv4 } from 'uuid';
 import { CartItem } from 'src/types/cart/cart-type';
+import { useCreateCartHistory } from 'src/hooks/cart_history/useCreateCartHistory';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -23,7 +23,7 @@ const CartPage = () => {
   const router = useRouter();
   const updateQuantityMutation = useUpdateCartQuantity();
   const deleteMutation = useDeleteCartItem(userId);
-  const { mutate: createCartHistory } = usePostCartHistory();
+  const { mutate: createCartHistory } = useCreateCartHistory();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const cartItemsList: CartItem[] = cartItems ?? [];
