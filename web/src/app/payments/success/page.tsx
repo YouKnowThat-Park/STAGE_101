@@ -2,8 +2,11 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import QrCodeImage from 'src/ui/qrCode/QrCodeImage';
 import { PaymentSuccessPageProps } from 'src/types/payment/payment-type';
-import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 import { formatPhoneNumber } from 'src/utils/formatPhoneNumber';
+import { createPaymentServer } from 'src/lib/api/payment/createPaymentServer';
+import { getUserPaymentsServer } from 'src/lib/api/payment/fetchUserPaymentServer';
+import { fetchReservationsServer } from 'src/lib/api/reservation/fetchReservationServer';
+import { fetchQrByReservationServer } from 'src/lib/api/qr_session/fetchQrByReservaitonServer';
 
 export default async function PaymentSuccessPage({ searchParams }: PaymentSuccessPageProps) {
   const getParam = (key: string): string | undefined => {
@@ -28,7 +31,6 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   }
 
   const amount = Number(amountStr);
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
   const headersList = headers();
   const cookie = headersList.get('cookie') ?? '';
 
@@ -37,83 +39,47 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
 
   try {
     // 1) 이 유저의 결제 내역 조회해서, 이미 해당 reservationId 에 대한 결제가 있는지 확인
-    const paymentRes = await fetch(`${apiBase}/payment/${userId}`, {
-      headers: { cookie },
-      cache: 'no-store',
-    });
 
-    let hasPaymentForReservation = false;
-
-    if (paymentRes.ok) {
-      const payments: {
-        id: string;
-        reservation_id: string;
-        amount: number;
-        payment_key: string;
-        status: string;
-      }[] = await paymentRes.json();
-
-      hasPaymentForReservation = payments.some(
-        (p) => p.reservation_id === reservationId && p.status === 'paid',
-      );
-    }
+    const payments = await getUserPaymentsServer(userId, { cookie });
+    const hasPaymentForReservation = payments.some(
+      (p) => p.reservation_id === reservationId && p.status === 'paid',
+    );
 
     // 2) 아직 결제 row가 없으면 FastAPI로 결제 생성 요청
     if (!hasPaymentForReservation) {
-      const pointEarned = Math.floor(amount * 0.01); // 예시: 1% 적립, 필요에 따라 조정
+      const pointEarned = Math.floor(amount * 0.01);
 
-      const createRes = await fetch(`${apiBase}/payment/create`, {
-        method: 'POST',
-        headers: {
-          cookie,
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store',
-        body: JSON.stringify({
-          user_id: userId,
-          reservation_id: reservationId,
-          amount,
-          point_earned: pointEarned,
-          payment_key: paymentKey,
-          payment_method: 'card', // Toss 결제니까 카드로 고정
-        }),
-      });
-
-      if (!createRes.ok) {
-        const text = await createRes.text().catch(() => '');
-        console.error('결제 생성 실패:', text || createRes.statusText);
-        // 여기서 바로 에러 화면으로 보내고 싶으면 throw 해도 됨
+      try {
+        await createPaymentServer(
+          {
+            user_id: userId,
+            reservation_id: reservationId,
+            amount,
+            point_earned: pointEarned,
+            payment_key: paymentKey,
+            payment_method: 'card',
+          },
+          { cookie },
+        );
+      } catch (err) {
+        console.error('결제 생성 실패:', err);
+        // 에러 페이지로 redirect 가능
       }
     }
 
     // 3) 예약 정보에서 좌석/QR 토큰 조회 (이미 예약 생성 시 QR 세션이 생성된다고 가정)
-    const reservationRes = await fetch(`${apiBase}/reservations/me`, {
-      headers: { cookie },
-      cache: 'no-store',
-    });
+    const reservations = await fetchReservationsServer({ cookie });
 
-    if (reservationRes.ok) {
-      const reservations: {
-        id: string;
-        seat_number: string[];
-        qr_session?: { qr_token?: string | null } | null;
-      }[] = await reservationRes.json();
+    const target = reservations.find((r) => r.id === reservationId);
 
-      const target = reservations.find((r) => r.id === reservationId);
-
-      if (target) {
-        seatNumberText = target.seat_number.join(', ');
-      }
+    if (target) {
+      seatNumberText = target.seat_number.join(', ');
     }
 
-    const qrRes = await fetch(`${apiBase}/qr-sessions/by-reservation/${reservationId}`, {
-      headers: { cookie },
-      cache: 'no-store',
-    });
+    const qrData = await fetchQrByReservationServer(reservationId, { cookie });
 
-    if (qrRes.ok) {
-      const qrData: QrDetailResponse = await qrRes.json();
-      qrUrl = qrData.qr_url; // ⭐ QR 안에 넣을 최종 URL
+    if (qrData) {
+      qrUrl = qrData.qr_url;
     }
   } catch (err) {
     console.error('결제 확인 처리 중 오류:', err);
