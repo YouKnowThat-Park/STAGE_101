@@ -1,11 +1,5 @@
 import { useUserStore } from 'src/store/userStore';
-import {
-  CreatedReview,
-  CreateReviewParams,
-  FetchAllReviewsParams,
-  FetchAllReviewsResponse,
-  UserReviewRanking,
-} from 'src/types/review/review-type';
+import { FetchAllReviewsParams, FetchAllReviewsResponse } from 'src/types/review/review-type';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -38,16 +32,6 @@ export const fetchAllReviews = async ({
   };
 };
 
-export const fetchReviewsRanking = async (): Promise<UserReviewRanking[]> => {
-  const res = await fetch(`${API_BASE}/reviews/ranking`);
-
-  if (!res.ok) {
-    throw new Error('리뷰 랭킹 데이터를 불러오는데 실패했습니다.');
-  }
-
-  return res.json();
-};
-
 export const fetchMyReviews = async (): Promise<FetchAllReviewsResponse> => {
   const { id } = useUserStore.getState();
 
@@ -61,20 +45,4 @@ export const fetchMyReviews = async (): Promise<FetchAllReviewsResponse> => {
     order: 'desc',
     userId: id, // ⭐ 여기서만 user_id 필터
   });
-};
-
-export const createReviews = async ({ comment, type, theaterId }: CreateReviewParams) => {
-  const res = await fetch('http://localhost:8000/reviews/create', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify({ comment, type, theater_id: theaterId }),
-  });
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.detail || data.error || '리뷰 저장에 실패했습니다.');
-  }
-
-  return data as CreatedReview;
 };

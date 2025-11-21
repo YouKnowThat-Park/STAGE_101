@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { reserveSeatApi } from 'src/lib/api/reservation/reservationHistory';
+import { reserveSeatApi } from 'src/lib/api/reservation/fetchReservedSeats';
 import {
   ReservationApiResponse,
   ReserveSeatsPayload,
@@ -20,7 +20,6 @@ export const useReservedSeats = (
       await mutation.mutateAsync(payload);
       return true;
     } catch (e) {
-      console.log('시발', e);
       return false;
     }
   }

@@ -1,14 +1,11 @@
+import { ServerOptions } from 'src/types/common/common-type';
 import { PaymentCreatePayload, PaymentResponse } from 'src/types/payment/payment-type';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
-type CreatePaymentServerOptions = {
-  cookie?: string; // 서버에서 세션 유지용
-};
-
 export const createPaymentServer = async (
   payload: PaymentCreatePayload,
-  options: CreatePaymentServerOptions = {},
+  options: ServerOptions = {},
 ): Promise<PaymentResponse> => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

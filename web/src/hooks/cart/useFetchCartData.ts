@@ -1,10 +1,10 @@
-import { fetchCartData } from 'src/lib/api/cart/cart';
 import { useQuery } from '@tanstack/react-query';
+import { fetchCart } from 'src/lib/api/cart/fetchcart';
 
 const useFetchCartData = (userId: string | null | undefined) => {
   return useQuery({
     queryKey: ['cart', userId],
-    queryFn: () => (userId ? fetchCartData(userId) : Promise.resolve([])), // ✅ userId가 없으면 빈 배열 반환
+    queryFn: () => (userId ? fetchCart(userId) : Promise.resolve([])), // ✅ userId가 없으면 빈 배열 반환
     enabled: !!userId, // user Id가 있을 경우에만 호출 없으면 queryFn 실행 안함
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 60, // 1시간 동안 메모리에서 데이터를 저장함 1시간동안 api요청을 하지 않음

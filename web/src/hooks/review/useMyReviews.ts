@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchMyReviews } from 'src/lib/api/review/review';
+import { fetchMyReviews } from 'src/lib/api/review/fetchReview';
 
 export const useMyReviews = () => {
   return useQuery({

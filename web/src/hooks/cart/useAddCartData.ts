@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addToCartData } from 'src/lib/api/cart/cart';
+import { createCart } from 'src/lib/api/cart/createCart';
 
-const useAddToCart = () => {
+const useCreateCartData = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: addToCartData,
+    mutationFn: createCart,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       alert('✅ 장바구니가 업데이트되었습니다.');
@@ -16,4 +16,4 @@ const useAddToCart = () => {
   });
 };
 
-export default useAddToCart;
+export default useCreateCartData;

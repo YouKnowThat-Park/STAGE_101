@@ -8,3 +8,7 @@ export interface LayoutSwitcherProps {
   children: React.ReactNode;
   user: SafeUserType | null;
 }
+
+export interface ServerOptions {
+  cookie?: string;
+}

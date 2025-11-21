@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchShopById, fetchShops } from 'src/lib/api/shop/shop';
+import { fetchShopById, fetchShops } from 'src/lib/api/shop/fetchShop';
 
 const useShop = (shopId?: string) => {
   // 전체 페이지용 모든 데이터 조회

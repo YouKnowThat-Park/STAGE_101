@@ -1,7 +1,4 @@
-import {
-  PaymentResponseInner,
-  QrSessionResponse,
-} from 'src/lib/api/reservation/reservationHistory';
+import { PaymentResponseInner, QrSessionResponse } from 'src/lib/api/reservation/fetchCheckSummary';
 import { TheaterResponse } from '../theater/theater-type';
 
 export interface ReservationType {

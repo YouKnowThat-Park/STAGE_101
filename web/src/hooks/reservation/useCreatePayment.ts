@@ -1,26 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createPayment, reserveSeatApi } from 'src/lib/api/reservation/reservationHistory';
-import { PaymentCreatePayload, PaymentResponse } from 'src/types/payment/payment-type';
+import { useMutation } from '@tanstack/react-query';
+import { reserveSeatApi } from 'src/lib/api/reservation/fetchReservedSeats';
 import {
   ReservationApiResponse,
   ReserveSeatsPayload,
   UseReserveSeatsResult,
 } from 'src/types/reservation/reservation-type';
-
-export const useCreatePayment = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation<PaymentResponse, Error, PaymentCreatePayload>({
-    mutationFn: (payload) => createPayment(payload),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['ticketHistory'] });
-      queryClient.invalidateQueries({ queryKey: ['reservations', 'me'] });
-      queryClient.invalidateQueries({
-        queryKey: ['payments', data.user_id],
-      });
-    },
-  });
-};
 
 export const useReserveSeats = (): UseReserveSeatsResult => {
   const mutation = useMutation<ReservationApiResponse[], Error, ReserveSeatsPayload>({

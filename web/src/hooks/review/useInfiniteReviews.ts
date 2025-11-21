@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchAllReviews } from 'src/lib/api/review/review';
+import { fetchAllReviews } from 'src/lib/api/review/fetchReview';
 
 export const useInfiniteReviews = (sort: 'newest' | 'oldest' = 'newest', userId?: string) => {
   return useInfiniteQuery({

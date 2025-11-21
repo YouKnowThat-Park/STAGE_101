@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchTheaterData } from 'src/lib/api/theater/theater';
+import { fetchTheaterData } from 'src/lib/api/theater/fetchTheater';
 
 export const useTheaterId = (theaterType: string) => {
   const [theaterId, setTheaterId] = useState<string>('');

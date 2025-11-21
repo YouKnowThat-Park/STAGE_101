@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { headers, cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 import HomeCountdownText from '../_components/HomeCountdownText';

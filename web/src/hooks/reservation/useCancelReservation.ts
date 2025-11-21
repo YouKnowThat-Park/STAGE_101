@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cancelReservation } from 'src/lib/api/reservation/reservationHistory';
+import { cancelReservation } from 'src/lib/api/reservation/cancelReservation';
 
 export const useCancelReservation = (userId: string) => {
   const queryClient = useQueryClient();
