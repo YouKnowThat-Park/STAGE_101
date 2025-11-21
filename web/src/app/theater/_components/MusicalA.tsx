@@ -33,11 +33,11 @@ const MusicalA = ({
   total_time,
 }: MusicalAProps) => {
   const router = useRouter();
-  const userId = useUserStore((state) => state.id);
+  const { id } = useUserStore();
   const [showModal, setShowModal] = useState(false);
 
   const handleReservationGo = async () => {
-    if (!userId) {
+    if (!id) {
       setShowModal(true);
       return;
     }
