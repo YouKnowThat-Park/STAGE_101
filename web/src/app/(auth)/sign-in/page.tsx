@@ -6,11 +6,13 @@ import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
 import signIn from './actions';
+import { useUserStore } from 'src/store/userStore';
 
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 const Page = () => {
   const router = useRouter();
+  const setUser = useUserStore((s) => s.setUser);
 
   const handleSignIn = async (data: EmailPasswordFormData) => {
     try {
@@ -21,13 +23,18 @@ const Page = () => {
         return;
       }
 
+      if (result.user) {
+        setUser(result.user ?? null);
+      }
+
+      console.log('setUser', setUser);
+
       const checkbox = document.getElementById('checkbox');
       if (checkbox instanceof HTMLInputElement && checkbox.checked) {
         localStorage.setItem('savedEmail', data.email);
       } else {
         localStorage.removeItem('savedEmail');
       }
-
       router.push('/');
       router.refresh();
     } catch (error: any) {
