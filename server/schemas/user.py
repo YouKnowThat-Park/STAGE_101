@@ -18,7 +18,7 @@ class UserResponse(BaseModel):
     profile_img: Optional[str] = None
 
     class Config:
-        orm_mode =True
+        from_attributes =True
     # 클라이언트 응답용 이기 때문에 password는 제외, 입력시 api에 노출
 
 class UserCreate(BaseModel):

@@ -18,7 +18,7 @@ class ReviewResponse(BaseModel):
     theater: Optional[TheaterResponse] = None
     
     class Config:
-        orm_mode =True
+        from_attributes =True
 
 class ReviewsListResponse(BaseModel):
     data: List[ReviewResponse]
