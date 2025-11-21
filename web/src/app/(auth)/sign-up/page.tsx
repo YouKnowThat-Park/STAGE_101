@@ -38,6 +38,7 @@ const SignUpPage = () => {
           nickname: meData.nickname,
           profile_img: meData.profile_img,
           point: meData.point,
+          name: meData.name ?? '',
         });
 
         // ✅ 페이지 이동 (Zustand 세팅 끝난 후)
