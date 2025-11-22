@@ -1,9 +1,9 @@
 import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchQrCode = async (reservationId: string): Promise<QrDetailResponse> => {
-  const res = await fetch(`${API_BASE_URL}/qr-sessions/by-reservation/${reservationId}`, {
+  const res = await fetch(`${API_BASE}/qr-sessions/by-reservation/${reservationId}`, {
     method: 'GET',
     credentials: 'include',
   });
@@ -27,7 +27,7 @@ export const fetchQrCode = async (reservationId: string): Promise<QrDetailRespon
 };
 
 export const fetchQrCodeByToken = async (qrToken: string): Promise<QrDetailResponse> => {
-  const res = await fetch(`${API_BASE_URL}/qr-sessions/by-token/${qrToken}`, {
+  const res = await fetch(`${API_BASE}/qr-sessions/by-token/${qrToken}`, {
     method: 'GET',
   });
 

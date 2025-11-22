@@ -4,6 +4,7 @@ export interface CheckoutSummaryResponse {
   reservations: ReservationApiResponse[];
   total_price: number;
 }
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchCheckoutSummary = async (
   theaterId: string,
@@ -15,16 +16,13 @@ export const fetchCheckoutSummary = async (
     seats: seatIds.join(','),
   });
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000'}/reservations/checkout-summary?${params.toString()}`,
-    {
-      method: 'GET',
-      headers: {
-        cookie,
-      },
-      cache: 'no-store',
+  const res = await fetch(`${API_BASE}/reservations/checkout-summary?${params.toString()}`, {
+    method: 'GET',
+    headers: {
+      cookie,
     },
-  );
+    cache: 'no-store',
+  });
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');

@@ -1,7 +1,7 @@
 import { ServerOptions } from 'src/types/common/common-type';
 import { QrDetailResponse } from 'src/types/qr-session/qr-session-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchQrByReservationServer = async (
   reservationId: string,

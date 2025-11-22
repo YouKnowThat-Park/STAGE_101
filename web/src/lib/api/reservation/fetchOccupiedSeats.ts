@@ -1,3 +1,5 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const fetchOccupiedSeats = async (
   theaterId: string,
   viewedAt: string,
@@ -9,7 +11,7 @@ export const fetchOccupiedSeats = async (
     show_time: showTime,
   });
 
-  const res = await fetch(`http://localhost:8000/reservations/occupied?${params.toString()}`, {
+  const res = await fetch(`${API_BASE}/reservations/occupied?${params.toString()}`, {
     method: 'GET',
     credentials: 'include',
   });

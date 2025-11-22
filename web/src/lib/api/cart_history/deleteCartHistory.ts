@@ -1,5 +1,7 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const deleteCartHistory = async (id: string) => {
-  const res = await fetch('http://localhost:8000/cart-histories/cancel', {
+  const res = await fetch(`${API_BASE}0/cart-histories/cancel`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

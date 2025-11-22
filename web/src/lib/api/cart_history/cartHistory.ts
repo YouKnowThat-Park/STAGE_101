@@ -1,7 +1,9 @@
 import { CartHistoryItem } from 'src/types/cart/cart-history-type';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const fetchCartHistory = async (): Promise<CartHistoryItem[]> => {
-  const res = await fetch('http://localhost:8000/cart-histories/me', {
+  const res = await fetch(`${API_BASE}/cart-histories/me`, {
     credentials: 'include',
   });
 
@@ -16,7 +18,7 @@ export const fetchCartHistory = async (): Promise<CartHistoryItem[]> => {
 export const fetchCartHistoriesByPayment = async (
   paymentKey: string,
 ): Promise<CartHistoryItem[]> => {
-  const res = await fetch(`http://localhost:8000/cart-histories/by-payment/${paymentKey}`, {
+  const res = await fetch(`${API_BASE}/cart-histories/by-payment/${paymentKey}`, {
     credentials: 'include',
     cache: 'no-store',
   });

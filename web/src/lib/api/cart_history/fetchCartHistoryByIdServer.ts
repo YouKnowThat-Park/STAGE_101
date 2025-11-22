@@ -1,7 +1,7 @@
 import { CartHistoryItem } from 'src/types/cart/cart-history-type';
 import { ServerOptions } from 'src/types/common/common-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchCartHistoryByIdServer = async (
   id: string,
