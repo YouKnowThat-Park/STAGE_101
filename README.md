@@ -1,14 +1,3 @@
-##
-```
-해당 플랫폼은 리팩터링중입니다.
-결제 완료 페이지 :  CSR > SSR
-백엔드 및 DB : Supabase > FastAPI & PostgreSQL
-모든 Storage > 세션 id만 받아서 내려주고 데이터는 서버에 저장하는 식으로 변경
-QR 페이지 : QR 페이지 생성
-배포 : Vercel > AWS ES2 (결제 오류 오열중)
-함수 & 면수 명 : 좀 더 직관적으로 변경
-```
-
 
 #  STAGE_101
 
@@ -138,7 +127,8 @@ QR 페이지 : QR 페이지 생성
 ![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge)
 
 ### Backend
-![TossPayments](https://img.shields.io/badge/Toss%20Payments-0064FF?style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-CA504E?style=for-the-badge&logo=alchemy&logoColor=white)
 
 ### DB
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -154,6 +144,12 @@ QR 페이지 : QR 페이지 생성
 ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=for-the-badge)
 ![Zod](https://img.shields.io/badge/Zod-2C2C2C?style=for-the-badge)
 ![Framer Motion](https://img.shields.io/badge/Framer%20Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+
+### Deployment
+![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white)
+![Amazon RDS](https://img.shields.io/badge/Amazon%20RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)
+![Amazon EC2](https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
+
 ---
 
 ## 🧩 나의 역할
@@ -163,7 +159,8 @@ QR 페이지 : QR 페이지 생성
 - 프론트엔드 구현 (화면, 상태 관리, 데이터 연결)  
 - FastAPI&PostgreSQL를 활용한 백엔드 처리 (실시간 DB 처리, 트리거, 인증 등)  
 - 테스트 및 사용자 시나리오 검증
-
+- AWS 배포
+  
 ---
 
 ## 🤔 기능 로직 설명
