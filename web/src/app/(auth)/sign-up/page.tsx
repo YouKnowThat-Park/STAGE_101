@@ -45,7 +45,8 @@ const SignUpPage = () => {
         // ✅ 페이지 이동 (Zustand 세팅 끝난 후)
         setIsRedirecting(true);
         setTimeout(() => {
-          router.replace('/'); // 새로고침 대신 클라이언트 라우팅
+          router.replace('/');
+          router.refresh();
         }, 500);
       } else {
         alert(`❌ 회원가입 실패: ${signUpResult.message}`);
