@@ -1,3 +1,5 @@
+import { MypageUserResponse, UpdateUserProfilePayload } from 'src/types/user/user-type';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const updateUserProfileImage = async (file: File) => {
@@ -17,4 +19,30 @@ export const updateUserProfileImage = async (file: File) => {
 
   const data = await res.json();
   return data.profile_img as string;
+};
+
+export const updateUserProfileData = async (
+  payload: UpdateUserProfilePayload,
+): Promise<MypageUserResponse> => {
+  const res = await fetch(`${API_BASE}/users/me/update`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    let serverMessage = '';
+    try {
+      const errJson = await res.json();
+      serverMessage = errJson?.detail || '';
+    } catch {
+      // JSON 아니면 무시
+    }
+
+    throw new Error(serverMessage || '프로필 업데이트에 실패했습니다.');
+  }
+
+  const data = (await res.json()) as MypageUserResponse;
+  return data;
 };

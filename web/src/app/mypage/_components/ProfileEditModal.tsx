@@ -3,7 +3,10 @@ import { useUserStore } from '../../../store/userStore';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { ProfileEditModalProps } from 'src/types/mypage/mypage-type';
-import { useUpdateUserProfileImage } from 'src/hooks/user/useUpdateUserProfileImage';
+import {
+  useUpdateUserProfileData,
+  useUpdateUserProfileImage,
+} from 'src/hooks/user/useUpdateUserProfileImage';
 
 const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const user = useUserStore();
@@ -14,7 +17,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const { mutateAsync: uploadProfileImage, isPending: isUploading } = useUpdateUserProfileImage();
-
+  const { mutateAsync: updateUserProfile, isPending: isUpdating } = useUpdateUserProfileData();
   useEffect(() => {
     if (!isOpen) {
       setTimeout(() => {
@@ -42,7 +45,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   };
 
   const handleSave = async () => {
-    if (isSaving || isUploading) return;
+    if (isSaving || isUploading || isUpdating) return;
     setIsSaving(true);
 
     try {
@@ -59,21 +62,10 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
       const nicknameToSave = newNickname.trim() || user.nickname || '';
 
       // 3) 닉네임/프로필 정보 서버에 반영
-      const res = await fetch(`http://localhost:8000/users/me/update`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          nickname: nicknameToSave,
-          profile_img: profileImageUrl,
-        }),
+      await updateUserProfile({
+        nickname: nicknameToSave,
+        profile_img: profileImageUrl,
       });
-
-      const result = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error((result as any).error || '서버 오류 발생');
-      }
 
       // 4) Zustand 스토어도 동기화
       useUserStore.setState({
@@ -94,6 +86,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   const isDisabled =
     isSaving ||
     isUploading ||
+    isUpdating ||
     (newNickname === (user.nickname ?? '') && newProfileImg === (user.profile_img ?? ''));
 
   if (!isOpen) return null;
@@ -144,7 +137,7 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
           onClick={handleSave}
           disabled={isDisabled}
         >
-          {isUploading ? '저장 중...' : '저장'}
+          {isUploading || isUpdating ? '저장 중...' : '저장'}
         </button>
       </div>
     </div>
