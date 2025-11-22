@@ -30,7 +30,7 @@ export const useReservedSeatsSocket = (options: UseReservedSeatsSocketOptions): 
       show_time: showTime,
     });
 
-    const ws = new WebSocket(`ws://localhost:8000/reservations/ws?${params.toString()}`);
+    const ws = new WebSocket(`ws://13.221.60.6:4000/reservations/ws?${params.toString()}`);
 
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data) as ReservedSeatsMessage;

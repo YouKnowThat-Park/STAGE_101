@@ -13,7 +13,7 @@ const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
     return window.location.origin; // 예: http://localhost:3000
   }
-  return 'http://localhost:3000'; // SSR fallback
+  return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'; // SSR fallback
 };
 
 interface CheckoutClientProps {

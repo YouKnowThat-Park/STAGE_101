@@ -3,6 +3,8 @@ import {
   ReserveSeatsPayload,
 } from 'src/types/reservation/reservation-type';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const reserveSeatApi = async (
   payload: ReserveSeatsPayload,
 ): Promise<ReservationApiResponse[]> => {
@@ -27,7 +29,7 @@ export const reserveSeatApi = async (
   }
 
   // ✅ 실제 API 호출
-  const res = await fetch('http://localhost:8000/reservations/create', {
+  const res = await fetch(`${API_BASE}/reservations/create`, {
     method: 'POST',
     credentials: 'include', // 쿠키 포함
     headers: { 'Content-Type': 'application/json' },

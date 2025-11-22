@@ -1,10 +1,12 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export default async function signIn(email: string, password: string) {
   try {
     if (!email || !password) {
       return { success: false, message: '이메일과 비밀번호를 모두 입력해주세요.' };
     }
 
-    const res = await fetch('http://localhost:8000/users/signin', {
+    const res = await fetch(`${API_BASE}/users/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

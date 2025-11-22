@@ -7,6 +7,7 @@ import SignUpForm from './_components/SignUpForm';
 import { SignUpFormData } from '../_components/SignUpSchema';
 import { useCallback, useState } from 'react';
 import { useUserStore } from 'src/store/userStore';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const SignUpPage = () => {
       const signUpResult = await signUp(data);
 
       if (signUpResult.success) {
-        const meRes = await fetch('http://localhost:8000/users/me', {
+        const meRes = await fetch(`${API_BASE}/users/me`, {
           method: 'GET',
           credentials: 'include', // 쿠키 포함해서 요청
         });
@@ -44,7 +45,8 @@ const SignUpPage = () => {
         // ✅ 페이지 이동 (Zustand 세팅 끝난 후)
         setIsRedirecting(true);
         setTimeout(() => {
-          router.replace('/'); // 새로고침 대신 클라이언트 라우팅
+          router.replace('/');
+          router.refresh();
         }, 500);
       } else {
         alert(`❌ 회원가입 실패: ${signUpResult.message}`);

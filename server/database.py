@@ -19,7 +19,7 @@ load_dotenv(dotenv_path=env_path)
 DATABASE_URL = os.getenv("DATABASE_URL")
 # → 환경변수에서 DATABASE_URL를 읽을 수 있도록
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"sslmode":"require"})
 # → SQLALchemy 엔진을 생성 해서 DB랑 연결
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)

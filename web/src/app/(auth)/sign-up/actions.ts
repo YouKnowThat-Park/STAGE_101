@@ -1,5 +1,6 @@
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,32}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export default async function signUp({
   email,
@@ -34,7 +35,7 @@ export default async function signUp({
       return { success: false, message: '닉네임은 최소 2자리 이상이어야 합니다.' };
     }
 
-    const res = await fetch('http://localhost:8000/users/signup', {
+    const res = await fetch(`${API_BASE}/users/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

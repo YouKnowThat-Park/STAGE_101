@@ -29,4 +29,4 @@ class CartHistoryResponse(BaseModel):
     cart_id: Optional[UUID] = None  # 대표 하나만 연결(호환 목적)
 
     class Config:
-        orm_mode = True
+        from_attributes = True

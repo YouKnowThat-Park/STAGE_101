@@ -140,10 +140,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         db.flush()  # new_user.id 확보
 
         # 각 극장에 대해 예약 + 결제 생성
-        for theater_id in THEATER_IDS:
-            seat = _generate_unique_seat(db, theater_id)
-
-            _create_default_data_for_new_user(db, new_user)
+        _create_default_data_for_new_user(db, new_user)
 
         db.commit()
         db.refresh(new_user)

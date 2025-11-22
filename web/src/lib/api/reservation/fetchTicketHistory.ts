@@ -1,7 +1,9 @@
 import { ReservationApiResponse, ReservationType } from 'src/types/reservation/reservation-type';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const fetchTicketHistory = async (userId: string): Promise<ReservationType[]> => {
-  const res = await fetch('http://localhost:8000/reservations/me', {
+  const res = await fetch(`${API_BASE}/reservations/me`, {
     credentials: 'include',
   });
 

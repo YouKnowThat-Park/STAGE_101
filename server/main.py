@@ -9,9 +9,15 @@ import asyncio
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",         # 로컬 개발용
+    "http://13.221.60.6:3000",       # 지금 EC2 프론트 주소
+    "http://13.221.60.6",            # 나중에 Nginx로 :3000 빼면 이거도 필요
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # 프론트엔드 주소
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

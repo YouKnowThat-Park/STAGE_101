@@ -12,7 +12,7 @@ class TheaterInfo(BaseModel):
     type: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 
@@ -31,7 +31,7 @@ class ReservationResponse(BaseModel):
     theater: Optional[TheaterInfo] = None
     qr_session: Optional[QrSessionSimple] = None
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CheckoutSummaryResponse(BaseModel):
     """결제 페이지에서 사용할 요약 응답"""

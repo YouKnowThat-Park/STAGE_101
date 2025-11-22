@@ -1,5 +1,7 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
 export const deleteUser = async (password: string) => {
-  const res = await fetch('http://localhost:8000/users/delete', {
+  const res = await fetch(`${API_BASE}/users/delete`, {
     method: 'DELETE',
     credentials: 'include',
     headers: {
