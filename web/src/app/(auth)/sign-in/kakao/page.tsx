@@ -1,11 +1,11 @@
 'use client';
 
-const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 const SocialLoginButtons = () => {
   const handleSocialSignIn = (provider: 'kakao' | 'google') => {
     // FastAPI 소셜 로그인 엔드포인트로 바로 이동
-    window.location.href = `${apiBase}/users/social/${provider}/login`;
+    window.location.href = `${API_BASE}/users/social/${provider}/login`;
   };
 
   return (

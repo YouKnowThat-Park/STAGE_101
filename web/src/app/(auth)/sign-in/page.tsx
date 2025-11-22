@@ -8,7 +8,7 @@ import { EmailPasswordFormData } from '../_components/CommonSchemas';
 import signIn from './actions';
 import { useUserStore } from 'src/store/userStore';
 
-const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
 const Page = () => {
   const router = useRouter();
@@ -44,7 +44,7 @@ const Page = () => {
   };
 
   const handleSocialSignIn = (provider: 'kakao' | 'google') => {
-    window.location.href = `${apiBase}/users/social/${provider}/signin`;
+    window.location.href = `${API_BASE}/users/social/${provider}/signin`;
   };
 
   return (

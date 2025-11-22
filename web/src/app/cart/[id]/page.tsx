@@ -7,8 +7,6 @@ import { CartHistoryItem, CartSuccessProps } from 'src/types/cart/cart-history-t
 import { fetchCartHistoryByIdServer } from 'src/lib/api/cart_history/fetchCartHistoryByIdServer';
 import { fetchCartHistoriesByPaymentKeyServer } from 'src/lib/api/cart_history/fetchCartHistoriesByPaymentKeyServer';
 
-const API = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:8000';
-
 export default async function CartSuccessPage({ params }: CartSuccessProps) {
   //  SSR에서 인증 쿠키를 전달해야 /by-payment가 내 소유만 조회됨
   const headersList = headers();

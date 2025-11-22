@@ -24,3 +24,8 @@ export interface UserState extends SafeUserType {
   setUser: (user: SafeUserType | null, token?: string | null) => void;
   clearUser: () => void;
 }
+
+export interface UpdateUserProfilePayload {
+  nickname: string;
+  profile_img: string | null;
+}
