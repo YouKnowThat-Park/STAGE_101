@@ -279,13 +279,58 @@
   - 스켈레톤 UI를 적용해 데이터 로딩 중에도 사용자가 끊김 없는 화면을 볼 수 있도록 했습니다.
 
  ## [좌석 예약 & 결제 / CSR + SSR ]
- 
+<div align="center">
+  <table style="width:90%;">
+    <tr>
+      <td align="center">
+        <img
+          width="466"
+          height="347"
+          alt="image"
+          src="https://github.com/user-attachments/assets/cffa29d2-6508-4c03-9696-9146309ed0e6"
+        />
+      </td>
+      <td align="center">
+        <img
+          width="454"
+          height="386"
+          alt="image"
+          src="https://github.com/user-attachments/assets/5e0dd516-fe5b-4abb-be89-183abf872b58"
+        />
+      </td>
+      <td align="center">
+        <img
+          width="453"
+          height="453"
+          alt="image"
+          src="https://github.com/user-attachments/assets/b98c2c94-dac8-496a-8280-3adaf4718458"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 
  ## [공연 & 상점 결제 완료 페이지 / SSR ]  
-<img width="373" height="572" alt="image" src="https://github.com/user-attachments/assets/7cc5fef7-6a36-408d-9e07-40dad27021f7" />
-
+<div align="center">
+  <table style="width:70%;">
+    <tr>
+      <td align="center">
+        <img
+          src="https://github.com/user-attachments/assets/7cc5fef7-6a36-408d-9e07-40dad27021f7"
+          width="45%"
+        />
+      </td>
+      <td align="center">
+        <img
+          src="https://github.com/user-attachments/assets/c36f43ea-13a4-4fa9-89a2-a357c36f1221"
+          width="45%"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 
@@ -306,7 +351,7 @@
         width="273"
         height="206"
         alt="image"
-        src="https://github.com/user-attachments/assets/f7c1efa4-660c-4b5c-b2d7-739f02dde88d"
+        src="https://github.com/user-attachments/assets/c2430c0f-44a5-4d59-a135-f440fff4197c"
       /><br/>
       <img
         width="273"
