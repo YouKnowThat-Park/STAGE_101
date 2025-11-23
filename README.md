@@ -30,8 +30,7 @@
 
 - ⏱ 개발 기간: 약 10주 / 리펙터링 5주
 - 🔨 주요 기능: 예약, 결제, 리뷰, 포인트, 장바구니
-- 🔧 총 커밋 수: 320회+
-- 📁 전체 파일: 약 100개 이상
+- 🔧 총 커밋 수: 480회+
 - 💡 목표: 실사용자 흐름에 가까운 감성 기반 상영 서비스 제작
   
 ---
@@ -164,7 +163,7 @@
 <br/>
 
 ---
-## 🤓 기능 로직 설명🤓
+## 🤓 주요 페이지 소개
 
 <br/>
 <br/>
@@ -173,13 +172,28 @@
 
  ## [로그인 , 회원가입 / CSR + ServerAction]
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/7b97bc7e-5a64-4ee6-981e-ecea2f6d7eba" width="40%" />
-  <img src="https://github.com/user-attachments/assets/3d9b3611-ec37-46e5-bfa1-abbe2d4c09f9" width="38%" />
-</p>
+<div align="center">
+  <table style="width:70%;">
+    <tr>
+      <!-- 각 셀 안에서 이미지도 가운데 정렬 -->
+      <td align="center">
+        <img
+          src="https://github.com/user-attachments/assets/7b97bc7e-5a64-4ee6-981e-ecea2f6d7eba"
+          width="270"
+        />
+      </td>
+      <td align="center">
+        <img
+          src="https://github.com/user-attachments/assets/3d9b3611-ec37-46e5-bfa1-abbe2d4c09f9"
+          width="260"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
 
 
-- 로그인 페이지에서는 **카카오 / 구글 소셜 로그인 가능**
+- 로그인 페이지에서는 **카카오톡 / 구글 소셜 로그인 가능**
   - 한국 사용자에게 친숙한 카카오와 구글 계정으로 빠른  서비스를 이용할 수 있게 했습니다.
 - 회원가입은 **3단계에 걸쳐 정보를 입력하는 스텝-바이-스텝 방식**으로 설계되었습니다.
   - 이메일, 비밀번호부터 휴대폰번호, 생년월일까지 순차적으로 입력하게 하여 사용자 피로도를 낮추고 입력 실수를 줄이기 위한 UX를 적용했습니다.  
@@ -187,17 +201,73 @@
 
  ## [리뷰 & 리뷰 작성 / Framer-Motion / Modal]  
 
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img
+          width="598"
+          height="840"
+          alt="image"
+          src="https://github.com/user-attachments/assets/f1834a09-34a3-4ca3-9b11-ffdce2d77fb1"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
+- **자연스러운 모달 애니메이션**
+  - Framer Motion을 활용해 리뷰 목록과 리뷰 작성 모달이 자연스럽게 열리도록 구현했습니다.
 
+- **실시간 리뷰 미리보기**
+  - 작성 중인 리뷰가 실제로 어떻게 보여질지 실시간으로 확인할 수 있습니다.
+  - 리뷰 카드에 사용될 이미지를 포스터 이미지와 프로필 이미지 중에서 선택할 수 있습니다.
 
- ## [리뷰 랭킹 / Framer-Motion ]
-
-
+ 
  ## [상점 & 장바구니 / CSR ]
- <p align="center">
-<img width="429" height="265" alt="image" src="https://github.com/user-attachments/assets/e09163a3-1d58-4cf6-ad5d-f6fc8626fa38" />
-<img width="429" height="265" alt="image" src="https://github.com/user-attachments/assets/0fcb6e15-6ca9-47d1-ad5f-88dae74a1fd4" />
- </p>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img
+          width="429"
+          height="265"
+          alt="image"
+          src="https://github.com/user-attachments/assets/e09163a3-1d58-4cf6-ad5d-f6fc8626fa38"
+        />
+      </td>
+      <td>
+        <img
+          width="429"
+          height="265"
+          alt="image"
+          src="https://github.com/user-attachments/assets/0fcb6e15-6ca9-47d1-ad5f-88dae74a1fd4"
+        />
+      </td>
+    </tr>
+  </table>
+</div>
 
+
+- **상점 페이지**
+  - 사용자는 포인트로 상품을 구매할 수 있는 상점 페이지에서 원하는 상품을 탐색할 수 있습니다.
+
+- **상품 카드 & 상세 페이지**
+  - 각 상품 카드는 포인트, 이름, 이미지 등의 정보를 제공하며, 클릭 시 해당 상품의 상세 페이지로 이동합니다.
+  - 상세 페이지에서는 수량 변경, 상품 정보 확인, 장바구니 담기 기능을 제공합니다.
+
+- **장바구니 기능**
+  - 장바구니 페이지에서 담긴 상품을 한눈에 확인할 수 있으며,
+    수량 변경, 선택 삭제, 전체 선택 등 기본적인 장바구니 기능을 지원합니다.
+
+- **일괄 결제 & 포인트 연동**
+  - 장바구니에 담긴 상품은 한 번에 결제할 수 있으며,
+    결제 시 포인트 차감과 결제 내역 저장이 함께 처리됩니다.
+
+- **데이터 최신 상태 유지**
+  - 모든 상태 변경 후 React Query의 `invalidateQueries`를 통해 데이터를 최신 상태로 유지합니다.
+
+- **로딩 UX 개선**
+  - 스켈레톤 UI를 적용해 데이터 로딩 중에도 사용자가 끊김 없는 화면을 볼 수 있도록 했습니다.
 
  ## [좌석 예약 & 결제 / CSR + SSR ]
  
@@ -211,20 +281,70 @@
 
 
  ## [마이페이지 기능 / CSR ]
-<img width="707" height="857" alt="image" src="https://github.com/user-attachments/assets/cc704d0f-0009-4301-a4cf-70c5ea0a3dc6" />
+<table align = "center">
+  <tr>
+    <!-- 왼쪽 큰 이미지 -->
+    <td>
+      <img
+        width="407"
+        height="857"
+        alt="image"
+        src="https://github.com/user-attachments/assets/cc704d0f-0009-4301-a4cf-70c5ea0a3dc6"
+      />
+    </td>
+    <td>
+      <img
+        width="273"
+        height="206"
+        alt="image"
+        src="https://github.com/user-attachments/assets/f7c1efa4-660c-4b5c-b2d7-739f02dde88d"
+      /><br/>
+      <img
+        width="273"
+        height="161"
+        alt="image"
+        src="https://github.com/user-attachments/assets/8ae8b24a-e91d-428d-b68e-5932b0deab74"
+      /><br/>
+      <img
+        width="276"
+        height="207"
+        alt="image"
+        src="https://github.com/user-attachments/assets/2c0be9a3-ac09-42ac-a8e0-0194f036abad"
+      />
+    </td>
+  </tr>
+</table>
 
+- **예매·리뷰·구매 이력 한눈에 확인**
+  - 마이페이지에서 예매 내역, 내가 작성한 리뷰, 상점 구매 이력을 한 화면에서 탭으로 나눠 확인할 수 있습니다.
 
- ## [접근 제한]
+- **탭 기반 화면 전환**
+  - Ticket / Review / History 탭을 전환하면 페이지 이동 없이 자연스럽게 내용이 바뀌어, 끊김 없는 사용 경험을 제공합니다.
 
-- **비로그인 제한**
-  - 마이페이지 접근 시 로그인 페이지로 리다이렉트
-  - 공연 선택 시 로그인 모달
-  - 상점에서 아이템 장바구니에 담을 시 로그인 모달
-  - 볼 수 있는 리뷰 5개 제한
+- **카드형 레이아웃**
+  - 각 내역은 카드 형태로 정리되어 있어 한 번에 필요한 정보를 파악하기 쉽고, 전체적으로 통일감 있는 화면을 구성합니다.
 
-- **일반 사용자 제한**
-  - 일반 사용자 QR 페이지 접근 불가
-  - 
+- **마이페이지 전용 하단 영역**
+  - 데스크톱 환경에서는 마이페이지 하단에 전용 푸터가 고정되어, 나의 이용 현황과 안내 정보를 한 번 더 정리해 보여줍니다.
+  - 가입한 상품이나 이용 상태에 따라 푸터에 노출되는 내용이 달라집니다.
+
+- **프로필 영역**
+  - 상단 프로필 영역에서 나의 닉네임, 간단한 소개, 현재 보유 포인트 등 기본 정보를 한눈에 확인할 수 있습니다.
+
+ ## [접근 제한 & 보안]
+
+- **비로그인 사용자 제한**
+  - 비로그인 상태에서 마이페이지 접근 시 로그인 페이지로 리다이렉트
+  - 공연 선택 시 로그인 모달 노출
+  - 상점에서 아이템을 장바구니에 담을 때 로그인 모달 노출
+  - 비로그인 사용자는 리뷰를 최대 5개까지만 열람 가능
+
+- **일반 사용자 권한 제한**
+  - 일반 사용자는 QR 전용 페이지에 접근할 수 없도록 권한 차단
+
+- **로그인 보안**
+  - JWT를 HttpOnly 쿠키로 관리하여 토큰을 안전하게 저장
+  - LocalStorage에는 사용자의 민감하지 않은 정보를 암호화/디코딩하여 저장해 보안을 강화
 
 
 ---
