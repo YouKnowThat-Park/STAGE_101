@@ -179,13 +179,13 @@
       <td align="center">
         <img
           src="https://github.com/user-attachments/assets/7b97bc7e-5a64-4ee6-981e-ecea2f6d7eba"
-          width="270"
+          width="470"
         />
       </td>
       <td align="center">
         <img
           src="https://github.com/user-attachments/assets/3d9b3611-ec37-46e5-bfa1-abbe2d4c09f9"
-          width="260"
+          width="460"
         />
       </td>
     </tr>
@@ -206,10 +206,18 @@
     <tr>
       <td>
         <img
-          width="598"
-          height="840"
+          width="798"
+          height="940"
           alt="image"
           src="https://github.com/user-attachments/assets/f1834a09-34a3-4ca3-9b11-ffdce2d77fb1"
+        />
+      </td>
+      <td>
+        <img
+          width="798"
+          height="940"
+          alt="image"
+          src="https://github.com/user-attachments/assets/14dd9c73-8f58-4f59-97e0-4a8b82930bca"
         />
       </td>
     </tr>
