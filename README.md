@@ -437,8 +437,8 @@
 ## 🔗 배포 링크 & 데모
 
 - **배포 주소:** [https://stage-101.vercel.app/](https://stage-101.vercel.app/)  
-- **GitHub:** [https://github.com/YouKnowThat-Park](https://github.com/YouKnowThat-Park)
-
+- **Blog:** [https://github.com/YouKnowThat-Park](https://github.com/YouKnowThat-Park](https://youkn0wthat.tistory.com/))
+- **Portfolio:** [https://www.wooseokbot.com/project/stage101]
 ---
 
 ## 📝 회고 & 배운 점
