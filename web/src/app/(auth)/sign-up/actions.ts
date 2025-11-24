@@ -1,21 +1,21 @@
+'use server';
+import { cookies } from 'next/headers';
+import { SignUpParams, SignUpResult } from 'src/types/auth/auth-type';
+import { SafeUserType } from 'src/types/user/user-type';
+
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,32}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
-export default async function signUp({
+export async function signUpAction({
   email,
   password,
   name,
   phone,
   nickname,
-}: {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  nickname: string;
-}) {
+}: SignUpParams): Promise<SignUpResult> {
   try {
+    // 1) 프론트 단 검증
     if (!email || !password || !name || !phone || !nickname) {
       return { success: false, message: '모든 정보를 입력해주세요.' };
     }
@@ -26,7 +26,10 @@ export default async function signUp({
       };
     }
     if (!EMAIL_REGEX.test(email)) {
-      return { success: false, message: '이메일 형식이 올바르지 않습니다. 예시)stage@stage.com' };
+      return {
+        success: false,
+        message: '이메일 형식이 올바르지 않습니다. 예시)stage@stage.com',
+      };
     }
     if (name.length < 2) {
       return { success: false, message: '이름은 최소 2자리 이상이어야 합니다.' };
@@ -35,16 +38,22 @@ export default async function signUp({
       return { success: false, message: '닉네임은 최소 2자리 이상이어야 합니다.' };
     }
 
+    // 2) FastAPI 회원가입 호출
     const res = await fetch(`${API_BASE}/users/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      // 서버 액션이라 credentials 옵션은 필요 없음
       body: JSON.stringify({ name, nickname, email, phone, password }),
-      credentials: 'include',
     });
 
-    const data = await res.json();
+    let data: any = {};
+    try {
+      data = await res.json();
+    } catch {
+      data = {};
+    }
 
     if (!res.ok) {
       return {
@@ -53,8 +62,51 @@ export default async function signUp({
       };
     }
 
-    return { success: true, message: `${name} 회원가입에 성공했습니다.`, user: data };
+    // 서버 응답: { message, user: { id, nickname, profile_img, point } }
+    const { user } = data;
+    if (!user) {
+      return {
+        success: false,
+        message: '회원가입 응답에 유저 정보가 없습니다.',
+      };
+    }
+
+    const cleanedUser: SafeUserType = {
+      id: user.id,
+      nickname: user.nickname,
+      profile_img: user.profile_img ?? null,
+      point: user.point ?? null,
+      // /users/signup 응답에 name은 없으니, 우리가 보낸 name 사용
+      name,
+    };
+
+    // 3) FastAPI가 내려준 __stage__ 쿠키를 브라우저 쿠키로 다시 세팅
+    const setCookieHeader = res.headers.get('set-cookie');
+    if (setCookieHeader) {
+      const match = setCookieHeader.match(/__stage__=([^;]+)/);
+      if (match) {
+        const token = match[1];
+        const cookieStore = cookies();
+
+        cookieStore.set('__stage__', token, {
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          path: '/',
+          maxAge: 60 * 60, // 1시간
+        });
+      }
+    }
+
+    return {
+      success: true,
+      message: data.message ?? `${name} 회원가입에 성공했습니다.`,
+      user: cleanedUser,
+    };
   } catch (error: any) {
-    return { success: false, message: error.message || '회원가입 중 오류가 발생했습니다.' };
+    return {
+      success: false,
+      message: error?.message || '회원가입 중 오류가 발생했습니다.',
+    };
   }
 }

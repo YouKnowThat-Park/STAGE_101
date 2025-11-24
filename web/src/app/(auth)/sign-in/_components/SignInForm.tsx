@@ -29,7 +29,7 @@ const SignInForm = ({ onSubmit }: SingInFormProps) => {
   }, [setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form id="signin-form" onSubmit={handleSubmit(onSubmit)}>
       {inputFields.map((field) => (
         <Controller
           key={field.name}

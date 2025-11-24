@@ -1,10 +1,14 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import AnyHttpUrl
 
 class QrSessionUrl(BaseSettings):
-    FRONTEND_BASE_URL: AnyHttpUrl = "http://localhost:3000"
+    # pydantic-settings v2 스타일 설정
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
 
-    class Config:
-        env_file = ".env"
+    FRONTEND_BASE_URL: AnyHttpUrl = "http://13.221.60.6:3000"
+
 
 settings = QrSessionUrl()
