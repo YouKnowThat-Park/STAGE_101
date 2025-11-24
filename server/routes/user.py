@@ -227,7 +227,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
     }
 
 @router.delete("/delete", status_code=204)
-def delete_user(data:DeleteUserRequest, request: Request, db: Session = Depends(get_db)):
+def delete_user(data: DeleteUserRequest, request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("__stage__")
     if not token:
         raise HTTPException(status_code=401, detail="인증 토큰이 없습니다.")
@@ -240,20 +240,24 @@ def delete_user(data:DeleteUserRequest, request: Request, db: Session = Depends(
     user = db.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
-    
-    if not verify_password(data.password, user.password):
-        raise HTTPException(status_code=403, detail="비밀번호가 일치하지 않습니다.")
-    
+
+    if user.phone == "social":
+        if data.agreement_text != "동의합니다":
+            raise HTTPException(status_code=400, detail="탈퇴 동의 문구를 정확히 입력해주세요.")
+    else:
+        if not data.password:
+            raise HTTPException(status_code=400, detail="비밀번호를 입력해주세요.")
+        if not verify_password(data.password, user.password):
+            raise HTTPException(status_code=403, detail="비밀번호가 일치하지 않습니다.")
+
     try:
-
-            db.query(Payment).filter(Payment.user_id == user.id).delete()
-            db.query(Reservation).filter(Reservation.user_id == user.id).delete()
-            db.query(Review).filter(Review.user_id == user.id).delete()
-            db.query(CartHistory).filter(CartHistory.user_id == user.id).delete()
-            db.query(Cart).filter(Cart.user_id == user.id).delete()
-            db.delete(user)
-            db.commit()
-
+        db.query(Payment).filter(Payment.user_id == user.id).delete()
+        db.query(Reservation).filter(Reservation.user_id == user.id).delete()
+        db.query(Review).filter(Review.user_id == user.id).delete()
+        db.query(CartHistory).filter(CartHistory.user_id == user.id).delete()
+        db.query(Cart).filter(Cart.user_id == user.id).delete()
+        db.delete(user)
+        db.commit()
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"회원 탈퇴 처리 중 오류 발생: {str(e)}")
@@ -261,7 +265,6 @@ def delete_user(data:DeleteUserRequest, request: Request, db: Session = Depends(
     response = Response(status_code=204)
     response.delete_cookie("__stage__")
     return response
-
 
 
 @router.get("/social/kakao/signin")

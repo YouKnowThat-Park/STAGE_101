@@ -12,3 +12,9 @@ export interface LayoutSwitcherProps {
 export interface ServerOptions {
   cookie?: string;
 }
+
+export interface HeaderScrollProps {
+  topClass?: string;
+  rightClass?: string;
+  bottomClass?: string;
+}

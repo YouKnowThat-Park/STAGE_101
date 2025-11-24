@@ -49,4 +49,5 @@ class UserReviewRow(TypedDict):
     count: int
 
 class DeleteUserRequest(BaseModel):
-    password: str
+    password: Optional[str] = None
+    agreement_text: Optional[str] = None
