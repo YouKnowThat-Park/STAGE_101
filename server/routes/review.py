@@ -9,7 +9,7 @@ from server.schemas.review import ReviewsListResponse, ReviewResponse, ReviewCre
 from server.schemas.user import UserReviewRanking
 from server.models.user import User
 from server.models.theater import Theater
-from .user import get_current_user
+from server.routes.user.public import get_current_user
 
 router = APIRouter(prefix="/reviews", tags=["Reviews"])
 
