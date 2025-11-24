@@ -27,3 +27,17 @@ export interface SignInResult {
   message: string;
   user?: SafeUserType;
 }
+
+export type SignUpParams = {
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
+  nickname: string;
+};
+
+export type SignUpResult = {
+  success: boolean;
+  message: string;
+  user?: SafeUserType;
+};
