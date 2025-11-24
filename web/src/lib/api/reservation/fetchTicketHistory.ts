@@ -10,7 +10,9 @@ export const fetchTicketHistory = async (userId: string): Promise<ReservationTyp
   if (!res.ok) throw new Error('예약 내역을 불러올 수 없습니다.');
 
   const rawData: ReservationApiResponse[] = await res.json();
-  return rawData.map((ticket) => {
+
+  const confirmedOnly = rawData.filter((ticket) => ticket.status === 'confirmed');
+  return confirmedOnly.map((ticket) => {
     const seatString = ticket.seat_number.join(', ');
 
     return {
