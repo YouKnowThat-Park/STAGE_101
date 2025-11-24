@@ -5,8 +5,8 @@ import KakaoLogin from '../../../ui/icon/KakaoLogin';
 import { useRouter } from 'next/navigation';
 import SignInForm from './_components/SignInForm';
 import { EmailPasswordFormData } from '../_components/CommonSchemas';
-import signIn from './actions';
 import { useUserStore } from 'src/store/userStore';
+import { signInAction } from './actions';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000';
 
@@ -16,7 +16,7 @@ const Page = () => {
 
   const handleSignIn = async (data: EmailPasswordFormData) => {
     try {
-      const result = await signIn(data.email, data.password);
+      const result = await signInAction(data.email, data.password);
 
       if (!result.success) {
         alert(result.message);
@@ -45,6 +45,11 @@ const Page = () => {
 
   const handleSocialSignIn = (provider: 'kakao' | 'google') => {
     window.location.href = `${API_BASE}/users/social/${provider}/signin`;
+  };
+
+  const handleClickLoginButton = () => {
+    const form = document.getElementById('signin-form') as HTMLFormElement | null;
+    form?.requestSubmit(); // HTML5 표준 submit (react-hook-form도 잘 먹음)
   };
 
   return (
@@ -81,7 +86,7 @@ const Page = () => {
         <button
           type="submit"
           className="bg-[#C9A66B] text-black font-semibold w-full py-2 rounded-lg hover:bg-[#e7c894] transition"
-          onClick={() => handleSignIn}
+          onClick={handleClickLoginButton}
         >
           로그인
         </button>

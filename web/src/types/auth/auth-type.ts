@@ -21,3 +21,9 @@ export interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface SignInResult {
+  success: boolean;
+  message: string;
+  user?: SafeUserType;
+}
