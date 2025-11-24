@@ -1,14 +1,19 @@
 import { useDeleteUser } from 'src/hooks/user/useDeleteUser';
 import { ModalProps } from '../../../types/modal/modal-type';
 import React, { useState } from 'react';
+import { useUserHook } from 'src/hooks/user/useUserHook';
 
 const SettingModal = ({ isOpen, onClose }: ModalProps) => {
   const [checks, setChecks] = useState({ reservation: false, review: false, user: false });
   const [showErrors, setShowErrors] = useState(false);
   const [password, setPassword] = useState('');
-  const allChecked = Object.values(checks).every(Boolean);
+  const [agreementText, setAgreementText] = useState('');
 
+  const allChecked = Object.values(checks).every(Boolean);
+  const { data: social } = useUserHook();
   const { mutate, isPending } = useDeleteUser();
+
+  const isSocialUser = social?.phone === 'social';
 
   const handleChange = (key: keyof typeof checks) => {
     setChecks((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -20,14 +25,23 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
       alert('필수 항목에 모두 동의해야 합니다.');
       return;
     }
-    if (!password) {
-      alert('비밀번호를 입력해주세요.');
-      return;
+    if (isSocialUser) {
+      if (agreementText !== '동의합니다') {
+        alert('"동의합니다"를 정확히 입력해 주세요.');
+        return;
+      }
+    } else {
+      if (!password) {
+        alert('비밀번호를 입력해주세요.');
+        return;
+      }
     }
     const confirmDelete = confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
     if (!confirmDelete) return;
 
-    mutate(password, {
+    const payload = isSocialUser ? { agreement_text: agreementText.trim() } : { password };
+
+    mutate(payload, {
       onSuccess: () => {
         alert('탈퇴 완료');
         window.location.href = '/';
@@ -109,20 +123,38 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
             </p>
           </label>
         </div>
-
-        <div className="w-full mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            탈퇴 확인을 위해 비밀번호를 입력해주세요
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
-            placeholder="비밀번호 입력"
-          />
-        </div>
+        {!isSocialUser ? (
+          <>
+            {/* 일반 회원: 비밀번호 입력 */}
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              탈퇴 확인을 위해 비밀번호를 입력해주세요
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+              placeholder="비밀번호 입력"
+            />
+          </>
+        ) : (
+          <>
+            {/* 소셜 로그인 회원: 동의 문구 입력 */}
+            <label htmlFor="agreement" className="block text-sm font-medium text-gray-700 mb-1">
+              소셜 계정 탈퇴를 위해 <span className="font-semibold">"동의합니다"</span>를 정확히
+              입력해주세요
+            </label>
+            <input
+              type="text"
+              id="agreement"
+              value={agreementText}
+              onChange={(e) => setAgreementText(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+              placeholder="동의합니다"
+            />
+          </>
+        )}
 
         <p className="text-gray-600 mb-6">
           회원 탈퇴를 진행하면 계정과 관련된 모든 데이터가 즉시 삭제됩니다. 이 작업은 되돌릴 수
