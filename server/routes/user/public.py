@@ -21,6 +21,7 @@ from server.models.cart import Cart
 from server.models.cart_history import CartHistory
 from server.schemas.user import UserCreate, AuthResponse, UserSignIn, DeleteUserRequest, UserUpdate
 from server.security import hash_password, create_access_token, verify_password, verify_access_token
+from .helpers import THEATER_IDS, _create_default_data_for_new_user, _unlink_kakao 
 
 
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
@@ -36,68 +37,7 @@ s3_client = boto3.client(
 
 router = APIRouter(prefix="/users", tags=["User"])
 
-# 트리거가 사용하던 극장 ID들
-THEATER_IDS = [
-    uuid.UUID("f32817ed-9564-4654-a670-3b4d2cb1fa12"),  # ✅ DB에 있는 값으로 수정(172d)
-    uuid.UUID("32d05b50-b486-4bc7-b8ab-dc81aaa9b1aa"),
-    uuid.UUID("6301fab5-95e6-443c-bbbb-609bc21ac5a6"),
-]
 
-def _generate_unique_seat(db: Session, theater_id: uuid.UUID) -> str:
-    """해당 극장에서 아직 사용되지 않은 좌석코드 생성 (A-Z + 1..50)"""
-    # 최대 시도 제한 (이론상 중복이 너무 많을 경우 대비)
-    for _ in range(500):
-        letter = random.choice(string.ascii_uppercase)  # A-Z
-        number = random.randint(1, 50)                  # 1..50
-        seat = f"{letter}{number}"
-        exists = (
-        db.query(Reservation)
-        .filter(
-            Reservation.theater_id == theater_id,
-            text(f"'{seat}' = ANY(seat_number)")
-        )
-        .first()
-    )
-        if not exists:
-            return seat
-    # 좌석 풀이 부족하거나 이상 상황
-    raise HTTPException(status_code=500, detail="예약 좌석 생성 중 충돌이 발생했습니다.")
-
-def _create_default_data_for_new_user(db: Session, new_user: User) -> None:
-    """회원가입 시 기본 예약/결제 생성 로직 (소셜 가입에서도 재사용)"""
-    now = datetime.now(timezone.utc)
-
-    for theater_id in THEATER_IDS:
-        seat = _generate_unique_seat(db, theater_id)
-
-        reservation = Reservation(
-            id=uuid.uuid4(),
-            user_id=new_user.id,
-            theater_id=theater_id,
-            seat_number=[seat],
-            total_price=1,
-            status="confirmed",
-            created_at=now,
-            viewed_at=datetime(2024, 5, 2, 0, 0, 0, tzinfo=timezone.utc),
-            show_time="14:00:00",
-        )
-        db.add(reservation)
-        db.flush()
-
-        payment = Payment(
-            id=uuid.uuid4(),
-            user_id=new_user.id,
-            reservation_id=reservation.id,
-            amount=1,
-            point_earned=0,
-            status="paid",
-            payment_key=uuid.uuid4(),
-            payment_method="credit_card",
-            created_at=now,
-        )
-        db.add(payment)
-
-        
 
 @router.post("/signup", response_model=AuthResponse)
 def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
@@ -225,14 +165,29 @@ def delete_user(data: DeleteUserRequest, request: Request, db: Session = Depends
     if not user:
         raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
 
-    if user.phone == "social":
+    # ✅ provider 판별
+    phone_value = user.phone or ""
+    is_kakao = phone_value == "Kakao"
+    is_google = phone_value == "Google"
+    is_social = is_kakao or is_google
+
+    if is_social:
+        # 소셜 유저 → 동의 문구
         if data.agreement_text != "동의합니다":
             raise HTTPException(status_code=400, detail="탈퇴 동의 문구를 정확히 입력해주세요.")
     else:
+        # 일반 유저 → 비밀번호
         if not data.password:
             raise HTTPException(status_code=400, detail="비밀번호를 입력해주세요.")
         if not verify_password(data.password, user.password):
             raise HTTPException(status_code=403, detail="비밀번호가 일치하지 않습니다.")
+
+    # ✅ 소셜 계정 언링크 요청
+    try:
+        if is_kakao and user.social_id:
+            _unlink_kakao(user.social_id)
+    except Exception as e:
+        print("Social unlink failed:", e)
 
     try:
         db.query(Payment).filter(Payment.user_id == user.id).delete()
@@ -249,6 +204,7 @@ def delete_user(data: DeleteUserRequest, request: Request, db: Session = Depends
     response = Response(status_code=204)
     response.delete_cookie("__stage__")
     return response
+
 
 
 @router.post("/me/profile-image")

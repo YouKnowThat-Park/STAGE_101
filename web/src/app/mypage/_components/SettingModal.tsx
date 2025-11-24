@@ -13,7 +13,7 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
   const { data: social } = useUserHook();
   const { mutate, isPending } = useDeleteUser();
 
-  const isSocialUser = social?.phone === 'social';
+  const isSocialUser = social?.phone === 'Kakao' || social?.phone === 'Google';
 
   const handleChange = (key: keyof typeof checks) => {
     setChecks((prev) => ({ ...prev, [key]: !prev[key] }));

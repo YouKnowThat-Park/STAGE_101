@@ -91,6 +91,8 @@ async def kakao_callback(code: str, db: Session = Depends(get_db)):
     profile_info = kakao_account.get("profile") or {}
     nickname = profile_info.get("nickname") or "KakaoUser"
 
+    kakao_id = str(profile.get("id"))
+
     if email is None:
         raise HTTPException(status_code=400, detail="카카오에서 이메일 정보를 제공하지 않았습니다.")
 
@@ -104,9 +106,10 @@ async def kakao_callback(code: str, db: Session = Depends(get_db)):
                 name=nickname,
                 nickname=nickname,
                 email=email,
-                phone="social",
+                phone="Kakao",
                 password=hashed_pw,
                 point=10000,
+                social_id=kakao_id
             )
             db.add(user)
             db.flush()
@@ -188,6 +191,7 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"Google HTTP 통신 오류: {str(e)}")
 
+    google_sub = str(profile.get("sub"))
     email = profile.get("email")
     name = profile.get("name") or "GoogleUser"
 
@@ -204,17 +208,23 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
                 name=name,
                 nickname=name,
                 email=email,
-                phone="social",
+                phone="Google",
                 password=hashed_pw,
                 point=10000,
+                social_id=google_sub
             )
             db.add(user)
             db.flush()
 
             _create_default_data_for_new_user(db, user)
 
+        else:
+            # 기존 구글 유저인데 social_id 비어있으면 채워주기
+            if user.social_id is None:
+                user.social_id = google_sub
+
         db.commit()
-        db.refresh(user)
+        db.refresh(user)     
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"구글 로그인 처리 중 DB 오류: {str(e)}")
