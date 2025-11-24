@@ -11,7 +11,7 @@ from server.models.qr_session import QrSession
 from server.models.reservation import Reservation
 from server.models.theater import Theater
 from server.schemas.qr_session import QrSessionCreate, QrSessionResponse, QrDetailResponse
-from .user import get_current_user
+from server.routes.user.public import get_current_user
 from server.qrSession import settings
 
 router = APIRouter(prefix="/qr-sessions", tags=["QR Sessions"])

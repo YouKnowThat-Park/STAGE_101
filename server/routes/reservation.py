@@ -22,7 +22,7 @@ from server.schemas.reservation import ReservationResponse, ReservationCreate, C
 from server.models.payment import Payment
 from server.security import verify_access_token
 from server.websocket_manager import manager
-from .user import get_current_user
+from server.routes.user.public import get_current_user
 router = APIRouter(prefix="/reservations", tags=["Reservations"])
 
 
