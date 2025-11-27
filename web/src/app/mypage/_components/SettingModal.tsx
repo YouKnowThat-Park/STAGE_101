@@ -142,8 +142,8 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
           <>
             {/* 소셜 로그인 회원: 동의 문구 입력 */}
             <label htmlFor="agreement" className="block text-sm font-medium text-gray-700 mb-1">
-              소셜 계정 탈퇴를 위해 <span className="font-semibold">"동의합니다"</span>를 정확히
-              입력해주세요
+              소셜 계정 탈퇴를 위해 <span className="font-semibold">&quot;동의합니다&quot;</span>를
+              정확히 입력해주세요
             </label>
             <input
               type="text"
