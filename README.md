@@ -436,7 +436,7 @@
 
 ## 🔗 배포 링크 & 데모
 
-- **배포 주소:** [https://stage-101.vercel.app/](https://stage-101.vercel.app/)  
+- **배포 주소:** [https://www.stage101.shop/](https://www.stage101.shop/)
 - **Blog:** [https://github.com/YouKnowThat-Park](https://github.com/YouKnowThat-Park](https://youkn0wthat.tistory.com/))
 - **Portfolio:** https://www.wooseokbot.com/project/stage101
 ---
@@ -444,16 +444,16 @@
 ## 📝 회고 & 배운 점
 
 [회고]
-[https://stage-101.vercel.app/notion/retrospective](https://stage-101.vercel.app/notion/retrospective)  
+[https://stage101.shop/notion/retrospective](https://stage101.shop/notion/retrospective)  
 
 [기능 선택 이유]
-[https://stage-101.vercel.app/notion/feature-decisions](https://stage-101.vercel.app/notion/feature-decisions)
+[https://stage101.shop/notion/feature-decisions](https://stage101.shop/notion/feature-decisions)
 
 [기능적 문제]
-[https://stage-101.vercel.app/notion/feature-history](https://stage-101.vercel.app/notion/feature-history)
+[https://stage101.shop/notion/feature-history](https://stage101.shop/notion/feature-history)
 
 [트러블 슈팅]
-[https://stage-101.vercel.app/notion/trouble-shooting](https://stage-101.vercel.app/notion/trouble-shooting)
+[https://stage101.shop/notion/trouble-shooting](https://stage101.shop/notion/trouble-shooting)
 
 
 ---
