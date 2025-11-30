@@ -16,7 +16,7 @@ export const fetchAllReviews = async ({
     ...(userId ? { user_id: userId } : {}),
   });
 
-  const res = await fetch(`${API_BASE}/reviews?${query.toString()}`, {
+  const res = await fetch(`${API_BASE}/reviews/?${query.toString()}`, {
     method: 'GET',
     credentials: 'include', // 있어도 되고 없어도 됨
   });
