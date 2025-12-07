@@ -19,17 +19,12 @@ FRONTEND_REDIRECT_URL = os.getenv("FRONTEND_REDIRECT_URL", "http://localhost:300
 KAKAO_ADMIN_KEY = os.getenv("KAKAO_ADMIN_KEY")
 KAKAO_CLIENT_ID = os.getenv("KAKAO_CLIENT_ID")
 KAKAO_CLIENT_SECRET = os.getenv("KAKAO_CLIENT_SECRET")
-KAKAO_REDIRECT_URI = os.getenv(
-    "KAKAO_REDIRECT_URI",
-    "http://localhost:8000/users/social/kakao/callback",
-)
+KAKAO_REDIRECT_URI = "https://www.stage101.shop/api/users/social/kakao/callback"
+
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-GOOGLE_REDIRECT_URI = os.getenv(
-    "GOOGLE_REDIRECT_URI",
-    "http://localhost:8000/users/social/google/callback",
-)
+GOOGLE_REDIRECT_URI = "https://www.stage101.shop/api/users/social/google/callback"
 
 
 router = APIRouter(prefix="/users", tags=["User Social"])

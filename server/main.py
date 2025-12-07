@@ -11,6 +11,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",         # 로컬 개발용
     "https://www.stage101.shop:3000",       # 지금 EC2 프론트 주소
+    "https://stage101.shop"
     "https://www.stage101.shop",            # 나중에 Nginx로 :3000 빼면 이거도 필요
 ]
 
