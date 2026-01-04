@@ -2,13 +2,15 @@ import Link from 'next/link';
 
 import HomeReviewsClient from './home/HomeReviewsClient';
 import { NowShowingSection } from './home/NowShowingSection';
+import { RecommendedShowings } from './home/RecommendedShowings';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center py-10  px-4">
+    <div className="min-h-screen flex flex-col items-center mt-20 py-10  px-4">
       {/* ✅ 슬라이드 이미지 반응형 */}
       <NowShowingSection />
 
+      <RecommendedShowings />
       <div className="flex flex-wrap justify-center gap-10 mt-20 w-full max-w-[1100px]">
         {/* 리뷰 랭킹 */}
 
