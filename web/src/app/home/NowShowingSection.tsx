@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { ArrowLeftIcon } from 'src/ui/icon/ArrowLeftIcon';
 import { ArrowRightIcon } from 'src/ui/icon/ArrowRightIcon ';
-import { ChartIcon } from 'src/ui/icon/ChartIcon';
+import { LuRectangleVertical } from 'react-icons/lu';
 import { PiRankingDuotone } from 'react-icons/pi';
 import { VscPreview, VscGraph } from 'react-icons/vsc';
 
@@ -57,24 +57,6 @@ export const NowShowingSection = () => {
         <div className="flex gap-2 ml-[100px]">
           <h2 className="text-[#C9A66B] font-semibold hover:scale-105 shadow-2xl">상영작</h2>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={goPrev}
-            aria-label="이전 이미지"
-            className="h-9 w-9 rounded-full bg-[#111111] shadow-sm"
-          >
-            <ArrowLeftIcon className="h-8 w-8 " />
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            aria-label="다음 이미지"
-            className="h-9 w-9 rounded-full bg-[#111111] shadow-sm"
-          >
-            <ArrowRightIcon className="h-8 w-8" />
-          </button>
-        </div>
       </div>
 
       <div className="mt-2 relative overflow-hidden">
@@ -110,6 +92,9 @@ export const NowShowingSection = () => {
 
                   <div className="absolute left-2 bottom-2 px-2 py-1 rounded bg-black/50 text-white text-sm">
                     {img.id}
+                  </div>
+                  <div className="text-white font-semibold px-2 py-1 absolute right-5 bottom-2 bg-black/50 rounded">
+                    안녕하세요.
                   </div>
                 </div>
 
@@ -170,6 +155,54 @@ export const NowShowingSection = () => {
                 <VscGraph className="text-white" size={30} />
               </span>
               <span>예매 / 리뷰</span>
+            </button>
+          </div>
+
+          <div
+            className=" absolute right-5 bottom-2
+    inline-flex items-center  p-1 rounded-full
+    bg-[#0b0b0b] border border-white/10
+    shadow-[inset_0_2px_8px_rgba(0,0,0,0.85),_0_1px_0_rgba(255,255,255,0.04)]
+  "
+          >
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="이전 이미지"
+              className="
+      group h-9 w-9 rounded-full
+      flex items-center justify-center
+      bg-[#111] text-white
+      
+      shadow-[inset_0_2px_6px_rgba(0,0,0,0.9),_0_1px_0_rgba(255,255,255,0.05)]
+      hover:text-[#C9A66B] hover:bg-[#141414]
+      active:text-[#C9A66B] active:bg-[#0f0f0f] active:translate-y-[1px]
+      active:shadow-[inset_0_4px_10px_rgba(0,0,0,0.95)]
+      transition-all
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A66B]/50
+    "
+            >
+              <LuRectangleVertical className="h-7 w-5 opacity-90 group-hover:opacity-100 transition" />
+            </button>
+
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="다음 이미지"
+              className="
+      group h-9 w-9 rounded-full
+      flex items-center justify-center
+      bg-[#111] text-white
+      
+      shadow-[inset_0_2px_6px_rgba(0,0,0,0.9),_0_1px_0_rgba(255,255,255,0.05)]
+      hover:text-[#C9A66B] hover:bg-[#141414]
+      active:text-[#C9A66B] active:bg-[#0f0f0f] active:translate-y-[1px]
+      active:shadow-[inset_0_4px_10px_rgba(0,0,0,0.95)]
+      transition-all
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A66B]/50
+    "
+            >
+              <LuRectangleVertical className="h-7 w-5 rotate-180 opacity-90 group-hover:opacity-100 transition" />
             </button>
           </div>
         </div>
