@@ -64,7 +64,7 @@ export const RecommendedShowings = () => {
   const faceBase = 'absolute inset-0 [backface-visibility:hidden]';
 
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-10 mt-20 py-6">
+    <section className="w-full h-[700px] px-4 sm:px-6 lg:px-10 mt-20 py-6 bg-white">
       <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* 카드 1 */}
         <article className="[perspective:1200px] aspect-[16/10] w-full">
