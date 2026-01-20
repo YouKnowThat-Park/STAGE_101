@@ -104,40 +104,6 @@ def _generate_unique_seat(db: Session, theater_id: uuid.UUID) -> str:
     # 좌석 풀이 부족하거나 이상 상황
     raise HTTPException(status_code=500, detail="예약 좌석 생성 중 충돌이 발생했습니다.")
 
-def _create_default_data_for_new_user(db: Session, new_user: User) -> None:
-    """회원가입 시 기본 예약/결제 생성 로직 (소셜 가입에서도 재사용)"""
-    now = datetime.now(timezone.utc)
-
-    for theater_id in THEATER_IDS:
-        seat = _generate_unique_seat(db, theater_id)
-
-        reservation = Reservation(
-            id=uuid.uuid4(),
-            user_id=new_user.id,
-            theater_id=theater_id,
-            seat_number=[seat],
-            total_price=1,
-            status="confirmed",
-            created_at=now,
-            viewed_at=datetime(2024, 5, 2, 0, 0, 0, tzinfo=timezone.utc),
-            show_time="14:00:00",
-        )
-        db.add(reservation)
-        db.flush()
-
-        payment = Payment(
-            id=uuid.uuid4(),
-            user_id=new_user.id,
-            reservation_id=reservation.id,
-            amount=1,
-            point_earned=0,
-            status="paid",
-            payment_key=uuid.uuid4(),
-            payment_method="credit_card",
-            created_at=now,
-        )
-        db.add(payment)
-
 def _unlink_kakao(kakao_user_id: str):
     if not KAKAO_ADMIN_KEY:
         print("KAKAO_ADMIN_KEY not set; skip unlink")
