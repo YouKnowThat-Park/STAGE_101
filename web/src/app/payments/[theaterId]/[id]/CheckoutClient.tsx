@@ -50,7 +50,6 @@ export default function CheckoutClient({
   useEffect(() => {
     async function initTossPayments() {
       if (!CLIENT_KEY) {
-        console.error('🚨 TOSS CLIENT KEY가 설정되지 않았습니다.');
         return;
       }
 
@@ -64,8 +63,6 @@ export default function CheckoutClient({
 
     initTossPayments();
   }, []);
-
-  if (isLoading) return <p className="text-white">로딩 중...</p>;
 
   const handleTossPayment = async () => {
     if (!tossPayments) {
