@@ -7,7 +7,16 @@ export interface TheaterResponse {
   type: string;
 }
 
+export interface TheaterDetailResponse extends TheaterResponse {
+  description: string;
+  show_time: string;
+  total_time: number;
+  price: number;
+}
+
 export interface TheaterProps {
   theaterId: string;
   onDateTimeSelect: (date: Date, time: string) => void;
 }
+
+export type TheaterId = 'musicalA' | 'musicalB' | 'musicalC' | 'cinemaA' | 'cinemaB' | 'cinemaC';

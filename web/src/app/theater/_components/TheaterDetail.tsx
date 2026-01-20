@@ -1,41 +1,27 @@
-import { useUserStore } from '../../../store/userStore';
-import LoginModal from '../../../ui/modal/LoginModal';
+'use client';
+
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useUserStore } from 'src/store/userStore';
+import LoginModal from 'src/ui/modal/LoginModal';
+import { TheaterDetailResponse } from 'src/types/theater/theater-type';
 
-interface MusicalAProps {
+export interface Props {
   theaterId: string;
-  name: string;
-  description: string;
-  price: number;
-  show_time: string;
-  main_img: string;
-  total_time: number;
+  data: TheaterDetailResponse;
 }
 
-// 🎭 좌석 배열 (기본 직선 형태)
-const SEATS = [
-  ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10'],
-  ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'],
-  ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10'],
-  ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10'],
-  ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'E10'],
-];
+const TheaterDetail = ({ theaterId, data }: Props) => {
+  const { name, description, main_img, show_time, total_time, price, type } = data;
 
-const CinemaA = ({
-  theaterId,
-  name,
-  description,
-  price,
-  show_time,
-  main_img,
-  total_time,
-}: MusicalAProps) => {
   const router = useRouter();
   const { id } = useUserStore();
   const [showModal, setShowModal] = useState(false);
 
+  const isMusical = String(type).toLowerCase().includes('musical');
+
+  // ✅ async로 바꿔야 await 사용 가능
   const handleReservationGo = async () => {
     if (!id) {
       setShowModal(true);
@@ -75,16 +61,29 @@ const CinemaA = ({
 
             {/* Info */}
             <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-              {/* Badge (고정 텍스트만) */}
+              {/* Badge */}
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-yellow-500/15 px-3 py-1 text-xs font-semibold text-yellow-200 ring-1 ring-yellow-500/30">
+                <span
+                  className={[
+                    'rounded-full px-3 py-1 text-xs font-semibold ring-1',
+                    isMusical
+                      ? 'bg-yellow-500/15 text-yellow-200 ring-yellow-500/30'
+                      : 'bg-sky-500/15 text-sky-200 ring-sky-500/30',
+                  ].join(' ')}
+                >
+                  {isMusical ? 'MUSICAL' : 'CINEMA'}
+                </span>
+                <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70 ring-1 ring-white/15">
                   STAGE_101 ORIGINAL
+                </span>
+                <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70 ring-1 ring-white/15">
+                  {type}
                 </span>
               </div>
 
               <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">{name}</h1>
 
-              {/* Meta (네 값 그대로) */}
+              {/* Meta */}
               <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="rounded-xl bg-black/30 p-4 ring-1 ring-white/10">
                   <p className="text-xs text-white/60">상영 시간</p>
@@ -95,7 +94,7 @@ const CinemaA = ({
                 <div className="rounded-xl bg-black/30 p-4 ring-1 ring-white/10">
                   <p className="text-xs text-white/60">가격</p>
                   <p className="mt-1 text-lg font-extrabold text-yellow-300">
-                    {price.toLocaleString()}원
+                    {Number(price).toLocaleString()}원
                   </p>
                 </div>
               </div>
@@ -104,7 +103,7 @@ const CinemaA = ({
                 {description}
               </p>
 
-              {/* 예매 버튼만 */}
+              {/* 예매 버튼 */}
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
                   onClick={handleReservationGo}
@@ -112,9 +111,8 @@ const CinemaA = ({
                 >
                   예매하기
                 </button>
-
                 <div className="text-xs text-white/55">
-                  * 포트폴리오용 데모입니다. 실제 결제/예매가 아닙니다.
+                  * 포트폴리오용 테스트 결제 입니다. 실제 결제/예매가 아닙니다.
                 </div>
               </div>
             </div>
@@ -122,7 +120,7 @@ const CinemaA = ({
         </div>
       </section>
 
-      {/* 기존 아래 섹션들 그대로 */}
+      {/* 아래 섹션들 */}
       <div className="mx-auto w-full max-w-6xl px-5 pb-14">
         <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full">
           <p className="text-gray-300">{description}</p>
@@ -145,10 +143,11 @@ const CinemaA = ({
           </p>
         </div>
 
+        {/* ✅ 모달도 여기서 그대로 */}
         <LoginModal isOpen={showModal} onClose={() => setShowModal(false)} />
       </div>
     </div>
   );
 };
 
-export default CinemaA;
+export default TheaterDetail;
