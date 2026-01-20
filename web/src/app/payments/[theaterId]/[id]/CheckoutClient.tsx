@@ -26,7 +26,7 @@ interface CheckoutClientProps {
   viewed_at: string;
   show_time: string;
   reservationId: string;
-  main_img: string;
+  main_img?: string;
 }
 
 export default function CheckoutClient({
