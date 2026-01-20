@@ -45,6 +45,7 @@ const buttonTabs = [
     ),
   },
 ];
+const INNER = 'max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12';
 
 const MyPage = () => {
   const [selectedTab, setSelectedTab] = useState('ticket');
@@ -66,7 +67,7 @@ const MyPage = () => {
 
   return (
     <div
-      className={`${notoSerif.className} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative`}
+      className={`${(notoSerif.className, INNER)} flex flex-col lg:flex-row min-[850px]:gap-40 px-4 py-10 lg:px-20 relative`}
     >
       {/* 📱 상단 로고 (모바일 전용) */}
       <div
