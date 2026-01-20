@@ -16,6 +16,7 @@ const TheaterList = () => {
     { id: 'musicalA', name: '뮤지컬 B관' },
     { id: 'musicalB', name: '뮤지컬 C관' },
     { id: 'cinemaB', name: '시네마 A관' },
+    { id: 'cinemaC', name: '시네마 C관' },
   ];
 
   const handleGoBack = () => {

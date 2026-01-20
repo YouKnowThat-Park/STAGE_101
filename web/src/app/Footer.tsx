@@ -23,7 +23,7 @@ const Footer = () => {
 
         {/* 네비게이션 링크 */}
         <nav className="mt-4 md:mt-0 flex flex-col md:flex-row items-center gap-6">
-          <Link href="/ui/notice" className="text-gray-400 hover:text-white text-sm">
+          <Link href="/notion/TermsOfService" className="text-gray-400 hover:text-white text-sm">
             이용약관
           </Link>
           <Link href="/ui/notice" className="text-gray-400 hover:text-white text-sm">

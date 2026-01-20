@@ -146,7 +146,7 @@ export const NowShowingSection = () => {
               <span>
                 <VscGraph className="text-white" size={30} />
               </span>
-              <span>굿즈 판매</span>
+              <span>굿즈 랭킹</span>
             </button>
           </div>
           <div>
@@ -160,7 +160,7 @@ export const NowShowingSection = () => {
 
           <div
             className=" absolute right-5 bottom-2
-    inline-flex items-center  p-1 rounded-full
+    inline-flex items-center  rounded-sm
     bg-[#0b0b0b] border border-white/10
     shadow-[inset_0_2px_8px_rgba(0,0,0,0.85),_0_1px_0_rgba(255,255,255,0.04)]
   "
@@ -170,7 +170,7 @@ export const NowShowingSection = () => {
               onClick={goPrev}
               aria-label="이전 이미지"
               className="
-      group h-9 w-9 rounded-full
+      group h-9 w-9 rounded-sm
       flex items-center justify-center
       bg-[#111] text-white
       
@@ -190,7 +190,7 @@ export const NowShowingSection = () => {
               onClick={goNext}
               aria-label="다음 이미지"
               className="
-      group h-9 w-9 rounded-full
+      group h-9 w-9 rounded-sm
       flex items-center justify-center
       bg-[#111] text-white
       
