@@ -3,7 +3,7 @@ import React from 'react';
 
 const FloorGuideSection = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-[1100px] mx-auto flex items-center justify-center gap-10">
         <div className="relative w-[300px] h-[420px]">
           <Image src="/STAGE101_floor_guide.webp" alt="층별 안내" fill className="object-contain" />
@@ -23,13 +23,16 @@ const FloorGuideSection = () => {
               <b>3F</b> – 중·소형 공연장, 연극과 다양한 장르.
             </li>
             <li>
-              <b>2F</b> – 창작 공연 공간, 실험적 작품.
+              <b>2F</b> – 매표소 / 창작 공연 공간, 실험적 작품.
             </li>
             <li>
               <b>1F</b> – 카페 & 레스토랑.
             </li>
             <li>
               <b>B1</b> – 굿즈샵, 한정 상품 판매.
+            </li>
+            <li>
+              <b>주차장</b> – 최대 50대까지 수용 가능한 주차 공간.
             </li>
           </ul>
         </div>

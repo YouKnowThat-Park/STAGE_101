@@ -123,7 +123,7 @@ const Page = () => {
               에서 확인하실 수 있습니다.
             </p>
             <p>📩 문의 : youkn0wthat@naver.com</p>
-            <p>🔗 GitHub : (링크 추가 가능)</p>
+            <p>🔗 GitHub : github.com/YouKnowThat-Park/STAGE_101</p>
           </div>
         </>
       )}

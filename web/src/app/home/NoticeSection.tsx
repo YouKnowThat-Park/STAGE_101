@@ -3,65 +3,72 @@ import React from 'react';
 
 const NoticeSection = () => {
   return (
-    <section className="mt-16 w-full">
-      <div className="mx-auto max-w-6xl rounded-2xl border border-white/10 bg-[#0B0B0B] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
-        {/* 데스크탑: 좌-텍스트-우 / 모바일: 위아래 스택 */}
-        <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-[1fr_1.2fr_1fr]">
-          {/* LEFT IMAGE */}
-          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111]">
-            <div className="relative aspect-[2/3] w-full">
-              <Image
-                src="/tosspay.webp"
-                alt="토스페이 결제 안내"
-                width={400}
-                height={800}
-                className=" opacity-95"
-                priority
-              />
-            </div>
-            {/* subtle overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-          </div>
-
-          {/* CENTER TEXT (between images) */}
-          <div className="flex flex-col justify-between gap-4 rounded-xl border border-white/10 bg-[#0E0E0E] p-5">
-            {/* TOP TEXT (for left image) */}
-            <div>
-              <p className="text-xs tracking-widest text-[#C9A66B]/90">PAYMENT NOTICE</p>
-              <h3 className="mt-2 text-lg font-semibold text-white">토스페이 테스트 결제 안내</h3>
-              <p className="mt-2 leading-relaxed text-sm text-white/80">
-                해당 결제 시스템은 <span className="text-white">테스트용</span>으로, 결제 UI 흐름은
-                실제 결제와 동일하지만{' '}
-                <span className="text-[#C9A66B]">실제 결제는 진행되지 않습니다</span>. 안심하고
-                이용해 주세요.
-              </p>
+    <section className="mt-12 w-full flex justify-center px-4">
+      <div className="w-full max-w-6xl">
+        <div className="rounded-2xl border  bg-[#FBFBFB] p-4 md:p-5 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+          <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-[420px_1fr] items-stretch">
+            {/* LEFT IMAGE */}
+            <div className="relative overflow-hidden rounded-xl ">
+              <div className="relative w-full aspect-[444/529]">
+                <Image
+                  src="/tosspay.webp"
+                  alt="토스페이 결제 안내"
+                  fill
+                  sizes="(max-width: 768px) 92vw, 420px"
+                  className="border"
+                  priority
+                />
+              </div>
             </div>
 
-            <div className="h-px w-full bg-white/10" />
+            {/* RIGHT TEXT */}
+            <div className="rounded-xl border  p-5 md:p-6 text-black">
+              <div className="divide-y divide-white/10">
+                {/* PAYMENT NOTICE */}
+                <div className="pb-6">
+                  <p className="text-xs tracking-widest text-[#C9A66B]/90">PAYMENT NOTICE</p>
+                  <h3 className="mt-2 text-xl font-semibold">토스페이 테스트 결제 안내</h3>
+                  <p className="mt-3 leading-relaxed text-sm">
+                    해당 결제 시스템은 <span className="">테스트용</span>으로, 결제 UI 흐름은 실제
+                    결제와 동일하지만
+                    <span className="text-[#C9A66B]">실제 결제는 진행되지 않습니다</span>. 안심하고
+                    이용해 주세요.
+                  </p>
+                </div>
 
-            {/* BOTTOM TEXT (for right image) */}
-            <div>
-              <p className="text-xs tracking-widest text-[#C9A66B]/90">CONTENT NOTICE</p>
-              <h3 className="mt-2 text-lg font-semibold text-white">이미지/사진 출처 안내</h3>
-              <p className="mt-2 leading-relaxed text-sm text-white/80">
-                본 페이지에 사용된 이미지 및 사진들은 <span className="text-white">AI 툴</span> 또는{' '}
-                <span className="text-white">제작자</span>가 제작/촬영한 자료입니다.
-              </p>
-            </div>
-          </div>
+                {/* CONTENT NOTICE */}
+                <div className="py-6">
+                  <p className="text-xs tracking-widest text-[#C9A66B]/90">CONTENT NOTICE</p>
+                  <h3 className="mt-2 text-xl font-semibold ">이미지/사진 출처 안내</h3>
+                  <p className="mt-3 leading-relaxed text-sm">
+                    본 페이지에 사용된 이미지 및 사진들은 AI 툴 또는 제작자가 제작/촬영한
+                    자료입니다.
+                  </p>
+                </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111]">
-            <div className="relative aspect-[2/3] w-full">
-              <Image
-                src="/STAGE101_rooftop.webp"
-                alt="이미지 및 사진 출처 안내"
-                fill
-                className="object-cover opacity-95"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
+                {/* SHOP & POINT NOTICE */}
+                <div className="pt-6">
+                  <p className="text-xs tracking-widest text-[#C9A66B]/90">SHOP & POINT NOTICE</p>
+                  <h3 className="mt-2 text-xl font-semibold ">굿즈 상점 · 포인트 안내</h3>
+
+                  <ul className="mt-3 space-y-2 text-sm leading-relaxed">
+                    <li>
+                      • 회원가입 시 <span className="font-medium">10,000P</span>가 기본 지급됩니다.
+                    </li>
+                    <li>
+                      • 결제 완료 후 <span className=" font-medium">관람이 확인</span>되면 티켓
+                      금액의 <span className="text-[#C9A66B] font-semibold">5%</span>가 포인트로
+                      페이백됩니다.
+                    </li>
+                    <li>
+                      • 적립된 포인트는 <span className=" font-medium">굿즈 상점</span>
+                      에서 할인/결제에 사용할 수 있습니다.
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            {/* /RIGHT TEXT */}
           </div>
         </div>
       </div>

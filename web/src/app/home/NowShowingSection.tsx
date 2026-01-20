@@ -68,7 +68,7 @@ export const NowShowingSection = () => {
               <div
                 key={`${img.id}-${idx}-${animKey}`}
                 className={[
-                  'relative flex-shrink-0 rounded-md border fade transition-all duration-200 bg-[#111]',
+                  'relative flex-shrink-0 rounded-md fade transition-all duration-200',
                   isFront
                     ? 'w-[220px] sm:w-[260px] h-[400px] shadow-lg z-10'
                     : 'w-[180px] sm:w-[210px] h-[340px]',
@@ -85,7 +85,7 @@ export const NowShowingSection = () => {
                         ? '(max-width: 640px) 288px, 324px'
                         : '(max-width: 640px) 240px, 270px'
                     }
-                    className="object-cover"
+                    className="object-cover "
                     style={{ objectPosition: img.pos ?? 'center' }}
                     priority={idx < 2}
                   />
@@ -99,8 +99,8 @@ export const NowShowingSection = () => {
                 </div>
 
                 {/* 버튼 영역 */}
-                <div className="w-full h-[15%] flex items-center justify-center bg-[#0E0E0E] rounded-b-md">
-                  <button className="w-[80%] h-[36px] rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition">
+                <div className="w-full h-[10%] mt-2 flex items-center justify-center  border rounded-md">
+                  <button className="w-full h-full rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition">
                     예매
                   </button>
                 </div>
