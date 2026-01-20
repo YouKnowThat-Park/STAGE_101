@@ -11,11 +11,11 @@ const NoticeSection = () => {
           <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111]">
             <div className="relative aspect-[2/3] w-full">
               <Image
-                src="/STAGE101_rooftop.webp"
+                src="/tosspay.webp"
                 alt="토스페이 결제 안내"
-                fill
-                className="object-cover opacity-95"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                width={400}
+                height={800}
+                className=" opacity-95"
                 priority
               />
             </div>
