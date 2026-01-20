@@ -82,6 +82,8 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
             "nickname": new_user.nickname,
             "profile_img": new_user.profile_img,
             "point": new_user.point,
+                        "phone": new_user,
+            "name": new_user
         },
     })
     response.set_cookie(
@@ -110,6 +112,8 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
             "nickname": user.nickname,
             "profile_img": user.profile_img,
             "point": user.point,
+            "phone": user.phone,
+            "name": user.name
         }
     })
 
@@ -147,7 +151,9 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         "nickname": user.nickname,
         "profile_img": user.profile_img,
         "phone": user.phone,
-        "point": user.point
+        "point": user.point,
+        "phone": user.phone,
+        "name": user.name
     }
 
 @router.delete("/delete", status_code=204)

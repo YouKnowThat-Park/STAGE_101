@@ -12,13 +12,14 @@ import { useSeatSelection } from 'src/hooks/payment/useSeatSelection';
 import { usePaymentHandler } from 'src/hooks/payment/usePaymentHandler';
 import formatDateToYMD from 'src/utils/formatDateToYYYYMMDD';
 import { ClientPaymentsPageProps } from 'src/types/payment/payment-type';
+import { useUserStore } from 'src/store/userStore';
 
 const ClientPaymentsPage = ({ initialSeats, theaterType }: ClientPaymentsPageProps) => {
   const [step, setStep] = useState(1);
   const [viewedAt, setViewedAt] = useState<string>('');
 
   // 유저 정보 가져오는 hook
-  const { data: user } = useUserHook();
+  const { id } = useUserStore();
 
   // 극장 Id 가져오는 hook
   const { theaterId } = useTheaterId(theaterType);
@@ -33,7 +34,7 @@ const ClientPaymentsPage = ({ initialSeats, theaterType }: ClientPaymentsPagePro
     error: reserveError,
   } = useReservedSeats(theaterId || null, viewedAt, theaterData?.show_time ?? null);
 
-  const userId = user?.id ?? '';
+  const userId = id || '';
 
   // 좌석 정보 불러오기
   const reservedSeats = useReservedSeatsSocket({

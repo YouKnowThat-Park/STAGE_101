@@ -45,6 +45,7 @@ export const useUserStore = create<UserState>()(
       profile_img: null,
       point: null,
       token: null,
+      phone: '',
       name: '',
 
       setUser: (user, token = null) => {
@@ -55,6 +56,7 @@ export const useUserStore = create<UserState>()(
             nickname: user.nickname,
             profile_img: user.profile_img,
             point: user.point,
+            phone: user.phone,
             token,
           });
         } else {
@@ -65,6 +67,7 @@ export const useUserStore = create<UserState>()(
             point: null,
             token: null,
             name: '',
+            phone: '',
           });
         }
       },
@@ -76,6 +79,7 @@ export const useUserStore = create<UserState>()(
           profile_img: null,
           point: null,
           token: null,
+          phone: '',
           name: '',
         });
       },

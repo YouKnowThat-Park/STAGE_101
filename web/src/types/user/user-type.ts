@@ -17,6 +17,7 @@ export interface SafeUserType {
   profile_img: string | null;
   point: number | null;
   name: string;
+  phone: string;
 }
 
 export interface UserState extends SafeUserType {

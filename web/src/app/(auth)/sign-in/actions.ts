@@ -38,6 +38,7 @@ export async function signInAction(email: string, password: string): Promise<Sig
       profile_img: user.profile_img ?? null,
       point: user.point ?? null,
       name: user.name ?? '',
+      phone: user.phone ?? '',
     };
 
     // __stage__ 쿠키 전달

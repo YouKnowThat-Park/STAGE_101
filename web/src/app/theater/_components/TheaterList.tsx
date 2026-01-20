@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useHeaderScroll } from 'src/hooks/useHeaderScroll';
 import HeaderScroll from 'src/ui/header/HeaderScroll';
+import { THEATER_LIST } from './theaterConfig';
 
 const TheaterList = () => {
   const router = useRouter();
@@ -10,13 +11,6 @@ const TheaterList = () => {
   const [showScrollHint, setShowScrollHint] = useState(false);
 
   useHeaderScroll(scrollRef, setShowScrollHint, 755);
-
-  const theaters = [
-    { id: 'cinemaA', name: '뮤지컬 A관' },
-    { id: 'musicalA', name: '뮤지컬 B관' },
-    { id: 'musicalB', name: '뮤지컬 C관' },
-    { id: 'cinemaB', name: '시네마 A관' },
-  ];
 
   const handleGoBack = () => {
     router.push('/theater');
@@ -56,12 +50,8 @@ const TheaterList = () => {
           <button onClick={handleGoBack} className="shrink-0 min-w-max">
             상영 예정
           </button>
-          {theaters.map((theater) => (
-            <button
-              key={theater.id}
-              onClick={() => router.push(`/theater/${theater.id}`)}
-              className="block p-4 shrink-0 min-w-max"
-            >
+          {THEATER_LIST.map((theater) => (
+            <button key={theater.id} onClick={() => router.push(`/theater/${theater.id}`)}>
               {theater.name}
             </button>
           ))}

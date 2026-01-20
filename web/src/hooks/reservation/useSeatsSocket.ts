@@ -45,7 +45,7 @@ export const useReservedSeatsSocket = (options: UseReservedSeatsSocketOptions): 
 
     return () => {
       if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-        ws.close;
+        ws.close();
       }
     };
   }, [enabled, theaterId, showTime, viewedAt]);

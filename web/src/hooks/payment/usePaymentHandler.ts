@@ -24,12 +24,12 @@ export const usePaymentHandler = () => {
       price <= 0
     ) {
       console.error('🚨 [프론트엔드] 필수 정보 누락:', {
-        selectedSeats,
-        userId,
-        theaterId,
-        viewedAt,
-        showTime,
-        price,
+        '좌석 정보': selectedSeats,
+        '유저 ID(userId)': userId,
+        '극장 ID(theaterId)': theaterId,
+        '관람 날짜(viewedAt)': viewedAt,
+        '상영 시간(showTime)': showTime,
+        '가격(price)': price,
       });
 
       alert('🚨 날짜, 유저 정보, 좌석 정보, 상영 시간, 가격이 모두 필요합니다.');
