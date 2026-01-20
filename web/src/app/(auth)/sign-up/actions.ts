@@ -76,7 +76,7 @@ export async function signUpAction({
       nickname: user.nickname,
       profile_img: user.profile_img ?? null,
       point: user.point ?? null,
-      // /users/signup 응답에 name은 없으니, 우리가 보낸 name 사용
+      phone: user.phone ?? null,
       name,
     };
 
