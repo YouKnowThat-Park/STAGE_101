@@ -51,104 +51,102 @@ const CinemaA = ({
   };
 
   return (
-    <div className="text-white min-h-screen p-6 flex flex-col items-center">
-      {/* 🎬 포스터 및 정보 */}
-      <div className="flex flex-col w-full max-w-4xl">
-        <Image
-          src={main_img}
-          alt="뮤지컬 포스터"
-          width={1000}
-          height={500}
-          className="rounded-lg shadow-lg"
-        />
-      </div>
+    <div className="min-h-screen bg-black text-white">
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        {/* STAGE_101 시그니처 배경 */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,200,80,0.18),_transparent_55%),radial-gradient(ellipse_at_bottom,_rgba(80,160,255,0.12),_transparent_60%)]" />
+        <div className="absolute inset-0 opacity-[0.10] [background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:36px_36px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/70 to-black" />
 
-      <div className="w-full max-w-4xl flex justify-between items-center mt-4">
-        <h2 className="text-4xl font-bold">{name}</h2>
-        <div className="text-right">
-          <p className="text-xl">
-            상영 시간: {show_time} / {total_time}분
-          </p>
-          <p className="text-lg font-semibold text-yellow-400 mt-1">
-            가격: {price.toLocaleString()}원
-          </p>
-        </div>
-      </div>
+        <div className="relative mx-auto w-full max-w-6xl px-5 py-10 lg:py-14">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_1fr]">
+            {/* Poster */}
+            <div className="rounded-2xl bg-white/5 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
+              <Image
+                src={main_img}
+                alt="포스터"
+                width={600}
+                height={900}
+                className="h-auto w-full rounded-xl object-cover"
+                priority
+              />
+            </div>
 
-      {/* 📖 공연 설명 */}
-      <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full max-w-4xl">
-        <p className="text-gray-300">{description}</p>
-      </div>
+            {/* Info */}
+            <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+              {/* Badge (고정 텍스트만) */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-yellow-500/15 px-3 py-1 text-xs font-semibold text-yellow-200 ring-1 ring-yellow-500/30">
+                  STAGE_101 ORIGINAL
+                </span>
+              </div>
 
-      {/* 🎭 좌석 배치 */}
-      <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full max-w-4xl">
-        <p className="text-center text-xl font-semibold mb-4">좌석 선택</p>
+              <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">{name}</h1>
 
-        {/* 🎭 연극 무대 */}
-        <div className="flex justify-center my-4">
-          <div className="bg-[#494744] text-white text-center py-6 w-40 h-20 rounded-md text-xl font-bold">
-            STAGE
+              {/* Meta (네 값 그대로) */}
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="rounded-xl bg-black/30 p-4 ring-1 ring-white/10">
+                  <p className="text-xs text-white/60">상영 시간</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {show_time} <span className="text-white/60">/ {total_time}분</span>
+                  </p>
+                </div>
+                <div className="rounded-xl bg-black/30 p-4 ring-1 ring-white/10">
+                  <p className="text-xs text-white/60">가격</p>
+                  <p className="mt-1 text-lg font-extrabold text-yellow-300">
+                    {price.toLocaleString()}원
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-5 text-sm leading-relaxed text-white/75 sm:text-base">
+                {description}
+              </p>
+
+              {/* 예매 버튼만 */}
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button
+                  onClick={handleReservationGo}
+                  className="w-full rounded-xl bg-yellow-500 px-6 py-3 font-extrabold text-black shadow-lg shadow-yellow-500/20 transition hover:bg-yellow-400 sm:w-auto"
+                >
+                  예매하기
+                </button>
+
+                <div className="text-xs text-white/55">
+                  * 포트폴리오용 데모입니다. 실제 결제/예매가 아닙니다.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* 🪑 좌석 UI */}
-        <div className="flex flex-col items-center gap-2 mt-6 w-full px-2">
-          {SEATS.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center gap-[4px] w-full">
-              {row.map((seat, seatIndex) => (
-                <div
-                  key={seatIndex}
-                  className="
-            flex items-center justify-center 
-            bg-[#374151] text-white rounded-md 
-            hover:bg-[#4b5563] transition
-            text-[2.8vw] sm:text-[1.8vw] md:text-sm 
-            w-[7.5vw] h-[7.5vw] 
-            min-w-[24px] min-h-[24px] 
-            max-w-[36px] max-h-[36px]"
-                >
-                  {seat}
-                </div>
-              ))}
-            </div>
-          ))}
+      {/* 기존 아래 섹션들 그대로 */}
+      <div className="mx-auto w-full max-w-6xl px-5 pb-14">
+        <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full">
+          <p className="text-gray-300">{description}</p>
         </div>
 
-        {/* 🛒 예약 버튼 */}
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={handleReservationGo}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-md transition"
-          >
-            좌석 예약
-          </button>
+        <div className="bg-[#3c3a37] p-6 mt-6 w-full">
+          <h2 className="text-xl font-bold text-red-400 mb-3">⚠️ 관람 안내 및 유의 사항</h2>
+          <ul className="text-gray-300 space-y-2 list-disc pl-6">
+            <li>공연이 시작된 후에는 입장이 제한될 수 있습니다.</li>
+            <li>공연 중 사진 촬영, 녹음 및 영상 촬영은 금지됩니다.</li>
+            <li>티켓 취소 및 환불 규정은 공연 기획사 정책에 따라 다를 수 있습니다.</li>
+            <li>모든 공연은 주최 측 사정에 따라 변경 또는 취소될 수 있습니다.</li>
+          </ul>
+
+          <h2 className="text-xl font-bold text-red-400 mt-6">⚠️ 중요 공지</h2>
+          <p className="text-gray-300 mt-2">
+            이 페이지는 <span className="text-red-400 font-bold">실제 예매 페이지가 아닙니다.</span>
+            <br />
+            모든 정보는 가상의 콘텐츠이며, 예매 및 결제 기능은 테스트 용도로만 제공됩니다.
+          </p>
         </div>
-      </div>
 
-      <div className="bg-[#3c3a37] p-6  mt-6 w-full max-w-4xl">
-        <h2 className="text-xl font-bold text-red-400 mb-3">⚠️ 관람 안내 및 유의 사항</h2>
-        <ul className="text-gray-300 space-y-2 list-disc pl-6">
-          <li>공연이 시작된 후에는 입장이 제한될 수 있습니다.</li>
-          <li>모든 좌석은 지정 좌석제로 운영되며, 임의로 좌석을 변경할 수 없습니다.</li>
-          <li>공연 중 사진 촬영, 녹음 및 영상 촬영은 금지됩니다.</li>
-          <li>음식물 반입이 제한될 수 있으며, 음료는 지정된 장소에서만 섭취 가능합니다.</li>
-          <li>티켓 취소 및 환불 규정은 공연 기획사 정책에 따라 다를 수 있습니다.</li>
-          <li>안전한 관람을 위해 어린이 및 노약자는 보호자의 동반이 필요합니다.</li>
-          <li>모든 공연은 주최 측 사정에 따라 변경 또는 취소될 수 있습니다.</li>
-        </ul>
-
-        <h2 className="text-xl font-bold text-red-400 mt-6">⚠️ 중요 공지</h2>
-        <p className="text-gray-300 mt-2">
-          이 페이지는 <span className="text-red-400 font-bold">실제 예매 페이지가 아닙니다.</span>
-          <br />
-          **모든 극장 위치, 연극 및 공연 정보는 임의로 만들어진 가상의 콘텐츠**이며, 예매 및 결제
-          기능은 테스트 용도로만 제공됩니다.
-          <br />
-          실제 공연 관람을 원하신다면 <span className="text-yellow-400 font-bold">공식 예매처</span>
-          를 이용해주세요.
-        </p>
+        <LoginModal isOpen={showModal} onClose={() => setShowModal(false)} />
       </div>
-      <LoginModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
