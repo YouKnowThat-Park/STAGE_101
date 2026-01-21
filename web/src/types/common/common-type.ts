@@ -18,3 +18,10 @@ export interface HeaderScrollProps {
   rightClass?: string;
   bottomClass?: string;
 }
+
+export interface BannerImage {
+  id: string;
+  src: string;
+  alt: string;
+  pos?: string;
+}

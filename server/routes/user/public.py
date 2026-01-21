@@ -21,7 +21,7 @@ from server.models.cart import Cart
 from server.models.cart_history import CartHistory
 from server.schemas.user import UserCreate, AuthResponse, UserSignIn, DeleteUserRequest, UserUpdate
 from server.security import hash_password, create_access_token, verify_password, verify_access_token
-from .helpers import THEATER_IDS, _create_default_data_for_new_user, _unlink_kakao 
+from .helpers import THEATER_IDS, _unlink_kakao, create_default_data_for_new_user
 
 
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
@@ -64,7 +64,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         db.flush()  # new_user.id 확보
 
         # 각 극장에 대해 예약 + 결제 생성
-        _create_default_data_for_new_user(db, new_user)
+        create_default_data_for_new_user(db, new_user)
 
         db.commit()
         db.refresh(new_user)

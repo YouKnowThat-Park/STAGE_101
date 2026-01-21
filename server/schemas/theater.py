@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 from uuid import UUID
 from datetime import datetime, date
 from server.models.enums import TheaterDaysEnum
@@ -23,3 +23,12 @@ class TheaterResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class TheaterListStats(BaseModel):
+    total: int
+    by_type: Dict[str, int] = {}
+    now_showing: int = 0
+
+class TheaterListResponse(BaseModel):
+    items: List[TheaterResponse]
+    stats: Optional[TheaterListStats] = None

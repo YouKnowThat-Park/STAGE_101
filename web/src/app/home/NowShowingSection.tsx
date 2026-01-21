@@ -1,37 +1,44 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { ArrowLeftIcon } from 'src/ui/icon/ArrowLeftIcon';
-import { ArrowRightIcon } from 'src/ui/icon/ArrowRightIcon ';
+import React, { useEffect, useMemo, useState } from 'react';
 import { LuRectangleVertical } from 'react-icons/lu';
 import { PiRankingDuotone } from 'react-icons/pi';
 import { VscPreview, VscGraph } from 'react-icons/vsc';
-
-type BannerImage = {
-  id: number;
-  src: string;
-  alt: string;
-  pos?: string;
-};
-
-const IMAGES: BannerImage[] = [
-  { id: 1, src: '/STAGE101_rooftop.webp', alt: '배너 이미지 1', pos: 'center 30%' },
-  { id: 2, src: '/mock/slide-2.jpg', alt: '배너 이미지 2' },
-  { id: 3, src: '/mock/slide-3.jpg', alt: '배너 이미지 3' },
-  { id: 4, src: '/mock/slide-4.jpg', alt: '배너 이미지 4' },
-];
+import { useTheaterList } from 'src/hooks/theater/useTheaterList';
+import { BannerImage } from 'src/types/common/common-type';
 
 export const NowShowingSection = () => {
-  const [order, setOrder] = useState<BannerImage[]>(IMAGES);
+  const { data } = useTheaterList({ status: false, limit: 10, offset: 0 });
+
+  const images: BannerImage[] = useMemo(() => {
+    const items = data?.items ?? [];
+    return items.map((t) => ({
+      id: String(t.id),
+      src: t.main_img,
+      alt: t.name,
+      pos: 'center 30%',
+    }));
+  }, [data]);
+
+  const [order, setOrder] = useState<BannerImage[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [animKey, setAnimKey] = useState(0);
 
   useEffect(() => {
+    if (images.length > 0) {
+      setOrder(images);
+      setAnimKey((k) => k + 1);
+    }
+  }, [images]);
+
+  // 진행바 activeIndex 계산(현재 맨 앞 카드가 원본 images에서 몇 번째인지)
+  useEffect(() => {
+    if (order.length === 0) return;
     const head = order[0];
-    const idx = IMAGES.findIndex((x) => x.id === head.id);
+    const idx = images.findIndex((x) => x.id === head.id);
     setActiveIndex(idx < 0 ? 0 : idx);
-  }, [order]);
+  }, [order, images]);
 
   // 왼쪽 회전
   const goNext = () => {
@@ -46,7 +53,7 @@ export const NowShowingSection = () => {
   };
 
   const jumpTo = (idx: number) => {
-    const rotated = [...IMAGES.slice(idx), ...IMAGES.slice(0, idx)];
+    const rotated = [...images.slice(idx), ...images.slice(0, idx)];
     setOrder(rotated);
     setAnimKey((k) => k + 1);
   };
@@ -111,7 +118,7 @@ export const NowShowingSection = () => {
 
         {/* 아래 진행 바(맨 앞 기준) */}
         <div className="mt-5 flex items-center justify-center gap-2">
-          {IMAGES.map((_, idx) => (
+          {images.map((_, idx) => (
             <button
               key={idx}
               type="button"

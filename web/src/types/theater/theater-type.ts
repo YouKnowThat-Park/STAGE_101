@@ -20,3 +20,22 @@ export interface TheaterProps {
 }
 
 export type TheaterId = 'musicalA' | 'musicalB' | 'musicalC' | 'cinemaA' | 'cinemaB' | 'cinemaC';
+
+export interface TheaterListStats {
+  total: number;
+  by_type: Record<string, number>;
+  now_showing: number;
+}
+
+export interface TheaterListResponse {
+  items: TheaterResponse[];
+  stats?: TheaterListStats | null;
+}
+
+export interface TheaterListParams {
+  type?: string;
+  status?: boolean;
+  limit?: number;
+  offset?: number;
+  include_stats?: boolean;
+}
