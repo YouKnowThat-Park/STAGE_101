@@ -4,10 +4,7 @@ import { cookies } from 'next/headers';
 import { SignInResult } from 'src/types/auth/auth-type';
 import { SafeUserType } from 'src/types/user/user-type';
 
-const BACKEND = (process.env.BACKEND_API_BASE ?? 'https://www.stage101.shop/api').replace(
-  /\/$/,
-  '',
-);
+const BACKEND = process.env.BACKEND_API_BASE;
 
 export async function signInAction(email: string, password: string): Promise<SignInResult> {
   try {
