@@ -20,7 +20,11 @@ const HomeCountdownText = () => {
     }
   }, [count, router]);
 
-  return <p className="text-gray-500">{count}초 후 메인 페이지로 자동 이동합니다.</p>;
+  return (
+    <p className="mt-6 text-center text-xs text-white/50 tracking-wide">
+      <span className="text-[#C9A66B] font-medium">{count}초</span> 후 메인 페이지로 자동 이동합니다
+    </p>
+  );
 };
 
 export default HomeCountdownText;
