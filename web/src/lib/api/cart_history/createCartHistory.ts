@@ -1,7 +1,6 @@
 import { CartHistoryItem } from 'src/types/cart/cart-history-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+const API_BASE = process.env.NEXT_PUBLIC_API_ROUTE || 'http://localhost:8000';
 
 export const createCartHistory = async (payload: {
   payment_key: string;
