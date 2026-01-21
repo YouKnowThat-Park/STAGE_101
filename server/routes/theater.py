@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 from server.database import get_db
 from server.models.theater import Theater
-from server.schemas.theater import TheaterResponse
-from sqlalchemy import or_
+from server.schemas.theater import TheaterResponse, TheaterListStats, TheaterListResponse
+from sqlalchemy import or_, func
 from uuid import UUID as _UUID
 
 router = APIRouter(prefix="/theaters", tags=["Theater"])
@@ -60,3 +60,42 @@ def get_theater_by_type(theater_key: str, db: Session = Depends(get_db)):
         )
 
     return theater
+
+@router.get("/", response_model=TheaterListResponse)
+def list_theaters(
+    db: Session = Depends(get_db),
+    type: str | None = Query(default=None),
+    status: bool = Query(default=False), 
+    include_stats: bool = Query(default=False),
+    limit: int = Query(default=20, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+):
+    
+    q = db.query(Theater).filter(Theater.status == status)
+
+    if type:
+        q = q.filter(Theater.type == type)
+
+    items = (
+        q.order_by(Theater.start_date.desc(), Theater.created_at.desc())
+         .offset(offset)
+         .limit(limit)
+         .all()
+    )
+
+    stats = None
+    if include_stats:
+        total = q.count()
+
+        rows = (
+            q.with_entities(Theater.type, func.count(Theater.id))
+             .group_by(Theater.type)
+             .all()
+        )
+        by_type = {t: c for (t, c) in rows}
+
+        now_showing = total if status else 0
+
+        stats = TheaterListStats(total=total, by_type=by_type, now_showing=now_showing)
+
+    return TheaterListResponse(items=items, stats=stats)
