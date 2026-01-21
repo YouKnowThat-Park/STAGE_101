@@ -90,9 +90,10 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         key="__stage__",
         value=access_token,
         httponly=True,
-        secure=False,  # 배포시 True
-        samesite="lax",
+        secure=True,  # 배포 시 True
+        samesite="none", # 배포 시 none? 
         max_age=60 * 60,
+        domain=".stage101.shop"
     )
     return response
 
@@ -121,9 +122,10 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
         key="__stage__",
         value=access_token,
         httponly=True,
-        secure=False,  # 배포 시 True
-        samesite="lax", # 배포 시 none? 
+        secure=True,  # 배포 시 True
+        samesite="none", # 배포 시 none? 
         max_age=60 * 60,
+        domain=".stage101.shop"
     )
 
     return response

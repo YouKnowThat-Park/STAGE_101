@@ -231,8 +231,9 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
         key="__stage__",
         value=jwt_token,
         httponly=True,
-        secure=False,  # 배포 시 True
-        samesite="lax",
+        secure=True,  # 배포 시 True
+        samesite="none", # 배포 시 none? 
         max_age=60 * 60,
+        domain=".stage101.shop"
     )
     return response
