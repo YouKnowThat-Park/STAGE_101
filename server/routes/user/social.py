@@ -11,7 +11,7 @@ import urllib.parse
 from server.database import get_db
 from server.models.user import User
 from server.security import hash_password, create_access_token
-from .public import _create_default_data_for_new_user
+from .public import create_default_data_for_new_user
 
 
 FRONTEND_REDIRECT_URL = os.getenv("FRONTEND_REDIRECT_URL", "http://localhost:3000")
@@ -109,7 +109,7 @@ async def kakao_callback(code: str, db: Session = Depends(get_db)):
             db.add(user)
             db.flush()
 
-            _create_default_data_for_new_user(db, user)
+            create_default_data_for_new_user(db, user)
 
         db.commit()
         db.refresh(user)
@@ -211,7 +211,7 @@ async def google_callback(code: str, db: Session = Depends(get_db)):
             db.add(user)
             db.flush()
 
-            _create_default_data_for_new_user(db, user)
+            create_default_data_for_new_user(db, user)
 
         else:
             # 기존 구글 유저인데 social_id 비어있으면 채워주기
