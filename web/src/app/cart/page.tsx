@@ -15,6 +15,7 @@ import CartSkeleton from './_components/CartSkeleton';
 import { v4 as uuidv4 } from 'uuid';
 import { CartItem } from 'src/types/cart/cart-type';
 import { useCreateCartHistory } from 'src/hooks/cart_history/useCreateCartHistory';
+import Link from 'next/link';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -202,7 +203,9 @@ const CartPage = () => {
 
                   {/* 정보 */}
                   <div className="flex-1 flex flex-col justify-between items-center sm:items-start text-center sm:text-left">
-                    <p className="text-lg font-semibold">{item.name}</p>
+                    <Link href={`/shop/${item.shop_id}`}>
+                      <p className="text-lg font-semibold">{item.name}</p>
+                    </Link>
                     <p className="text-[#C9A66B] font-semibold">
                       {(item.point * item.quantity).toLocaleString()} Point
                     </p>{' '}

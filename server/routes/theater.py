@@ -6,7 +6,7 @@ from server.schemas.theater import TheaterResponse, TheaterListStats, TheaterLis
 from sqlalchemy import or_, func
 from uuid import UUID as _UUID
 
-router = APIRouter(prefix="/theaters", tags=["Theater"])
+router = APIRouter(prefix="/theaters", tags=["Theater"], redirect_slashes=False)
 
 @router.get("/by-type/{theater_key}", response_model=TheaterResponse)
 def get_theater_by_type(theater_key: str, db: Session = Depends(get_db)):
@@ -61,7 +61,7 @@ def get_theater_by_type(theater_key: str, db: Session = Depends(get_db)):
 
     return theater
 
-@router.get("/", response_model=TheaterListResponse)
+@router.get("/list", response_model=TheaterListResponse)
 def list_theaters(
     db: Session = Depends(get_db),
     type: str | None = Query(default=None),
