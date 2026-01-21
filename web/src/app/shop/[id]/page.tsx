@@ -54,65 +54,90 @@ const Page = () => {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen py-10 px-6 flex flex-col items-center">
+    <div className="min-h-screen bg-black text-white px-6 py-16">
       <ShopDetailSkeleton loading={loading} />
 
       {!loading && item && (
         <>
-          <div className="bg-[#1C1C1C] p-8 rounded-xl shadow-lg w-full max-w-2xl">
-            <div className="w-full flex justify-center mb-6">
+          {/* 헤더 */}
+          <div className="max-w-4xl mx-auto mb-10">
+            <p className="text-sm tracking-[0.25em] text-white/60">STAGE101 • GOODS</p>
+            <h1 className="mt-2 text-3xl sm:text-4xl font-semibold">
+              무대의 순간을 <span className="text-[#C9A66B]">굿즈로</span>
+            </h1>
+            <p className="mt-3 text-white/70">
+              STAGE101에서 만난 공연의 감동을 일상에서도 느껴보세요.
+            </p>
+          </div>
+
+          {/* 메인 카드 */}
+          <div className="mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            {/* 이미지 */}
+            <div className="flex justify-center">
               <Image
                 src={imageUrl}
                 alt={item.name}
-                width={300}
-                height={300}
-                className="rounded-lg object-cover"
+                width={360}
+                height={360}
+                className="rounded-xl object-cover shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
                 unoptimized
               />
             </div>
-            <h1 className="text-3xl font-bold text-center mb-2">{item.name}</h1>
-            <p className="text-xl text-[#C9A66B] font-semibold text-center mb-4">
-              {item.point.toLocaleString()} 포인트
-            </p>
-            <div className="bg-gray-800/40 p-4 rounded mb-6 text-sm text-gray-300 leading-relaxed">
-              {item.description || '상품 설명이 없습니다.'}
-            </div>
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <button
-                onClick={decreaseQuantity}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl transition"
-              >
-                −
-              </button>
-              <input
-                type="number"
-                value={quantity}
-                onChange={handleInputChange}
-                min={1}
-                className="w-14 text-center py-2 rounded bg-black border border-gray-600 text-white text-lg outline-none focus:ring-2 focus:ring-[#C9A66B]"
-              />
-              <button
-                onClick={increaseQuantity}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white text-xl transition"
-              >
-                +
-              </button>
-            </div>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={handleAddToCart}
-                className="px-6 py-2 rounded-lg bg-[#C9A66B] text-black font-semibold hover:bg-[#e7c894] transition"
-              >
-                장바구니 담기
-              </button>
+
+            {/* 정보 */}
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-semibold">{item.name}</h2>
+              <p className="text-lg text-[#C9A66B] font-semibold">
+                {item.point.toLocaleString()} Point
+              </p>
+
+              <div className="text-sm text-white/70 leading-relaxed">
+                {item.description || '상품 설명이 없습니다.'}
+              </div>
+
+              {/* 수량 */}
+              <div className="flex items-center gap-3 mt-4">
+                <button
+                  onClick={decreaseQuantity}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={handleInputChange}
+                  min={1}
+                  className="w-14 text-center py-2 rounded bg-black border border-white/20 text-white outline-none focus:ring-2 focus:ring-[#C9A66B]"
+                />
+                <button
+                  onClick={increaseQuantity}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  +
+                </button>
+              </div>
+
+              {/* 버튼 */}
+              <div className="mt-6">
+                <button
+                  onClick={handleAddToCart}
+                  className="px-6 py-3 rounded-xl bg-[#C9A66B] text-black font-semibold
+                         shadow-[0_10px_30px_rgba(201,166,107,0.25)]
+                         hover:brightness-110 transition"
+                >
+                  장바구니에 담기
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="mt-10 max-w-2xl w-full bg-gray-800/70 p-6 rounded-xl text-sm text-gray-300 space-y-2">
-            <h2 className="text-lg font-bold text-white">📌 안내사항</h2>
+          {/* 안내 */}
+          <div className="mt-16 mx-auto max-w-4xl border border-white/10 rounded-xl p-6 text-sm text-white/70 space-y-2">
+            <h3 className="text-base font-semibold text-white">안내</h3>
             <p>
-              이 페이지는 실제 거래가 이루어지지 않는 가상의 쇼핑몰입니다. 프론트엔드 개발자를
-              꿈꾸는 학생이 학습 목적으로 제작하였으며, 자세한 내용은
+              이 페이지는 실제 거래가 이루어지지 않는 포트폴리오용 서비스입니다. <br /> 프론트엔드
+              개발 학습을 위해 제작되었습니다. 자세한 내용은
               <Link
                 href="https://youkn0wthat.tistory.com/"
                 target="_blank"
@@ -122,8 +147,8 @@ const Page = () => {
               </Link>
               에서 확인하실 수 있습니다.
             </p>
-            <p>📩 문의 : youkn0wthat@naver.com</p>
-            <p>🔗 GitHub : github.com/YouKnowThat-Park/STAGE_101</p>
+            <p>문의 : youkn0wthat@naver.com</p>
+            <p>GitHub : github.com/YouKnowThat-Park/STAGE_101</p>
           </div>
         </>
       )}

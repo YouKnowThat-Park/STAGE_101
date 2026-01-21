@@ -15,6 +15,7 @@ import CartSkeleton from './_components/CartSkeleton';
 import { v4 as uuidv4 } from 'uuid';
 import { CartItem } from 'src/types/cart/cart-type';
 import { useCreateCartHistory } from 'src/hooks/cart_history/useCreateCartHistory';
+import Link from 'next/link';
 
 const CartPage = () => {
   const userId = useUserStore((state) => state?.id) ?? null;
@@ -132,100 +133,133 @@ const CartPage = () => {
       .reduce((total, item) => total + item.point * item.quantity, 0) || 0;
 
   return (
-    <div className="min-h-screen bg-black text-white py-10 px-6 flex flex-col md:flex-row items-center sm:items-start justify-center gap-12">
-      {/* 장바구니 목록 */}
-      <div className="w-full max-w-[700px]">
-        <h1 className="text-3xl font-bold text-[#C9A66B] mb-8 text-center">🛒 장바구니</h1>
+    <div className="min-h-screen bg-black text-white px-6 py-16">
+      <div className="mx-auto max-w-6xl flex flex-col lg:flex-row gap-12 items-start">
+        {/* 좌측: 목록 */}
+        <div className="flex-1">
+          {/* 헤더 */}
+          <div className="mb-8">
+            <p className="text-sm tracking-[0.25em] text-white/60">STAGE101 • CART</p>
+            <h1 className="mt-2 text-3xl font-semibold">
+              선택한 <span className="text-[#C9A66B]">프로그램 & 굿즈</span>
+            </h1>
+            <p className="mt-2 text-white/70 text-sm">무대에서 만난 순간을 다시 담아보세요.</p>
+          </div>
 
-        <div className="flex gap-4 items-center mb-6">
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              className="accent-[#C9A66B] w-5 h-5"
-              checked={selectedItems.length === cartItemsList.length && cartItemsList.length > 0}
-              onChange={handleToggleSelectAll}
-            />
-            <span className="text-sm text-gray-300">전체 선택</span>
-          </label>
-          <button
-            className="text-sm border border-gray-500 px-3 py-1 rounded hover:bg-gray-700"
-            onClick={handleDeleteSelectedItems}
-          >
-            선택 삭제
-          </button>
-        </div>
+          {/* 상단 옵션 */}
+          <div className="flex items-center gap-4 mb-6">
+            <label className="flex items-center gap-2 text-sm text-white/70">
+              <input
+                type="checkbox"
+                className="accent-[#C9A66B] w-4 h-4"
+                checked={selectedItems.length === cartItemsList.length && cartItemsList.length > 0}
+                onChange={handleToggleSelectAll}
+              />
+              전체 선택
+            </label>
+            <button
+              onClick={handleDeleteSelectedItems}
+              className="text-sm border border-white/20 px-3 py-1 rounded hover:bg-white/10 transition"
+            >
+              선택 삭제
+            </button>
+          </div>
 
-        {cartItemsList.length > 0 ? (
-          <ul className="flex flex-col gap-6">
-            {cartItemsList.map((item) => (
-              <li
-                key={item.id}
-                className="relative flex bg-[#1C1C1C] lg:flex-row flex-col rounded-xl p-4 shadow-md "
-              >
-                <button
-                  onClick={() => handleDeleteItem(item.shop_id)}
-                  className="absolute top-3 right-3 text-gray-400 hover:text-white"
+          {/* 리스트 */}
+          {cartItemsList.length > 0 ? (
+            <ul className="flex flex-col gap-6">
+              {cartItemsList.map((item) => (
+                <li
+                  key={item.id}
+                  className="relative flex flex-col sm:flex-row gap-4 bg-white/[0.04] 
+                         border border-white/10 rounded-2xl p-4 
+                         shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
                 >
-                  <DeleteIcon />
-                </button>
+                  {/* 삭제 */}
+                  <button
+                    onClick={() => handleDeleteItem(item.shop_id)}
+                    className="absolute top-3 right-3 text-white/50 hover:text-white"
+                  >
+                    <DeleteIcon />
+                  </button>
 
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item.id)}
-                  onChange={() => handleToggleSelect(item.id)}
-                  className="accent-[#C9A66B] mr-4 mt-3 w-5 h-5"
-                />
-
-                <div className="flex-shrink-0 lg:flex lg:justify-start lg:items-start flex justify-center items-center">
-                  <Image
-                    src={item.image_url}
-                    alt={item.name}
-                    width={100}
-                    height={100}
-                    className="rounded-lg object-cover"
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={() => handleToggleSelect(item.id)}
+                    className="accent-[#C9A66B] w-4 h-4 mt-2"
                   />
-                </div>
-                <div className="lg:ml-4 flex flex-col justify-between w-full items-center text-center lg:items-start lg:text-left">
-                  <p className="text-lg font-semibold text-white">{item.name}</p>
-                  <div className="flex justify-center lg:justify-start items-center gap-2 mt-2">
-                    <button
-                      onClick={() => handleQuantityChange(item.shop_id, item.quantity - 1)}
-                      className="p-2 rounded-full border border-gray-600 hover:bg-gray-800"
-                    >
-                      <MinusIcon />
-                    </button>
-                    <span className="px-4 text-white font-bold">{item.quantity}</span>
-                    <button
-                      onClick={() => handleQuantityChange(item.shop_id, item.quantity + 1)}
-                      className="p-2 rounded-full border border-gray-600 hover:bg-gray-800"
-                    >
-                      <PlusIcon />
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center text-gray-500 mt-10">장바구니가 비어 있습니다.</p>
-        )}
-      </div>
 
-      {/* 결제 정보 */}
-      <div className="w-full md:w-[280px] bg-[#1C1C1C]/80 backdrop-blur-md border md:mt-[121px] border-gray-600 rounded-xl flex flex-col items-center p-6 shadow-lg">
-        <div className="w-full border-b border-gray-500 text-center pb-3">
-          <h2 className="text-lg font-bold text-white mb-2">주문 예상 가격</h2>
-          <p className="text-2xl font-semibold text-[#C9A66B]">
-            {totalPoint.toLocaleString()} 포인트
-          </p>
+                  {/* 이미지 */}
+                  <div className="flex-shrink-0 flex justify-center sm:justify-start">
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      width={110}
+                      height={110}
+                      className="rounded-xl object-cover"
+                    />
+                  </div>
+
+                  {/* 정보 */}
+                  <div className="flex-1 flex flex-col justify-between items-center sm:items-start text-center sm:text-left">
+                    <Link href={`/shop/${item.shop_id}`}>
+                      <p className="text-lg font-semibold">{item.name}</p>
+                    </Link>
+                    <p className="text-[#C9A66B] font-semibold">
+                      {(item.point * item.quantity).toLocaleString()} Point
+                    </p>{' '}
+                    {/* 수량 */}
+                    <div className="flex items-center gap-2 mt-3">
+                      <button
+                        onClick={() => handleQuantityChange(item.shop_id, item.quantity - 1)}
+                        className="p-2 rounded-full border border-white/20 hover:bg-white/10"
+                      >
+                        <MinusIcon />
+                      </button>
+                      <span className="px-4 font-semibold">{item.quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange(item.shop_id, item.quantity + 1)}
+                        className="p-2 rounded-full border border-white/20 hover:bg-white/10"
+                      >
+                        <PlusIcon />
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-center text-white/40 mt-12">아직 선택한 항목이 없습니다.</p>
+          )}
         </div>
 
-        <button
-          onClick={handleCheckout}
-          className="mt-4 bg-[#C9A66B] text-black font-bold py-2 px-6 rounded-lg hover:bg-[#e3bc73] transition w-full"
-        >
-          구매하기
-        </button>
+        {/* 우측: 결제 요약 */}
+        <div className="w-full lg:w-[300px] sticky top-24">
+          <div
+            className="bg-white/[0.04] border border-white/10 rounded-2xl p-6
+                   shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+          >
+            <div className="text-center border-b border-white/10 pb-4">
+              <p className="text-sm tracking-widest text-white/60">CHECKOUT</p>
+              <h2 className="mt-2 text-lg font-semibold">관람 준비</h2>
+              <p className="mt-3 text-2xl font-semibold text-[#C9A66B]">
+                {totalPoint.toLocaleString()} Point
+              </p>
+            </div>
+
+            <button
+              onClick={handleCheckout}
+              className="mt-6 w-full rounded-xl bg-[#C9A66B] text-black font-semibold py-3
+                     shadow-[0_10px_30px_rgba(201,166,107,0.25)]
+                     hover:brightness-110 transition"
+            >
+              결제 진행하기
+            </button>
+
+            <p className="mt-4 text-xs text-white/50 text-center">선택한 항목만 결제됩니다.</p>
+          </div>
+        </div>
       </div>
     </div>
   );

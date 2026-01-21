@@ -122,11 +122,11 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
 
       {/* 아래 섹션들 */}
       <div className="mx-auto w-full max-w-6xl px-5 pb-14">
-        <div className="bg-[#3c3a37] p-6 rounded-lg shadow-md mt-6 w-full">
+        <div className="bg-white/5 p-6 rounded-lg shadow-md mt-6 w-full">
           <p className="text-gray-300">{description}</p>
         </div>
 
-        <div className="bg-[#3c3a37] p-6 mt-6 w-full">
+        <div className="bg-white/5 p-6 mt-6 w-full">
           <h2 className="text-xl font-bold text-red-400 mb-3">⚠️ 관람 안내 및 유의 사항</h2>
           <ul className="text-gray-300 space-y-2 list-disc pl-6">
             <li>공연이 시작된 후에는 입장이 제한될 수 있습니다.</li>

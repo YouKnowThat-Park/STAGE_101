@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from server import models
 from server.cleanup import delete_expired_reservations_loop
 import asyncio
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 
 origins = [
     "http://localhost:3000",         # 로컬 개발용

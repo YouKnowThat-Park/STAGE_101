@@ -5,8 +5,10 @@ import { SafeUserType } from 'src/types/user/user-type';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,32}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-
+const BACKEND = (process.env.BACKEND_API_BASE ?? 'https://www.stage101.shop/api').replace(
+  /\/$/,
+  '',
+);
 export async function signUpAction({
   email,
   password,
@@ -39,7 +41,7 @@ export async function signUpAction({
     }
 
     // 2) FastAPI 회원가입 호출
-    const res = await fetch(`${API_BASE}/users/signup`, {
+    const res = await fetch(`${BACKEND}/users/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

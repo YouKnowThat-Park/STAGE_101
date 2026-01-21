@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useMemo, useState } from 'react';
 import { LuRectangleVertical } from 'react-icons/lu';
 import { PiRankingDuotone } from 'react-icons/pi';
@@ -18,6 +19,7 @@ export const NowShowingSection = () => {
       src: t.main_img,
       alt: t.name,
       pos: 'center 30%',
+      theaterKey: t.type,
     }));
   }, [data]);
 
@@ -60,6 +62,12 @@ export const NowShowingSection = () => {
 
   return (
     <section className="w-full    shadow-md rounded-lg p-2 overflow-hidden mt-20">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:16px_16px]" />
+      </div>
       <div className="flex items-center justify-between px-1">
         <div className="flex gap-2 ml-[100px]">
           <h2 className="text-[#C9A66B] font-semibold hover:scale-105 shadow-2xl">상영작</h2>
@@ -96,20 +104,19 @@ export const NowShowingSection = () => {
                     style={{ objectPosition: img.pos ?? 'center' }}
                     priority={idx < 2}
                   />
-
-                  <div className="absolute left-2 bottom-2 px-2 py-1 rounded bg-black/50 text-white text-sm">
-                    {img.id}
-                  </div>
-                  <div className="text-white font-semibold px-2 py-1 absolute right-5 bottom-2 bg-black/50 rounded">
-                    안녕하세요.
+                  <div className="text-white font-semibold px-2 py-1 absolute right-5 bottom-2 bg-black/50 rounded text-sm">
+                    {img.alt}
                   </div>
                 </div>
 
                 {/* 버튼 영역 */}
                 <div className="w-full h-[10%] mt-2 flex items-center justify-center  border rounded-md">
-                  <button className="w-full h-full rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition">
+                  <Link
+                    href={`/theater/${encodeURIComponent(img.theaterKey)}`}
+                    className="w-full h-full flex items-center justify-center rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition"
+                  >
                     예매
-                  </button>
+                  </Link>
                 </div>
               </div>
             );

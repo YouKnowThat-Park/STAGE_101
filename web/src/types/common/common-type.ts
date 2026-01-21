@@ -24,4 +24,5 @@ export interface BannerImage {
   src: string;
   alt: string;
   pos?: string;
+  theaterKey: string;
 }
