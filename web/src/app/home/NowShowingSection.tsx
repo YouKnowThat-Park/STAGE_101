@@ -62,6 +62,12 @@ export const NowShowingSection = () => {
 
   return (
     <section className="w-full    shadow-md rounded-lg p-2 overflow-hidden mt-20">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:16px_16px]" />
+      </div>
       <div className="flex items-center justify-between px-1">
         <div className="flex gap-2 ml-[100px]">
           <h2 className="text-[#C9A66B] font-semibold hover:scale-105 shadow-2xl">상영작</h2>

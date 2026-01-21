@@ -1,81 +1,126 @@
+'use client';
+
 import Image from 'next/image';
+import { useMemo, useState } from 'react';
+import { TheaterFilters } from './_components/TheaterFilters';
+import { useTheaterList } from 'src/hooks/theater/useTheaterList';
+import { useRouter } from 'next/navigation';
 
-export default function TheaterPage() {
+function typeLabel(type: string) {
+  if (type.startsWith('musical')) return '뮤지컬';
+  if (type.startsWith('cinema')) return '영화';
+  if (type.startsWith('concert')) return '콘서트';
+  return '기타';
+}
+
+const TheaterPage = () => {
+  const router = useRouter();
+  const { data, isError } = useTheaterList({ status: false, limit: 50, offset: 0 });
+
+  const items = data?.items ?? [];
+  const [filter, setFilter] = useState<{ category: string; selectedId: string }>({
+    category: '전체',
+    selectedId: 'all',
+  });
+
+  const filtered = useMemo(() => {
+    let arr = items;
+
+    if (filter.category !== '전체') {
+      arr = arr.filter((it) => typeLabel(it.type) === filter.category);
+    }
+    if (filter.selectedId !== 'all') {
+      arr = arr.filter((it) => it.id === filter.selectedId);
+    }
+
+    return arr;
+  }, [items, filter]);
+
+  if (isError) return <div className="min-h-screen bg-black text-white p-10">불러오기 실패</div>;
+
   return (
-    <div className="relative py-20  text-white">
-      {/* ✅ 배경 이미지 */}
-      <div className="absolute inset-0 bg-[url('/lesmiserables.jpg')] bg-cover bg-center opacity-20 "></div>
+    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+      {/* 배경 */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+        <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:16px_16px]" />
+      </div>
 
-      {/* ✅ 메인 콘텐츠 */}
-      <div className="relative z-10 flex flex-col items-center py-20">
-        <h1 className="text-4xl font-bold mb-12">🎭 공연 예정 중인 작품</h1>
+      <div className="relative mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        {/* 헤더 */}
+        <div className="flex flex-col gap-3">
+          <p className="text-sm tracking-[0.25em] text-white/60">
+            <a href="/">STAGE101</a> • PROGRAM
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-semibold">
+            상영 작품 <span className="text-[#C9A66B]">라인업</span>
+          </h1>
+          <p className="max-w-2xl text-white/70">
+            소극장 감성과 루프탑의 밤. 오픈 일정과 함께 미리 작품을 만나보세요.
+          </p>
+        </div>
 
-        {/* ✅ 공연 리스트 (그리드) */}
-        <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* 🎟️ 레미제라블 카드 */}
-          <div className="relative w-[300px] h-[450px] bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105">
-            <Image
-              src="/lesmiserables.jpg"
-              alt="레 미제라블"
-              width={300}
-              height={450}
-              className="absolute w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>9월 10일</p>
-              <h2 className="text-lg font-bold">Les Miserables</h2>
-              <p className="text-sm text-gray-300 mt-2">
-                혁명과 자유를 향한 감동적인 이야기. 감성을 자극하는 명곡과 함께!
-              </p>
-              <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                9월 2일 Open
-              </button>
+        {/* ✅ 필터 */}
+        <TheaterFilters
+          items={items.map((x) => ({ id: x.id, name: x.name, type: x.type }))}
+          onChange={setFilter}
+        />
+
+        {/* ✅ 카드 그리드: filtered를 사용 */}
+        <div className="mt-10 grid gap-8 sm:grid-cols-1 lg:grid-cols-3">
+          {filtered.map((it) => (
+            <div
+              key={it.id}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-[0_18px_70px_rgba(0,0,0,0.55)]"
+            >
+              <div className="relative h-[420px] w-full">
+                <Image
+                  src={it.main_img}
+                  alt={it.name}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/10" />
+
+                {/* 배지 */}
+                <div className="absolute left-4 top-4 flex items-center gap-2">
+                  <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 text-xs text-white/80 backdrop-blur">
+                    {typeLabel(it.type)}
+                  </span>
+                  <span className="rounded-full border border-[#C9A66B]/30 bg-[#C9A66B]/15 px-3 py-1 text-xs text-[#C9A66B] backdrop-blur">
+                    상영 중
+                  </span>
+                </div>
+
+                {/* 하단 */}
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <p className="text-xs text-white/70">
+                    {it.start_date}
+                    {it.end_date ? ` ~ ${it.end_date}` : ''}
+                  </p>
+                  <h2 className="mt-1 text-lg font-semibold tracking-wide">{it.name}</h2>
+
+                  <div className="mt-4 flex items-center justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/theater/${it.id}`)}
+                      className="inline-flex items-center justify-center rounded-xl border bg-white/5  border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white transition"
+                    >
+                      상세 보기
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 group-hover:ring-[#C9A66B]/30 transition" />
             </div>
-          </div>
-
-          {/* 🎟️ 나는 내일, 어제의 너와 만난다 카드 */}
-          <div className="relative w-[300px] h-[450px] bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105">
-            <Image
-              src="/tomorrow.webp"
-              alt="나는 내일, 어제의 너와 만난다"
-              width={300}
-              height={450}
-              className="absolute w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>9월 11일</p>
-              <h2 className="text-lg font-bold">나는 내일, 어제의 너와 만난다</h2>
-              <p className="text-sm text-gray-300 mt-2">
-                시간이 엇갈리는 두 남녀의 운명적인 사랑 이야기.
-              </p>
-              <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                9월 3일 Open
-              </button>
-            </div>
-          </div>
-
-          {/* 🎟️ 먼데이키즈 서울의 꿈 카드 */}
-          <div className="relative w-[300px] h-[450px] bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105">
-            <Image
-              src="/mondaykiz.jpg"
-              alt="먼데이키즈 서울의 꿈"
-              width={300}
-              height={450}
-              className="absolute w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4">
-              <p>10월 10일</p>
-              <h2 className="text-lg font-bold">먼데이키즈 서울의 꿈</h2>
-              <p className="text-sm text-gray-300 mt-2">
-                감성을 자극하는 명곡과 함께하는 특별한 밤!
-              </p>
-              <button className="mt-4 bg-red-600 px-4 py-2 text-sm rounded hover:bg-red-700">
-                10월 2일 Open
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default TheaterPage;
