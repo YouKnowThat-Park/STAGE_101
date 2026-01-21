@@ -23,39 +23,12 @@ THEATER_IDS = [
 
 KAKAO_ADMIN_KEY = os.getenv("KAKAO_ADMIN_KEY")
 
-
-def generate_unique_seat(db: Session, theater_id: uuid.UUID) -> str:
-    """
-    해당 극장에서 사용되지 않은 좌석코드 생성 (A-Z + 1..50)
-    """
-    for _ in range(500):
-        letter = random.choice(string.ascii_uppercase)  # A-Z
-        number = random.randint(1, 50)                  # 1..50
-        seat = f"{letter}{number}"
-
-        exists = (
-            db.query(Reservation)
-            .filter(
-                Reservation.theater_id == theater_id,
-                text(f"'{seat}' = ANY(seat_number)"),
-            )
-            .first()
-        )
-
-        if not exists:
-            return seat
-
-    raise RuntimeError("예약 좌석 생성 중 충돌이 발생했습니다.")
-
-
 def create_default_data_for_new_user(db: Session, new_user: User) -> None:
-    """
-    회원가입 시 기본 예약/결제 생성 로직 (일반/소셜 모두에서 재사용)
-    """
+    """회원가입 시 기본 예약/결제 생성 로직 (소셜 가입에서도 재사용)"""
     now = datetime.now(timezone.utc)
 
     for theater_id in THEATER_IDS:
-        seat = generate_unique_seat(db, theater_id)
+        seat = _generate_unique_seat(db, theater_id)
 
         reservation = Reservation(
             id=uuid.uuid4(),
@@ -83,6 +56,7 @@ def create_default_data_for_new_user(db: Session, new_user: User) -> None:
             created_at=now,
         )
         db.add(payment)
+
 
 def _generate_unique_seat(db: Session, theater_id: uuid.UUID) -> str:
     """해당 극장에서 아직 사용되지 않은 좌석코드 생성 (A-Z + 1..50)"""
