@@ -125,7 +125,6 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
         secure=True,  # 배포 시 True
         samesite="none", # 배포 시 none? 
         max_age=60 * 60,
-        domain=".stage101.shop"
     )
 
     return response
@@ -212,7 +211,6 @@ def delete_user(data: DeleteUserRequest, request: Request, db: Session = Depends
     response = Response(status_code=204)
     response.delete_cookie(
     key="__stage__",
-    domain=".stage101.shop",
     path="/",
     samesite="none",
 )
