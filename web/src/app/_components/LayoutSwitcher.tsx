@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Header from '../Header';
 import Footer from '../Footer';
 import QrLayout from '../qr_session/QrLayout';
 import { LayoutSwitcherProps } from 'src/types/common/common-type';
+import Loading from '../loading';
 
 export default function LayoutSwitcher({ children, user }: LayoutSwitcherProps) {
   const pathname = usePathname();
@@ -16,24 +17,14 @@ export default function LayoutSwitcher({ children, user }: LayoutSwitcherProps) 
     return <QrLayout>{children}</QrLayout>;
   }
 
-  // if (pathname.startsWith('/')) {
-  //   return <HomeLayout>{children}</HomeLayout>;
-  // }
-
-  //  나머지 경로에서는 기존 루트 레이아웃 구조 유지
-  //   return (
-  //     <div className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 ">
-  //       <Header user={user} />
-  //       {children}
-  //       <Footer />
-  //     </div>
-  //   );
-  // }
   return (
-    <div className=" ">
+    <div className="min-h-screen flex flex-col">
       <Header user={user} />
-      <div className="border-b" />
-      {children}
+
+      <main className="flex-1 relative">
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </main>
+
       <Footer />
     </div>
   );
