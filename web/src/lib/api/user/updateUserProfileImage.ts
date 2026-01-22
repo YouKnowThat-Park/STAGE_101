@@ -3,7 +3,7 @@ import { MypageUserResponse, UpdateUserProfilePayload } from 'src/types/user/use
 export const updateUserProfileImage = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
-  const res = await fetch('/api/users/profile', {
+  const res = await fetch('/bff/users/profile', {
     method: 'POST',
     body: formData,
   });
