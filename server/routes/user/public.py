@@ -82,8 +82,8 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
             "nickname": new_user.nickname,
             "profile_img": new_user.profile_img,
             "point": new_user.point,
-                        "phone": new_user,
-            "name": new_user
+                        "phone": new_user.phone,
+            "name": new_user.name
         },
     })
     response.set_cookie(
