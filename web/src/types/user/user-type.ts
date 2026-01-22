@@ -24,6 +24,7 @@ export interface UserState extends SafeUserType {
   token: string | null;
   setUser: (user: SafeUserType | null, token?: string | null) => void;
   clearUser: () => void;
+  reset: () => void;
 }
 
 export interface UpdateUserProfilePayload {

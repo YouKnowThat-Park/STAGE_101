@@ -83,6 +83,21 @@ export const useUserStore = create<UserState>()(
           name: '',
         });
       },
+      reset: () => {
+        set({
+          id: '',
+          nickname: '',
+          profile_img: null,
+          point: null,
+          token: null,
+          phone: '',
+          name: '',
+        });
+
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem('stage101');
+        }
+      },
     }),
     {
       name: 'stage101',
