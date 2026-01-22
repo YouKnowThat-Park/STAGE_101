@@ -1,7 +1,7 @@
 import { CartHistoryItem } from 'src/types/cart/cart-history-type';
 
 export const fetchCartHistory = async (): Promise<CartHistoryItem[]> => {
-  const res = await fetch('/api/cart-histories', {
+  const res = await fetch('/bff/cart-histories', {
     method: 'GET',
     credentials: 'include',
   });

@@ -1,7 +1,7 @@
 import { DeleteUserPayload } from 'src/types/user/user-type';
 
 export const deleteUser = async (body: DeleteUserPayload) => {
-  const res = await fetch('/api/users/profile', {
+  const res = await fetch('/bff/users/profile', {
     method: 'DELETE',
     credentials: 'include',
     headers: {

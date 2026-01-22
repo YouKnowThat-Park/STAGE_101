@@ -10,7 +10,7 @@ export const createCartHistory = async (payload: {
   cart_id?: string;
   cart_item_ids: string[];
 }): Promise<CartHistoryItem[]> => {
-  const res = await fetch(`/api/cart-histories/`, {
+  const res = await fetch(`/bff/cart-histories/`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
