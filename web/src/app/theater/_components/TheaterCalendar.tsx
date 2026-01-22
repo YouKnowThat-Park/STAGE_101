@@ -45,11 +45,28 @@ const TheaterCalendar = ({ theaterId, onDateTimeSelect }: TheaterProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
-      <h3 className="text-lg font-bold text-red-500">STEP 1</h3>
-      <h2 className="text-2xl font-extrabold text-gray-900">날짜 선택</h2>
+    <div
+      className="
+        w-full max-w-2xl
+        rounded-2xl
+        bg-black/70
+        backdrop-blur
+        ring-1 ring-white/10
+        shadow-[0_25px_80px_rgba(0,0,0,0.75)]
+        px-6 py-8
+        text-white
+      "
+    >
+      {/* STEP 1 */}
+      <div className="text-center">
+        <p className="text-xs tracking-[0.3em] text-white/40">STEP 01</p>
+        <h2 className="mt-1 text-2xl font-semibold">
+          관람 날짜 <span className="text-[#C9A66B]">선택</span>
+        </h2>
+      </div>
 
-      <div className="border rounded-md p-4 mt-4 bg-gray-50">
+      {/* 캘린더 */}
+      <div className="mt-6 flex justify-center">
         <Calendar
           onChange={(value) => setDate(value as Date)}
           value={date}
@@ -60,51 +77,57 @@ const TheaterCalendar = ({ theaterId, onDateTimeSelect }: TheaterProps) => {
           maxDetail="month"
           locale="ko-KR"
           className="w-full"
-          formatDay={(locale, date) => {
-            // 한글 '일' 제거
-            const dayString = date.toLocaleString('ko-KR', { day: 'numeric' });
-            return dayString.replace('일', '');
-          }}
-          tileDisabled={({ date: tileDate, view }) => {
-            if (view === 'month') {
-              return !isSelectableDate(tileDate);
-            }
-            return false;
-          }}
+          formatDay={(locale, date) =>
+            date.toLocaleString('ko-KR', { day: 'numeric' }).replace('일', '')
+          }
         />
       </div>
 
-      <div className="mt-6">
-        <h3 className="text-lg font-bold text-red-500">STEP 2</h3>
-        <h2 className="text-2xl font-extrabold text-gray-900">시간 선택</h2>
+      {/* STEP 2 */}
+      <div className="mt-10 text-center">
+        <p className="text-xs tracking-[0.3em] text-white/40">STEP 02</p>
+        <h2 className="mt-1 text-2xl font-semibold">
+          상영 <span className="text-[#C9A66B]">시간 선택</span>
+        </h2>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 mt-4">
+      {/* 시간 버튼 */}
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
         {showTimes.map((time) => (
           <button
             key={time}
             onClick={() => setSelectedTime(time)}
-            className={`px-6 py-3 font-bold rounded-md transition ${
-              selectedTime === time
-                ? 'bg-red-500 text-white shadow-md'
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-            }`}
+            className={`
+              rounded-xl px-6 py-3
+              text-sm font-semibold
+              ring-1 transition
+              ${
+                selectedTime === time
+                  ? 'bg-[#C9A66B] text-black ring-[#C9A66B] shadow-[0_10px_30px_rgba(201,166,107,0.35)]'
+                  : 'bg-white/5 text-white/80 ring-white/15 hover:bg-white/10'
+              }
+            `}
           >
             {time}
           </button>
         ))}
       </div>
 
+      {/* 다음 버튼 */}
       <button
-        className={`mt-6 w-full py-3 rounded-lg font-bold text-white transition ${
-          !date || !selectedTime
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-red-500 hover:bg-red-600 shadow-lg'
-        }`}
         disabled={!date || !selectedTime}
         onClick={handleNext}
+        className={`
+          mt-10 w-full rounded-xl py-4
+          text-base font-bold transition
+          ${
+            !date || !selectedTime
+              ? 'bg-white/10 text-white/40 cursor-not-allowed'
+              : 'bg-[#C9A66B] text-black hover:brightness-110 shadow-[0_20px_50px_rgba(201,166,107,0.35)]'
+          }
+        `}
       >
-        다음
+        다음 단계로
       </button>
     </div>
   );

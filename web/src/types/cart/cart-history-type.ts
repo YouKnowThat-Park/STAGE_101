@@ -16,3 +16,10 @@ export interface CartHistoryItem {
 export interface CartSuccessProps {
   params: { id: string };
 }
+
+export interface GoodsChartItem {
+  name: string;
+  value: number;
+  id: string;
+  [key: string]: string | number;
+}

@@ -1,12 +1,9 @@
 import { CreatedReview, CreateReviewParams } from 'src/types/review/review-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-
 export const createReviews = async ({ comment, type, theaterId }: CreateReviewParams) => {
-  const res = await fetch(`${API_BASE}/reviews/create`, {
+  const res = await fetch('/bff/reviews', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
     body: JSON.stringify({ comment, type, theater_id: theaterId }),
   });
   const data = await res.json();

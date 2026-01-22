@@ -10,7 +10,7 @@ const shootImages = [
 
 const Stage101RooftopSection = () => {
   return (
-    <section className="w-full bg-white  py-20 md:py-28">
+    <section className="w-full bg-white  py-20 md:py-28 ">
       <div className="max-w-screen-2xl mx-auto px-6 relative">
         <div className="flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-16">
           {/* 이미지 영역 */}

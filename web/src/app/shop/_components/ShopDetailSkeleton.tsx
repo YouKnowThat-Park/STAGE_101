@@ -4,27 +4,58 @@ import { ShopDetailSkeletonProps } from 'src/types/shop/shop-type';
 const ShopDetailSkeleton = ({ loading }: ShopDetailSkeletonProps) => {
   if (!loading) return null;
   return (
-    <div>
-      <div
-        className="bg-[#1C1C1C] p-8 rounded-xl shadow-lg w-full max-w-2xl animate-pulse"
-        hidden={!loading}
-      >
-        <div className="w-full flex justify-center mb-6">
-          <div className="w-[300px] h-[300px] bg-gray-700 rounded-lg" />
+    <div className="mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-10 items-start animate-pulse">
+      {/* 이미지 스켈레톤 */}
+      <div className="flex justify-center">
+        <div
+          className="
+            w-[360px] h-[360px]
+            rounded-xl
+            bg-white/5
+            ring-1 ring-white/10
+            shadow-[0_20px_60px_rgba(0,0,0,0.6)]
+            relative
+            overflow-hidden
+          "
+        >
+          {/* shimmer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[shimmer_1.6s_infinite]" />
         </div>
-        <div className="h-6 w-1/2 bg-gray-600 mx-auto rounded mb-3" />
-        <div className="h-5 w-1/3 bg-gray-600 mx-auto rounded mb-6" />
-        <div className="bg-gray-700 p-4 rounded mb-6 space-y-2">
-          <div className="h-3 bg-gray-600 rounded w-full" />
-          <div className="h-3 bg-gray-600 rounded w-5/6" />
-          <div className="h-3 bg-gray-600 rounded w-4/6" />
+      </div>
+
+      {/* 정보 스켈레톤 */}
+      <div className="flex flex-col gap-4">
+        {/* 상품명 */}
+        <div className="h-7 w-3/4 rounded bg-white/10" />
+
+        {/* 가격 */}
+        <div className="h-6 w-1/3 rounded bg-[#C9A66B]/30" />
+
+        {/* 설명 */}
+        <div className="space-y-2 mt-2">
+          <div className="h-4 w-full rounded bg-white/10" />
+          <div className="h-4 w-5/6 rounded bg-white/10" />
+          <div className="h-4 w-2/3 rounded bg-white/10" />
         </div>
-        <div className="flex justify-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-gray-600 rounded-full" />
-          <div className="w-14 h-10 bg-gray-700 rounded" />
-          <div className="w-10 h-10 bg-gray-600 rounded-full" />
+
+        {/* 수량 버튼 영역 */}
+        <div className="flex items-center gap-3 mt-4">
+          <div className="w-9 h-9 rounded-full bg-white/10" />
+          <div className="w-14 h-9 rounded bg-white/10" />
+          <div className="w-9 h-9 rounded-full bg-white/10" />
         </div>
-        <div className="w-40 h-10 bg-gray-500 mx-auto rounded" />
+
+        {/* CTA 버튼 */}
+        <div className="mt-6">
+          <div
+            className="
+              h-12 w-40
+              rounded-xl
+              bg-[#C9A66B]/40
+              shadow-[0_10px_30px_rgba(201,166,107,0.25)]
+            "
+          />
+        </div>
       </div>
     </div>
   );

@@ -87,48 +87,71 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   }
 
   return (
-    <div className="flex justify-center items-center py-14">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 space-y-6 relative">
-        <div className="text-center border-b pb-4">
-          <h2 className="text-xl font-bold text-black">{theaterName ?? '공연명 정보 없음'}</h2>
-          <p className="text-sm text-gray-500">{showTime ?? ''}</p>
+    <div className="min-h-screen bg-black text-white px-6 py-16 flex justify-center">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0b0b0b] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
+        {/* 헤더 */}
+        <div className="text-center border-b border-white/10 pb-4 mb-6">
+          <p className="text-xs tracking-[0.3em] text-white/40">STAGE101 • ADMISSION</p>
+          <h2 className="mt-2 text-xl font-semibold text-[#C9A66B]">
+            {theaterName ?? '공연 정보 없음'}
+          </h2>
+          <p className="mt-1 text-sm text-white/60">{showTime}</p>
         </div>
 
-        <div className="flex justify-between text-sm text-gray-800">
-          <p>
-            <span className="text-purple-500">👤</span> {userName ?? '이름 없음'}
-          </p>
-          <p>
-            <span className="text-red-500">📞</span> {formatPhoneNumber(userPhone)}
-          </p>
+        {/* 유저 정보 */}
+        <div className="flex justify-between text-sm mb-4">
+          <p className="text-white/70">👤 {userName ?? '이름 없음'}</p>
+          <p className="text-white/70">📞 {formatPhoneNumber(userPhone)}</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm mt-2">
-          <div className="bg-gray-100 p-3 rounded-lg shadow-inner">
-            <p className="text-gray-500 text-xs mb-1">좌석</p>
-            <p className="text-base font-semibold text-indigo-600">{seatNumberText}</p>
+        {/* 티켓 정보 */}
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="rounded-lg bg-black/40 border border-white/10 p-3">
+            <p className="text-xs text-white/40 mb-1">좌석</p>
+            <p className="text-base font-semibold text-[#C9A66B]">{seatNumberText}</p>
           </div>
-          <div className="bg-gray-100 p-3 rounded-lg shadow-inner">
-            <p className="text-gray-500 text-xs mb-1">결제 금액</p>
-            <p className="text-base font-semibold text-blue-500">{amount.toLocaleString()}원</p>
+
+          <div className="rounded-lg bg-black/40 border border-white/10 p-3">
+            <p className="text-xs text-white/40 mb-1">결제 금액</p>
+            <p className="text-base font-semibold text-white">{amount.toLocaleString()}원</p>
           </div>
-          <div className="col-span-2 bg-gray-100 p-3 rounded-lg shadow-inner break-words">
-            <p className="text-gray-500 text-xs mb-1">주문 번호</p>
-            <p className="text-[13px] font-mono text-gray-700">{orderId}</p>
+
+          <div className="col-span-2 rounded-lg bg-black/40 border border-white/10 p-3 break-words">
+            <p className="text-xs text-white/40 mb-1">주문 번호</p>
+            <p className="text-[13px] font-mono text-white/70">{orderId}</p>
           </div>
         </div>
 
-        <div className="flex justify-center mt-6">
+        {/* QR */}
+        <div className="flex flex-col items-center mt-8">
+          <p className="text-xs text-white/50 mb-3 tracking-widest">ADMISSION QR</p>
+
           {qrUrl ? (
-            <QrCodeImage value={qrUrl} size={100} />
+            <div className="rounded-xl bg-white p-3 shadow-lg">
+              <QrCodeImage value={qrUrl} size={140} />
+            </div>
           ) : (
-            <p className="text-gray-400">QR 코드 생성 중...</p>
+            <p className="text-white/40">QR 코드 생성 중...</p>
           )}
+
+          <p className="mt-4 text-xs text-white/40 text-center leading-relaxed">
+            공연장 입장 시<br />본 QR 코드를 제시해 주세요
+          </p>
         </div>
 
-        <div className="text-center mt-6">
-          <a href="/" className="inline-block text-sm text-blue-600 font-medium hover:underline">
-            홈으로 이동
+        {/* 액션 */}
+        <div className="mt-8 flex justify-center">
+          <a
+            href="/"
+            className="
+              inline-flex items-center justify-center
+              rounded-xl bg-[#C9A66B]
+              px-6 py-3 text-black font-semibold
+              shadow-[0_10px_30px_rgba(201,166,107,0.25)]
+              hover:brightness-110 transition
+            "
+          >
+            홈으로 돌아가기
           </a>
         </div>
       </div>

@@ -20,7 +20,7 @@ export const updateUserProfileImage = async (file: File) => {
 export const updateUserProfileData = async (
   payload: UpdateUserProfilePayload,
 ): Promise<MypageUserResponse> => {
-  const res = await fetch('/api/users/profile', {
+  const res = await fetch('/bff/users/profile', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
