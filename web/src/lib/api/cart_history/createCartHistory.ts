@@ -1,7 +1,5 @@
 import { CartHistoryItem } from 'src/types/cart/cart-history-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_ROUTE || 'http://localhost:8000';
-
 export const createCartHistory = async (payload: {
   payment_key: string;
   total_price: number;
@@ -12,7 +10,7 @@ export const createCartHistory = async (payload: {
   cart_id?: string;
   cart_item_ids: string[];
 }): Promise<CartHistoryItem[]> => {
-  const res = await fetch(`${API_BASE}/cart-histories/`, {
+  const res = await fetch(`/api/cart-histories/`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
