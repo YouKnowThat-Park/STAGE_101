@@ -165,7 +165,7 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
           ) : (
             <>
               <label className="block text-xs text-white/60 mb-1">
-                <span className="font-semibold text-white">"동의합니다"</span> 를 정확히
+                <span className="font-semibold text-white">&quot;동의합니다&quot;</span> 를 정확히
                 입력해주세요
               </label>
               <input
