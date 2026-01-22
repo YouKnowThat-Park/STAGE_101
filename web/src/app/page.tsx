@@ -9,13 +9,13 @@ export default function Home() {
   return (
     <main className="w-full min-h-screen">
       <section className="relative bg-black text-white">
-        <div className={`${INNER} relative py-10`}>
+        <div className={`${INNER} relative py-10 z-[9999]`}>
           <NowShowingSection />
         </div>
       </section>
 
       <section className="bg-white">
-        <div className={`${INNER} relative pb-16`}>
+        <div className={`${INNER} relative pb-16 `}>
           <Stage101RooftopSection />
         </div>
       </section>

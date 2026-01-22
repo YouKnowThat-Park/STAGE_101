@@ -9,10 +9,11 @@ import { VscPreview, VscGraph } from 'react-icons/vsc';
 import { useTheaterList } from 'src/hooks/theater/useTheaterList';
 import { BannerImage } from 'src/types/common/common-type';
 import NowShowingSkeleton from './_components/NowShowingSkeleton';
+import ReviewPage from '../reviews/ReviewPage';
 
 export const NowShowingSection = () => {
   const { data, isPending } = useTheaterList({ status: false, limit: 10, offset: 0 });
-
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   const images: BannerImage[] = useMemo(() => {
     const items = data?.items ?? [];
     return items.map((t) => ({
@@ -145,7 +146,10 @@ export const NowShowingSection = () => {
 
         <div className="flex justify-center items-center gap-10 mt-2 shadow-2xl ">
           <div>
-            <button className=" text-white border p-4 rounded-lg mt-6 flex flex-col justify-center items-center shadow-2xl shadow-white/50">
+            <button
+              onClick={() => setIsReviewOpen(true)}
+              className=" text-white border p-4 rounded-lg mt-6 flex flex-col justify-center items-center shadow-2xl shadow-white/50"
+            >
               <span>
                 <VscPreview className="text-white" size={30} />
               </span>
@@ -240,6 +244,14 @@ export const NowShowingSection = () => {
           }
         `}</style>
       </div>
+
+      {isReviewOpen && (
+        <ReviewPage
+          closeModal={() => {
+            setIsReviewOpen(false);
+          }}
+        />
+      )}
     </section>
   );
 };
