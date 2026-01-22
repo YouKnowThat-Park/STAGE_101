@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useDeleteUser } from 'src/hooks/user/useDeleteUser';
 import { useUserHook } from 'src/hooks/user/useUserHook';
 import { ModalProps } from '../../../types/modal/modal-type';
+import { useUserStore } from 'src/store/userStore';
 
 const SettingModal = ({ isOpen, onClose }: ModalProps) => {
   const [checks, setChecks] = useState({
@@ -17,6 +18,7 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
 
   const { data: social } = useUserHook();
   const { mutate, isPending } = useDeleteUser();
+  const { clearUser } = useUserStore.getState();
 
   const isSocialUser = social?.phone === 'Kakao' || social?.phone === 'Google';
   const allChecked = Object.values(checks).every(Boolean);
@@ -51,6 +53,9 @@ const SettingModal = ({ isOpen, onClose }: ModalProps) => {
 
     mutate(payload, {
       onSuccess: () => {
+        clearUser();
+        localStorage.removeItem('stage101');
+
         alert('탈퇴가 완료되었습니다.');
         window.location.href = '/';
       },

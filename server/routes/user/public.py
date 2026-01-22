@@ -210,7 +210,12 @@ def delete_user(data: DeleteUserRequest, request: Request, db: Session = Depends
         raise HTTPException(status_code=500, detail=f"회원 탈퇴 처리 중 오류 발생: {str(e)}")
 
     response = Response(status_code=204)
-    response.delete_cookie("__stage__")
+    response.delete_cookie(
+    key="__stage__",
+    domain=".stage101.shop",
+    path="/",
+    samesite="none",
+)
     return response
 
 
