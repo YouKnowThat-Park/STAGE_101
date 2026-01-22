@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { SignInResult } from 'src/types/auth/auth-type';
 import { SafeUserType } from 'src/types/user/user-type';
 
-const BACKEND = process.env.BACKEND_API_BASE;
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export async function signInAction(email: string, password: string): Promise<SignInResult> {
   try {
@@ -15,7 +15,7 @@ export async function signInAction(email: string, password: string): Promise<Sig
       };
     }
 
-    const res = await fetch(`${BACKEND}/users/signin`, {
+    const res = await fetch(`${API_BASE}/users/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
