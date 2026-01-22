@@ -8,9 +8,10 @@ import { PiRankingDuotone } from 'react-icons/pi';
 import { VscPreview, VscGraph } from 'react-icons/vsc';
 import { useTheaterList } from 'src/hooks/theater/useTheaterList';
 import { BannerImage } from 'src/types/common/common-type';
+import NowShowingSkeleton from './_components/NowShowingSkeleton';
 
 export const NowShowingSection = () => {
-  const { data } = useTheaterList({ status: false, limit: 10, offset: 0 });
+  const { data, isPending } = useTheaterList({ status: false, limit: 10, offset: 0 });
 
   const images: BannerImage[] = useMemo(() => {
     const items = data?.items ?? [];
@@ -61,76 +62,80 @@ export const NowShowingSection = () => {
   };
 
   return (
-    <section className="w-full    shadow-md rounded-lg p-2 overflow-hidden mt-20">
-      <div className="pointer-events-none absolute inset-0">
+    <section className="relative isolate w-full rounded-lg p-2 mt-20 shadow-md">
+      {/* 배경 */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
         <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:16px_16px]" />
       </div>
-      <div className="flex items-center justify-between px-1">
+
+      {/* 타이틀 */}
+      <div className="relative z-10 flex items-center justify-between px-1">
         <div className="flex gap-2 ml-[100px]">
-          <h2 className="text-[#C9A66B] font-semibold hover:scale-105 shadow-2xl">상영작</h2>
+          <h2 className="text-[#C9A66B] font-semibold shadow-2xl hover:scale-105 transition">
+            상영작
+          </h2>
         </div>
       </div>
 
-      <div className="mt-2 relative overflow-hidden">
+      {/* 카드 영역 */}
+      <div className="relative z-10 mt-2 overflow-hidden">
         <div className="flex w-max gap-6 items-end mx-auto">
-          {order.map((img, idx) => {
-            const isFront = idx === 0;
+          {isPending
+            ? Array.from({ length: 4 }).map((_, idx) => (
+                <NowShowingSkeleton key={idx} isFront={idx === 0} />
+              ))
+            : order.map((img, idx) => {
+                const isFront = idx === 0;
 
-            return (
-              <div
-                key={`${img.id}-${idx}-${animKey}`}
-                className={[
-                  'relative flex-shrink-0 rounded-md fade transition-all duration-200',
-                  isFront
-                    ? 'w-[220px] sm:w-[260px] h-[400px] shadow-lg z-10'
-                    : 'w-[180px] sm:w-[210px] h-[340px]',
-                ].join(' ')}
-              >
-                {/* 이미지 영역 */}
-                <div className="relative w-full h-[85%] overflow-hidden rounded-t-md">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes={
+                return (
+                  <div
+                    key={`${img.id}-${idx}-${animKey}`}
+                    className={[
+                      'relative flex-shrink-0 rounded-md fade transition-all duration-200',
                       isFront
-                        ? '(max-width: 640px) 288px, 324px'
-                        : '(max-width: 640px) 240px, 270px'
-                    }
-                    className="object-cover "
-                    style={{ objectPosition: img.pos ?? 'center' }}
-                    priority={idx < 2}
-                  />
-                  <div className="text-white font-semibold px-2 py-1 absolute right-5 bottom-2 bg-black/50 rounded text-sm">
-                    {img.alt}
-                  </div>
-                </div>
-
-                {/* 버튼 영역 */}
-                <div className="w-full h-[10%] mt-2 flex items-center justify-center  border rounded-md">
-                  <Link
-                    href={`/theater/${encodeURIComponent(img.theaterKey)}`}
-                    className="w-full h-full flex items-center justify-center rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition"
+                        ? 'w-[220px] sm:w-[260px] h-[400px] shadow-lg z-10'
+                        : 'w-[180px] sm:w-[210px] h-[340px]',
+                    ].join(' ')}
                   >
-                    예매
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+                    {/* 이미지 */}
+                    <div className="relative w-full h-[85%] overflow-hidden rounded-t-md">
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        className="object-cover"
+                        style={{ objectPosition: img.pos ?? 'center' }}
+                        priority={idx < 2}
+                      />
+                      <div className="absolute right-5 bottom-2 rounded bg-black/50 px-2 py-1 text-sm font-semibold text-white">
+                        {img.alt}
+                      </div>
+                    </div>
+
+                    {/* 버튼 */}
+                    <div className="mt-2 h-[10%] w-full rounded-md border flex items-center justify-center">
+                      <Link
+                        href={`/theater/${encodeURIComponent(img.theaterKey)}`}
+                        className="w-full h-full flex items-center justify-center rounded bg-[#C9A66B] text-black font-medium hover:bg-[#d8b77a] transition"
+                      >
+                        예매
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
         </div>
 
-        {/* 아래 진행 바(맨 앞 기준) */}
+        {/* 진행바 */}
+
         <div className="mt-5 flex items-center justify-center gap-2">
           {images.map((_, idx) => (
             <button
               key={idx}
-              type="button"
               onClick={() => jumpTo(idx)}
-              aria-label={`${idx + 1}번 이미지로 이동`}
               className={`h-[4px] w-[34px] rounded-full transition-all ${
                 idx === activeIndex ? 'bg-[#C9A66B]' : 'bg-gray-300'
               }`}

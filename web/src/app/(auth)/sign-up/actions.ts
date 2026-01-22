@@ -5,10 +5,7 @@ import { SafeUserType } from 'src/types/user/user-type';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,32}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const BACKEND = (process.env.BACKEND_API_BASE ?? 'https://www.stage101.shop/api').replace(
-  /\/$/,
-  '',
-);
+const BACKEND = process.env.BACKEND_API_BASE;
 export async function signUpAction({
   email,
   password,

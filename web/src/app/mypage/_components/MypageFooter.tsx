@@ -17,7 +17,7 @@ const MypageFooter = () => {
           {/* 회사 정보 */}
           <div className="flex flex-col">
             <Link href="/">
-              <h2 className="text-4xl mt-[50px] font-semibold transition-transform duration-300 hover:scale-105">
+              <h2 className="text-4xl mt-[50px] font-semibold transition-transform duration-300 hover:scale-105 text-[#C9A66B]">
                 STAGE_101
               </h2>
             </Link>
@@ -40,8 +40,8 @@ const MypageFooter = () => {
 
           {/*운영 정보*/}
           <div className="flex flex-col gap-2 mt-[90px]">
-            <p>운영시간 13:00 ~ 03:00</p>
-            <p>고객센터 12:00 ~ 19:00</p>
+            <p>운영시간 09:00 ~ 19:00</p>
+            <p>고객센터 12:00 ~ 24:00</p>
             <p className="text-sm ">📩 : youkn0wthat@naver.com</p>
           </div>
 

@@ -6,7 +6,7 @@ export const useTicketHistory = (userId: string) => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['history', userId] as const, // 'history'와 userId로 배열을 만듭니다. QueryKey로 강제 타입 지정
-    queryFn: () => fetchTicketHistory(userId),
+    queryFn: () => fetchTicketHistory(),
     staleTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
   });
 

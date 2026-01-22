@@ -14,8 +14,8 @@ const MypageReview = () => {
     new Date(dateString).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
 
   return (
-    <section className="flex flex-col items-center bg-[#151515] h-[500px] gap-5">
-      <div className="w-full max-w-lg bg-[#151515] h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+    <section className="flex flex-col items-center  h-[500px] gap-5">
+      <div className="w-full max-w-lg  h-[480px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {!reviews ? (
           // ✅ Skeleton UI
           <ul className="space-y-4 p-5">
@@ -52,14 +52,17 @@ const MypageReview = () => {
               return (
                 <li
                   key={review.id}
-                  className="p-4 border border-black rounded-lg bg-white shadow-md"
+                  className="p-4 border border-black rounded-lg bg-white shadow-md h-[203px]"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-1">
-                      <h4 className="text-lg font-black border-b border-black pb-1">
-                        {theaterName}
-                      </h4>
-                      <p className="text-xs mt-3 text-gray-600 break-words">{review.comment}</p>
+                      <h2 className="text-2xl font-black border-b border-black pb-1 text-[#C9A66B]">
+                        STAGE_101
+                      </h2>
+                      <h4 className="text-lg font-black mt-1">{theaterName}</h4>
+                      <p className="text-xs mt-3 h-[64px] text-gray-600 break-words">
+                        {review.comment}
+                      </p>
                     </div>
 
                     {review.image_url && (
@@ -78,7 +81,6 @@ const MypageReview = () => {
                   <div className="flex gap-4 text-xs text-gray-700 mt-2">
                     <p>✅ {formatDateToKST(review.created_at)}</p>
                     <p>✅ {displayName}</p>
-                    <span className="text-xs">{review.past_views ?? 0}회 감상</span>
                   </div>
                 </li>
               );

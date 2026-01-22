@@ -1,34 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import React from 'react';
 
 const CartSuccessRedirect = () => {
   const router = useRouter();
-  const [count, setCount] = useState(10);
-
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      setCount((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(countdown);
-  }, []);
-
-  useEffect(() => {
-    if (count === 0) {
-      router.push('/');
-    }
-  }, [count, router]);
 
   return (
     <button
       onClick={() => router.push('/')}
-      className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+      className="
+        mt-6 w-full rounded-xl
+        bg-[#C9A66B] text-black font-semibold
+        py-3
+        shadow-[0_10px_30px_rgba(201,166,107,0.25)]
+        hover:brightness-110
+        active:scale-[0.99]
+        transition
+      "
     >
-      홈으로 즉시 이동
+      홈으로 돌아가기
     </button>
   );
 };
