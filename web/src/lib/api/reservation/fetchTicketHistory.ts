@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { ReservationApiResponse, ReservationType } from 'src/types/reservation/reservation-type';
 
-const API_BASE = process.env.BACKEND_API_BASE!;
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchTicketHistory = async (): Promise<ReservationType[]> => {
   const cookie = cookies().toString();
