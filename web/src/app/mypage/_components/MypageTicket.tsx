@@ -67,7 +67,9 @@ const MypageTicket = () => {
               <li key={ticket.id} className="p-4 bg-white rounded-lg border border-gray-700">
                 <div className="flex justify-between items-start">
                   <div className="w-full">
-                    <h2 className="text-2xl font-black border-b border-black pb-1">STAGE_101</h2>
+                    <h2 className="text-2xl font-black border-b border-black pb-1 text-[#C9A66B]">
+                      STAGE_101
+                    </h2>
                     <p className="font-black text-lg mt-1">{ticket.theater_name}</p>
 
                     <div className="flex justify-between items-center mt-2 max-[431px]:flex-col max-[431px]:items-start">

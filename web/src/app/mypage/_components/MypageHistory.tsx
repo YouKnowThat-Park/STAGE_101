@@ -33,7 +33,7 @@ const MypageHistory = () => {
   };
 
   return (
-    <section className="flex flex-col items-center bg-[#151515] h-[500px] gap-5">
+    <section className="flex flex-col items-center  h-[500px] gap-5">
       {isLoading ? (
         // ✅ Skeleton UI
         <HistorySkeleton />

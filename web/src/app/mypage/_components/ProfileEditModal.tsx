@@ -92,50 +92,124 @@ const ProfileEditModal = ({ isOpen, onClose }: ProfileEditModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] relative">
-        <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+      <div
+        className="
+    relative w-[380px]
+    rounded-xl
+    bg-[#151515]
+    border border-white/10
+    p-6
+    text-white
+    shadow-[0_20px_60px_rgba(0,0,0,0.8)]
+  "
+      >
+        {/* 헤더 */}
+        <div className="mb-5">
+          <h2 className="text-lg font-semibold">프로필 수정</h2>
+          <p className="mt-1 text-sm text-white/50">닉네임과 프로필 이미지를 변경할 수 있습니다.</p>
+        </div>
 
-        <button className="absolute top-2 right-2 text-gray-600" onClick={onClose}>
+        {/* 닫기 버튼 */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/40 hover:text-white transition"
+          aria-label="닫기"
+        >
           ✕
         </button>
 
+        {/* 닉네임 */}
         <div className="flex flex-col gap-2">
-          <label className="text-gray-700 font-medium">닉네임</label>
+          <label className="text-sm text-white/60">닉네임</label>
           <input
             type="text"
             value={newNickname}
             onChange={(e) => setNewNickname(e.target.value)}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className="
+          w-full
+          rounded-md
+          border border-white/10
+          bg-black/40
+          px-3 py-2
+          text-white
+          placeholder:text-white/30
+          focus:outline-none
+          focus:border-[#C9A66B]
+        "
           />
         </div>
 
-        <div className="flex flex-col gap-2 mt-3">
-          <label className="text-gray-700 font-medium">프로필 이미지</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
-          />
-          {newProfileImg && (
-            <>
-              {/* 🔍 이미지 URL 출력 */}
+        {/* 프로필 이미지 */}
+        <div className="mt-4 flex flex-col gap-2">
+          <label className="text-sm text-white/60">프로필 이미지</label>
+
+          <label
+            htmlFor="profile-upload"
+            className="
+      mx-auto
+      flex flex-col items-center gap-2
+      cursor-pointer
+      group
+    "
+          >
+            {/* 강조 텍스트 */}
+            <span
+              className="
+        text-sm
+        text-[#C9A66B]
+        group-hover:text-[#E6C98A]
+        transition
+      "
+            >
+              이미지 변경
+            </span>
+
+            {/* 이미지 프리뷰 */}
+            {newProfileImg && (
               <Image
                 src={getValidImageUrl(newProfileImg)}
                 alt="미리보기"
-                height={100}
-                width={100}
-                className="w-24 h-24 object-cover rounded-full mx-auto mt-2"
+                width={96}
+                height={96}
+                className="
+          h-24 w-24
+          rounded-full
+          object-cover
+          ring-2 ring-white/10
+          transition
+          group-hover:ring-[#C9A66B]
+          group-hover:opacity-90
+        "
               />
-            </>
-          )}
+            )}
+          </label>
+
+          {/* 실제 파일 input */}
+          <input
+            id="profile-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
 
+        {/* 저장 버튼 */}
         <button
-          className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
           onClick={handleSave}
           disabled={isDisabled}
+          className="
+        mt-6 w-full
+        rounded-md
+        bg-[#C9A66B]
+        py-2
+        text-sm font-semibold text-black
+        hover:bg-[#E6C98A]
+        transition
+        disabled:cursor-not-allowed
+        disabled:opacity-40
+      "
         >
           {isUploading || isUpdating ? '저장 중...' : '저장'}
         </button>
