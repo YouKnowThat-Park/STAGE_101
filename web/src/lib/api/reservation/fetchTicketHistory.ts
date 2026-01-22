@@ -1,24 +1,27 @@
+'use server';
+import { cookies } from 'next/headers';
 import { ReservationApiResponse, ReservationType } from 'src/types/reservation/reservation-type';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+const API_BASE = process.env.BACKEND_API_BASE!;
 
-export const fetchTicketHistory = async (userId: string): Promise<ReservationType[]> => {
+export const fetchTicketHistory = async (): Promise<ReservationType[]> => {
+  const cookie = cookies().toString();
+
   const res = await fetch(`${API_BASE}/reservations/me`, {
-    credentials: 'include',
+    headers: { cookie },
+    cache: 'no-store',
   });
 
   if (!res.ok) throw new Error('예약 내역을 불러올 수 없습니다.');
 
   const rawData: ReservationApiResponse[] = await res.json();
 
-  const confirmedOnly = rawData.filter((ticket) => ticket.status === 'confirmed');
-  return confirmedOnly.map((ticket) => {
-    const seatString = ticket.seat_number.join(', ');
-
-    return {
+  return rawData
+    .filter((t) => t.status === 'confirmed')
+    .map((ticket) => ({
       id: ticket.id,
       theater_id: ticket.theater_id,
-      seat_number: seatString,
+      seat_number: ticket.seat_number.join(', '),
       total_price: ticket.total_price,
       status: ticket.status,
       created_at: ticket.created_at,
@@ -29,6 +32,5 @@ export const fetchTicketHistory = async (userId: string): Promise<ReservationTyp
       type: ticket.theater?.type ?? '',
       payment_method: ticket.payment?.payment_method ?? '정보 없음',
       qr_token: ticket.qr_session?.qr_token ?? null,
-    };
-  });
+    }));
 };

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { useCartHistory } from 'src/hooks/cart_history/useCartHistory';
 import NoHistoryIcon from '../../../ui/icon/NoHistoryIcon';
@@ -83,7 +81,7 @@ const MypageHistory = () => {
               <div className="flex flex-col items-center gap-2 shrink-0">
                 <div className="relative rounded-lg overflow-hidden border w-28 h-28 max-[420px]:w-24 max-[420px]:h-24">
                   <Image
-                    src={cart.image_url || '/default-image.png'}
+                    src={cart.image_url || '/default.png'}
                     alt={cart.name || '상품 이미지'}
                     width={96}
                     height={96}
