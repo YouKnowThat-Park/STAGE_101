@@ -191,14 +191,18 @@ def goods_ranking(
 ):
     rows = (
         db.query(
-            CartHistory.name,
+            CartHistory.cart_id.label("id"),
+            CartHistory.name.label("name"),
             func.sum(CartHistory.quantity).label("value"),
         )
         .filter(
             CartHistory.status == CartStatusEnum.pending,
             CartHistory.name.isnot(None),
         )
-        .group_by(CartHistory.name)
+        .group_by(
+            CartHistory.cart_id,
+            CartHistory.name,
+        )
         .order_by(func.sum(CartHistory.quantity).desc())
         .limit(limit)
         .all()
