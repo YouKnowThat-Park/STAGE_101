@@ -1,37 +1,15 @@
 import React from 'react';
-import { useCartHistory } from 'src/hooks/cart_history/useCartHistory';
-import { buildGoodsRanking } from 'src/utils/buildGoodsRanking';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import Link from 'next/link';
-import useShop from 'src/hooks/shop/useShop';
+import { useGoodsRanking } from 'src/hooks/cart_history/useGoodsRanking';
+import { GoodsRankingProps } from 'src/lib/api/cart_history/cartGoodsRanking';
 
 const COLORS = ['#C9A66B', '#8E7A4A', '#5F5332', '#3E3721', '#262012'];
 
 const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
-  const { history = [], isLoading, error } = useCartHistory();
-  const { items: shops = [] } = useShop();
+  const ranking: GoodsRankingProps[] = useGoodsRanking().data ?? [];
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
-        <div className="bg-[#111] p-6 rounded-xl w-[520px] text-white">로딩중…</div>
-      </div>
-    );
-  }
-
-  if (error || !history) {
-    return (
-      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
-        <div className="bg-[#111] p-6 rounded-xl w-[520px] text-white">
-          데이터를 불러오지 못했습니다.
-        </div>
-      </div>
-    );
-  }
-
-  const data = buildGoodsRanking(history, shops);
-
-  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const total = ranking.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
@@ -46,14 +24,14 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data}
+                  data={ranking}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={70}
                   outerRadius={100}
                   paddingAngle={3}
                 >
-                  {data.map((_, i) => (
+                  {ranking.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
@@ -67,7 +45,7 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
             </ResponsiveContainer>
           </div>
           <div className="flex-1 space-y-3">
-            {data.map((item, index) => {
+            {ranking.map((item, index) => {
               const percent = Math.round((item.value / total) * 100);
 
               return (
