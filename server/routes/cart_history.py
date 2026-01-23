@@ -184,7 +184,7 @@ def get_histories_by_payment(
         raise HTTPException(status_code=404, detail="해당 결제의 히스토리가 없습니다.")
     return rows
 
-@router.get("/ranking", response_model=list[GoodsRankingItem])
+@router.get("/goods/ranking", response_model=list[GoodsRankingItem])
 def goods_ranking(
     limit: int = 5,
     db: Session = Depends(get_db),
