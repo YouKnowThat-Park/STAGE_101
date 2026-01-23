@@ -9,8 +9,8 @@ import NowShowingSection from './sections/NowShowingSection';
 import { useTheaterList } from 'src/hooks/theater/useTheaterList';
 import { BannerImage } from 'src/types/common/common-type';
 import ReviewListModal from './modal/ReviewListModal';
-import ReviewRankingModal from './_components/ReviewRankingModal';
 import GoodsGraphModal from './modal/GoodsGraphModal';
+import ReviewRankingModal from './modal/ReviewRankingModal';
 
 const INNER = 'max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12';
 
