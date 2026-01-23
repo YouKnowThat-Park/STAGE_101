@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import HomeReviews from '../home/HomeReviews';
+import HomeReviews from '../HomeReviews';
 
 const ReviewRankingModal = ({ onClose }: { onClose: () => void }) => {
   return (
