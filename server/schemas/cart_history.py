@@ -30,3 +30,8 @@ class CartHistoryResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class GoodsRankingItem(BaseModel):
+    name: str
+    value: int

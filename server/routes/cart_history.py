@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func
 from uuid import UUID
 from typing import List
 from datetime import datetime
@@ -10,8 +11,9 @@ from server.database import get_db
 from server.models.cart_history import CartHistory
 from server.models.user import User
 from server.models.cart import Cart
-from server.schemas.cart_history import CartHistoryCreate, CartHistoryResponse
+from server.schemas.cart_history import CartHistoryCreate, CartHistoryResponse, GoodsRankingItem
 from server.security import verify_access_token
+from server.models.enums import CartStatusEnum
 
 router = APIRouter(prefix="/cart-histories", tags=["CartHistory"])
 
@@ -180,4 +182,26 @@ def get_histories_by_payment(
     )
     if not rows:
         raise HTTPException(status_code=404, detail="해당 결제의 히스토리가 없습니다.")
+    return rows
+
+@router.get("/ranking", response_model=list[GoodsRankingItem])
+def goods_ranking(
+    limit: int = 5,
+    db: Session = Depends(get_db),
+):
+    rows = (
+        db.query(
+            CartHistory.name,
+            func.sum(CartHistory.quantity).label("value"),
+        )
+        .filter(
+            CartHistory.status == CartStatusEnum.pending,
+            CartHistory.name.isnot(None),
+        )
+        .group_by(CartHistory.name)
+        .order_by(func.sum(CartHistory.quantity).desc())
+        .limit(limit)
+        .all()
+    )
+
     return rows
