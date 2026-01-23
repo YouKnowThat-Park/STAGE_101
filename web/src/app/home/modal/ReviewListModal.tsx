@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useUserStore } from '../../store/userStore';
-import ReviewAddModal from './_components/ReviewAddModal';
+import { useUserStore } from '../../../store/userStore';
 import { useInfiniteReviews } from 'src/hooks/review/useInfiniteReviews';
 import { ReviewsType } from 'src/types/review/review-type';
 import Link from 'next/link';
+import ReviewAddModal from './ReviewAddModal';
 
-const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
+const ReviewListModal = ({ onClose }: { onClose?: () => void }) => {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(true);
   const [isOpenWriteModal, setIsOpenWriteModal] = useState(false);
   const { id: userId } = useUserStore();
@@ -77,7 +77,7 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
             <button
               onClick={() => {
                 setIsOpenReviewModal(false);
-                closeModal && closeModal();
+                onClose && onClose();
               }}
               className="text-white/50 hover:text-white transition"
             >
@@ -256,4 +256,4 @@ const ReviewPage = ({ closeModal }: { closeModal?: () => void }) => {
   );
 };
 
-export default ReviewPage;
+export default ReviewListModal;

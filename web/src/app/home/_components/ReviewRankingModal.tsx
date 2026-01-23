@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import HomeReviews from '../HomeReviews';
+import ReviewListModal from '../modal/ReviewListModal';
 
 const ReviewRankingModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -22,7 +22,7 @@ const ReviewRankingModal = ({ onClose }: { onClose: () => void }) => {
         </button>
 
         {/* 랭킹 내용 */}
-        <HomeReviews />
+        <ReviewListModal />
       </motion.div>
     </div>
   );

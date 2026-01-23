@@ -20,7 +20,7 @@ const fadeUp = {
   }),
 };
 
-const HomeReviews = ({ className = '' }: HomeReviewsProps) => {
+const ReviewRankingModal = ({ className = '' }: HomeReviewsProps) => {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
@@ -128,4 +128,4 @@ const HomeReviews = ({ className = '' }: HomeReviewsProps) => {
   );
 };
 
-export default HomeReviews;
+export default ReviewRankingModal;

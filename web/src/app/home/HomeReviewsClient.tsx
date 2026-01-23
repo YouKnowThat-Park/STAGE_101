@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import HomeReviews from './HomeReviews';
-import ReviewPage from '../reviews/ReviewPage';
+import ReviewListModal from './modal/ReviewListModal';
 
 const HomeReviewsClient = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -14,14 +13,14 @@ const HomeReviewsClient = () => {
           className="text-sm border-b border-black inline-block w-full h-full"
         >
           <div className="pointer-events-none">
-            <HomeReviews />
+            <ReviewListModal />
           </div>
         </button>
       </div>
       {isReviewModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="relative  w-[90%] max-w-[600px] max-h-[80vh] overflow-y-auto p-6 rounded-lg shadow-lg">
-            <ReviewPage closeModal={() => setIsReviewModalOpen(false)} />
+            <ReviewListModal onClose={() => setIsReviewModalOpen(false)} />
           </div>
         </div>
       )}
