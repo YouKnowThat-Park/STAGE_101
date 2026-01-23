@@ -8,9 +8,11 @@ export const attachShopId = (
 
   return ranking.map((item) => {
     const key = item.name.trim().toLowerCase();
+    const shopId = shopMap.get(key);
+
     return {
       ...item,
-      id: shopMap.get(key) ?? item.id,
+      id: shopId ?? item.id ?? key,
     };
   });
 };

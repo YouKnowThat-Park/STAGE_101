@@ -2,15 +2,18 @@ import React from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import Link from 'next/link';
 import { useGoodsRanking } from 'src/hooks/cart_history/useGoodsRanking';
-import { GoodsRankingProps } from 'src/lib/api/cart_history/cartGoodsRanking';
+import useShop from 'src/hooks/shop/useShop';
+import { attachShopId } from 'src/utils/attachShopId';
 
 const COLORS = ['#C9A66B', '#8E7A4A', '#5F5332', '#3E3721', '#262012'];
 
 const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
-  const ranking: GoodsRankingProps[] = useGoodsRanking().data ?? [];
+  const ranking = useGoodsRanking().data ?? [];
+  const { items: shops = [] } = useShop();
 
-  const total = ranking.reduce((sum, item) => sum + item.value, 0);
-
+  const data = attachShopId(ranking, shops);
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  console.log(data);
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
       <div className="bg-[#111] p-6 rounded-xl w-[540px] text-white relative">
@@ -24,14 +27,14 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={ranking}
+                  data={data}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={70}
                   outerRadius={100}
                   paddingAngle={3}
                 >
-                  {ranking.map((_, i) => (
+                  {data.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
@@ -45,12 +48,12 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
             </ResponsiveContainer>
           </div>
           <div className="flex-1 space-y-3">
-            {ranking.map((item, index) => {
+            {data.map((item, index) => {
               const percent = Math.round((item.value / total) * 100);
 
               return (
                 <div
-                  key={item.name}
+                  key={item.id}
                   className="flex items-center gap-3 text-sm hover:text-[#C9A66B] transition"
                 >
                   <span
