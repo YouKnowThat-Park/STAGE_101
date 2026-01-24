@@ -40,7 +40,6 @@ export default function CheckoutClient({
   main_img,
 }: CheckoutClientProps) {
   const { name, phone } = useUserStore();
-  console.log('user Data', name, phone);
   const { data: theaterData } = useTheaterData(theaterId);
 
   const [tossPayments, setTossPayments] = useState<TossPaymentsInstance | null>(null);

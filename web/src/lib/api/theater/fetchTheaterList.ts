@@ -1,8 +1,6 @@
 import type { TheaterListParams, TheaterListResponse } from 'src/types/theater/theater-type';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL!;
-console.log('NEXT_PUBLIC_API_BASE_URL : ', API_BASE);
-// const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
 export const fetchTheaterList = async (
   params: TheaterListParams = {},
@@ -15,7 +13,7 @@ export const fetchTheaterList = async (
   if (params.limit) qs.set('limit', String(params.limit));
   if (params.offset) qs.set('offset', String(params.offset));
 
-  const url = `https://www.stage101.shop/api/theaters/list${qs.toString() ? `?${qs.toString()}` : ''}`;
+  const url = `${API_BASE}/theaters/list${qs.toString() ? `?${qs.toString()}` : ''}`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error('공연 목록을 불러올 수 없습니다.');

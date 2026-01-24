@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import Link from 'next/link';
 import { useGoodsRanking } from 'src/hooks/cart_history/useGoodsRanking';
 import useShop from 'src/hooks/shop/useShop';
 import { attachShopId } from 'src/utils/attachShopId';
+import { useLockBodyScroll } from 'src/hooks/useLockBodyScroll';
 
 const COLORS = ['#C9A66B', '#8E7A4A', '#5F5332', '#3E3721', '#262012'];
 
@@ -13,7 +14,9 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
 
   const data = attachShopId(ranking, shops);
   const total = data.reduce((sum, item) => sum + item.value, 0);
-  console.log(data);
+
+  useLockBodyScroll();
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
       <div className="bg-[#111] p-6 rounded-xl w-[540px] text-white relative">

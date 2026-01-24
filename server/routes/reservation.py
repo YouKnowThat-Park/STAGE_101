@@ -10,7 +10,7 @@ from fastapi import (
 from sqlalchemy.orm import Session, joinedload
 from typing import List
 from uuid import UUID
-from sqlalchemy import text
+from sqlalchemy import text, func
 from datetime import date, datetime
 import json
 
@@ -18,7 +18,7 @@ from server.database import get_db
 from server.models.reservation import Reservation
 from server.models.user import User
 from server.models.theater import Theater
-from server.schemas.reservation import ReservationResponse, ReservationCreate, CheckoutSummaryResponse
+from server.schemas.reservation import ReservationResponse, ReservationCreate, CheckoutSummaryResponse, ReservationRankingItem
 from server.models.payment import Payment
 from server.security import verify_access_token
 from server.websocket_manager import manager
@@ -312,3 +312,30 @@ def get_checkout_summary(
     total_price = sum(r.total_price for r in reservations)
 
     return {"reservations":reservations, "total_price":total_price}
+
+@router.get(
+    "/popularityTheater",
+    response_model=list[ReservationRankingItem],
+)
+def top_reservations(
+    limit: int = 5,
+    db: Session = Depends(get_db),
+):
+    rows = (
+        db.query(
+            Theater.name.label("name"),
+            Theater.type.label("type"),
+            func.count(Reservation.id).label("value"),
+        )
+        .join(Theater, Reservation.theater_id == Theater.id)
+        .filter(
+            Theater.status == False,
+            Reservation.status == "confirmed",
+        )
+        .group_by(Theater.name, Theater.type)
+        .order_by(func.count(Reservation.id).desc())
+        .limit(limit)
+        .all()
+    )
+
+    return rows

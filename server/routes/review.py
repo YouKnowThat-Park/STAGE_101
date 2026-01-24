@@ -6,6 +6,7 @@ from typing import Optional, List, cast
 from server.database import get_db
 from server.models.review import Review
 from server.schemas.review import ReviewsListResponse, ReviewResponse, ReviewCreate
+from server.schemas.theater import TheaterReviewPopularity
 from server.schemas.user import UserReviewRanking
 from server.models.user import User
 from server.models.theater import Theater
@@ -63,7 +64,7 @@ def get_user_review_ranking(db: Session = Depends(get_db)):
         .join(User, User.id == Review.user_id)
         .group_by(Review.user_id, User.nickname, User.profile_img)
         .order_by(func.count(Review.id).desc())
-        .limit(3)
+        .limit(5)
         .all()
     )
 
@@ -108,3 +109,27 @@ def create_review(payload: ReviewCreate, db: Session =Depends(get_db), current_u
     db.refresh(review)
 
     return review
+
+@router.get("/theater/popularity", response_model=List[TheaterReviewPopularity])
+def get_theater_review_ranking(db: Session = Depends(get_db)):
+    result = (
+        db.query(
+            Review.theater_id,
+            func.count(Review.id).label("count"),
+            Theater.name.label("name"),
+        )
+        .join(Theater, Theater.id == Review.theater_id)
+        .group_by(Review.theater_id, Theater.name)
+        .order_by(func.count(Review.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    return [
+        TheaterReviewPopularity(
+            theater_id=row[0],
+            count=row[1],
+            name=row[2] or "알 수 없음",
+        )
+        for row in result
+    ]
