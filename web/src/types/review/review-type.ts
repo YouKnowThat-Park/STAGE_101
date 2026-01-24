@@ -60,3 +60,9 @@ export interface CreatedReview {
   dislike_count: number;
   image_url: string | null;
 }
+
+export interface TheaterReviewRanking {
+  theater_id: number;
+  count: number;
+  name: string;
+}

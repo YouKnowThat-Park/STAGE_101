@@ -1,6 +1,7 @@
 import React from 'react';
 import TopReservation from './_components/TopReservation';
 import { useLockBodyScroll } from 'src/hooks/useLockBodyScroll';
+import TopReviewChart from './_components/TopReviewCart';
 
 const TheaterPopularityModal = ({ onClose }: { onClose: () => void }) => {
   useLockBodyScroll();
@@ -16,7 +17,10 @@ const TheaterPopularityModal = ({ onClose }: { onClose: () => void }) => {
             <TopReservation />
           </div>
           <div className="border border-l-2" />
-          <div className="w-[300px]"></div>
+          <div>
+            <h2 className="text-center mb-4 text-[#C9A66B] font-bold">BAST 작품</h2>
+            <TopReviewChart />
+          </div>
         </div>
       </div>
     </div>

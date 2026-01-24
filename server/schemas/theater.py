@@ -32,3 +32,11 @@ class TheaterListStats(BaseModel):
 class TheaterListResponse(BaseModel):
     items: List[TheaterResponse]
     stats: Optional[TheaterListStats] = None
+    
+class TheaterReviewPopularity(BaseModel):
+    theater_id: UUID
+    count: int
+    name: str
+
+    class Config:
+        orm_mode = True
