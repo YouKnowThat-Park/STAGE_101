@@ -13,7 +13,7 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
 
   const data = attachShopId(ranking, shops);
   const total = data.reduce((sum, item) => sum + item.value, 0);
-  console.log(data);
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
       <div className="bg-[#111] p-6 rounded-xl w-[540px] text-white relative">
