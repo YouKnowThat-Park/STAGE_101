@@ -63,7 +63,7 @@ def get_user_review_ranking(db: Session = Depends(get_db)):
         .join(User, User.id == Review.user_id)
         .group_by(Review.user_id, User.nickname, User.profile_img)
         .order_by(func.count(Review.id).desc())
-        .limit(3)
+        .limit(5)
         .all()
     )
 
