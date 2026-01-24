@@ -4,18 +4,14 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useReviewRanking } from 'src/hooks/review/useReviewsRanking';
+import { useLockBodyScroll } from 'src/hooks/useLockBodyScroll';
 
 const crownIcons = ['👑', '🥈', '🥉'];
 
 const ReviewRankingModal = ({ onClose }: { onClose: () => void }) => {
   const { data: ranking, isLoading } = useReviewRanking();
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+  useLockBodyScroll();
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">

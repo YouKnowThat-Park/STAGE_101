@@ -1,7 +1,9 @@
 import React from 'react';
 import TopReservation from './_components/TopReservation';
+import { useLockBodyScroll } from 'src/hooks/useLockBodyScroll';
 
 const TheaterPopularityModal = ({ onClose }: { onClose: () => void }) => {
+  useLockBodyScroll();
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
       <div className="bg-[#111] p-6 rounded-xl h-[450px] text-white relative">
