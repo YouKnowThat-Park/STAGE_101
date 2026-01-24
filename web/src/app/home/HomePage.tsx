@@ -11,13 +11,15 @@ import { BannerImage } from 'src/types/common/common-type';
 import ReviewListModal from './modal/ReviewListModal';
 import GoodsGraphModal from './modal/GoodsGraphModal';
 import ReviewRankingModal from './modal/ReviewRankingModal';
+import TheaterPopularityModal from './modal/TheaterPopularityModal';
 
 const INNER = 'max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12';
 
 const HomePage = () => {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [isReviewRankingOpen, setIsReviewRankingOpen] = useState(false);
-  const [isGoodsGraph, setIsGoodsGraph] = useState(false);
+  const [isGoodsGraphOpen, setIsGoodsGraphOpen] = useState(false);
+  const [isPopularityOpen, setIsPopularityOpen] = useState(false);
 
   // 🔑 캐러셀 컨트롤 (공유)
   const { data, isPending } = useTheaterList({
@@ -74,12 +76,10 @@ const HomePage = () => {
 
   return (
     <main className="w-full min-h-screen">
-      {/* 🔥 상영작 섹션 – 여기서 전부 조립 */}
       <section className="relative bg-black text-white">
         <div className={`${INNER} relative py-10`}>
-          {/* 🔥 NOW SHOWING UI BLOCK */}
           <div className="relative isolate w-full rounded-lg p-2 mt-20 shadow-md">
-            {/* 배경 (원래 NowShowingSection에 있던 거) */}
+            {/* 배경  */}
             <div className="pointer-events-none absolute inset-0 -z-10">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
@@ -102,12 +102,12 @@ const HomePage = () => {
             <ContentMenu
               setIsReviewOpen={setIsReviewOpen}
               setIsReviewRankingOpen={setIsReviewRankingOpen}
-              setIsGoodsGraph={setIsGoodsGraph}
+              setIsGoodsGraphOpen={setIsGoodsGraphOpen}
+              setIsPopularityOpen={setIsPopularityOpen}
               goPrev={goPrev}
               goNext={goNext}
             />
           </div>
-          {/* 🔥 END NOW SHOWING UI BLOCK */}
         </div>
       </section>
 
@@ -130,10 +130,10 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 🔔 모달은 페이지 레벨 */}
       {isReviewOpen && <ReviewListModal onClose={() => setIsReviewOpen(false)} />}
       {isReviewRankingOpen && <ReviewRankingModal onClose={() => setIsReviewRankingOpen(false)} />}
-      {isGoodsGraph && <GoodsGraphModal onClose={() => setIsGoodsGraph(false)} />}
+      {isGoodsGraphOpen && <GoodsGraphModal onClose={() => setIsGoodsGraphOpen(false)} />}
+      {isPopularityOpen && <TheaterPopularityModal onClose={() => setIsPopularityOpen(false)} />}
     </main>
   );
 };

@@ -6,7 +6,8 @@ import { VscGraph, VscPreview } from 'react-icons/vsc';
 interface ContentModalMenuProps {
   setIsReviewOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsReviewRankingOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsGoodsGraph: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsGoodsGraphOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsPopularityOpen: React.Dispatch<React.SetStateAction<boolean>>;
   goPrev: () => void;
   goNext: () => void;
 }
@@ -14,7 +15,8 @@ interface ContentModalMenuProps {
 const ContentMenu = ({
   setIsReviewOpen,
   setIsReviewRankingOpen,
-  setIsGoodsGraph,
+  setIsGoodsGraphOpen,
+  setIsPopularityOpen,
   goPrev,
   goNext,
 }: ContentModalMenuProps) => {
@@ -44,7 +46,7 @@ const ContentMenu = ({
       </div>
       <div>
         <button
-          onClick={() => setIsGoodsGraph(true)}
+          onClick={() => setIsGoodsGraphOpen(true)}
           className=" text-white border p-4 rounded-lg mt-6 flex flex-col justify-center items-center shadow-2xl shadow-white/50"
         >
           <span>
@@ -54,7 +56,10 @@ const ContentMenu = ({
         </button>
       </div>
       <div>
-        <button className=" text-white border p-4 rounded-lg mt-6 flex flex-col justify-center items-center shadow-2xl shadow-white/50">
+        <button
+          onClick={() => setIsPopularityOpen(true)}
+          className=" text-white border p-4 rounded-lg mt-6 flex flex-col justify-center items-center shadow-2xl shadow-white/50"
+        >
           <span>
             <VscGraph className="text-white" size={30} />
           </span>

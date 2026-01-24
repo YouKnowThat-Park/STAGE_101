@@ -59,3 +59,7 @@ class ReservationCreate(BaseModel):
         return v
     
     
+class ReservationRankingItem(BaseModel):
+    name: str
+    type: str
+    value: int
