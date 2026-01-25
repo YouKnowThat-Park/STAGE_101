@@ -5,15 +5,12 @@ import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 import Stage101Logo from 'src/ui/logo/Stage101Logo';
 import { LogoutProps } from 'src/types/auth/auth-type';
-import { useHeaderScroll } from 'src/hooks/useHeaderScroll';
 import HeaderScroll from 'src/ui/header/HeaderScroll';
 
 const Logout = ({ user }: LogoutProps) => {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollHint, setShowScrollHint] = useState(false);
-
-  useHeaderScroll(scrollRef, setShowScrollHint);
 
   const handleLogout = async () => {
     const res = await fetch('/logout', { method: 'GET' });
@@ -47,7 +44,6 @@ const Logout = ({ user }: LogoutProps) => {
     <div className="relative">
       {/* 스크롤 가능한 네비 영역 */}
       <div
-        ref={scrollRef}
         onScroll={handleScroll}
         className="
           flex items-center h-16 px-8 bg-black text-white justify-between

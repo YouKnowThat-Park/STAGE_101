@@ -19,13 +19,13 @@ const GoodsGraphModal = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
-      <div className="bg-[#111] p-6 rounded-xl w-[540px] text-white relative">
+      <div className="bg-[#111] p-6 rounded-xl w-[600px] text-white relative">
         <button onClick={onClose} className="absolute top-3 right-3">
           ✕
         </button>
         <h2 className="text-center mb-4 text-[#C9A66B] font-bold">많이 판매 된 굿즈</h2>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-center max-[600px]:flex  max-[600px]:flex-col">
           <div className="w-[260px] h-[260px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

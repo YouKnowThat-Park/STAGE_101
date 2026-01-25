@@ -108,7 +108,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
                 {description.length > 150 ? `${description.slice(0, 150)}...` : description}
               </p>
               {/* 예매 버튼 */}
-              <div className="mt-auto mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
                   onClick={handleReservationGo}
                   className="w-full rounded-xl bg-yellow-500 px-6 py-3 font-extrabold text-black shadow-lg shadow-yellow-500/20 transition hover:bg-yellow-400 sm:w-auto"

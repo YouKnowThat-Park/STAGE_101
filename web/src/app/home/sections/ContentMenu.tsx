@@ -68,11 +68,18 @@ const ContentMenu = ({
       </div>
 
       <div
-        className=" absolute right-5 bottom-2
-       inline-flex items-center  rounded-sm
-       bg-[#0b0b0b] border border-white/10
-       shadow-[inset_0_2px_8px_rgba(0,0,0,0.85),_0_1px_0_rgba(255,255,255,0.04)]
-     "
+        className="
+    absolute
+    right-5 bottom-2
+
+    max-[850px]:top-4
+    max-[850px]:right-4
+    max-[850px]:bottom-auto
+
+    inline-flex items-center rounded-sm
+    bg-[#0b0b0b] border border-white/10
+    shadow-[inset_0_2px_8px_rgba(0,0,0,0.85),_0_1px_0_rgba(255,255,255,0.04)]
+  "
       >
         <button
           type="button"

@@ -9,6 +9,7 @@ import { useInfiniteReviews } from 'src/hooks/review/useInfiniteReviews';
 import { ReviewsType } from 'src/types/review/review-type';
 import Link from 'next/link';
 import ReviewAddModal from './ReviewAddModal';
+import { useRouter } from 'next/navigation';
 
 const ReviewListModal = ({ onClose }: { onClose?: () => void }) => {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(true);
@@ -17,6 +18,8 @@ const ReviewListModal = ({ onClose }: { onClose?: () => void }) => {
   const queryClient = useQueryClient();
   const [sortOption, setSortOption] = useState<'newest' | 'oldest'>('newest');
   const [isNarrow, setIsNarrow] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,15 +114,22 @@ const ReviewListModal = ({ onClose }: { onClose?: () => void }) => {
             </div>
 
             <button
-              onClick={() => setIsOpenWriteModal(true)}
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.innerWidth < 750) {
+                  router.push('/sign-in');
+                  return;
+                }
+
+                setIsOpenWriteModal(true);
+              }}
               className="
-              rounded-xl
-              bg-[#C9A66B]
-              px-4 py-2
-              text-sm font-semibold text-black
-              hover:brightness-110
-              transition
-            "
+                rounded-xl
+                bg-[#C9A66B]
+                px-4 py-2
+                text-sm font-semibold text-black
+                hover:brightness-110
+                transition
+              "
             >
               리뷰 작성
             </button>
