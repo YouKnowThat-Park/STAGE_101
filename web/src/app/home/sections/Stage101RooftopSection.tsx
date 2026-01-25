@@ -12,11 +12,11 @@ const Stage101RooftopSection = () => {
   return (
     <section className="w-full bg-white  py-20 md:py-28 ">
       <div className="max-w-screen-2xl mx-auto px-6 relative">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-16">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-16 max-[1030px]:justify-center max-[1030px]:items-center ">
           {/* 이미지 영역 */}
           <div>
             {/* 메인 이미지 */}
-            <a href="/theater/musicalC">
+            <a href="/theater/musicalC" className=" inline-block">
               <Image
                 src="/STAGE101_rooftop.webp"
                 alt="stage101 루프탑"

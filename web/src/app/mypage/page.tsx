@@ -12,6 +12,7 @@ import { Noto_Serif_KR } from 'next/font/google';
 
 import { useUserHook } from '../../hooks/user/useUserHook';
 import { useUserStore } from '../../store/userStore';
+import { GoHome } from 'react-icons/go';
 
 const notoSerif = Noto_Serif_KR({
   subsets: ['latin'],
@@ -102,6 +103,25 @@ const MyPage = () => {
               </button>
             ))}
           </nav>
+
+          <a href="/">
+            <div
+              className="
+                fixed
+                bottom-4
+                left-1/2 -translate-x-1/2
+                md:left-auto md:translate-x-0 md:right-6
+                z-[9999]
+                w-14 h-14 md:w-16 md:h-16
+                flex items-center justify-center
+                bg-white/5 border border-white/10
+                rounded-full
+                backdrop-blur
+              "
+            >
+              <GoHome className="text-white text-xl md:text-2xl" />
+            </div>
+          </a>
 
           {/* 탭 콘텐츠 */}
           <div className=" w-full p-4 max-[431px]:p-0 overflow-x-hidden">

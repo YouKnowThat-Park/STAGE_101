@@ -59,7 +59,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
                 alt="포스터"
                 width={600}
                 height={900}
-                className="h-auto w-full rounded-xl object-cover"
+                className="h-auto w-full max-w-[360px] mx-auto rounded-xl object-cover"
                 priority
               />
             </div>
