@@ -19,9 +19,14 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
   const { id } = useUserStore();
   const [showModal, setShowModal] = useState(false);
 
-  const isMusical = String(type).toLowerCase().includes('musical');
+  const lowerType = String(type).toLowerCase();
 
-  // ✅ async로 바꿔야 await 사용 가능
+  const label = lowerType.includes('musical')
+    ? 'MUSICAL'
+    : lowerType.includes('concert')
+      ? 'CONCERT'
+      : 'CINEMA';
+
   const handleReservationGo = async () => {
     if (!id) {
       setShowModal(true);
@@ -54,24 +59,24 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
                 alt="포스터"
                 width={600}
                 height={900}
-                className="h-auto w-full rounded-xl object-cover"
+                className="h-auto w-full max-w-[360px] mx-auto rounded-xl object-cover"
                 priority
               />
             </div>
 
             {/* Info */}
-            <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+            <div className="flex h-full flex-col rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
               {/* Badge */}
               <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={[
                     'rounded-full px-3 py-1 text-xs font-semibold ring-1',
-                    isMusical
+                    lowerType
                       ? 'bg-yellow-500/15 text-yellow-200 ring-yellow-500/30'
                       : 'bg-sky-500/15 text-sky-200 ring-sky-500/30',
                   ].join(' ')}
                 >
-                  {isMusical ? 'MUSICAL' : 'CINEMA'}
+                  {label}
                 </span>
                 <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70 ring-1 ring-white/15">
                   STAGE_101 ORIGINAL
@@ -100,11 +105,10 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               </div>
 
               <p className="mt-5 text-sm leading-relaxed text-white/75 sm:text-base">
-                {description}
+                {description.length > 150 ? `${description.slice(0, 150)}...` : description}
               </p>
-
               {/* 예매 버튼 */}
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
                   onClick={handleReservationGo}
                   className="w-full rounded-xl bg-yellow-500 px-6 py-3 font-extrabold text-black shadow-lg shadow-yellow-500/20 transition hover:bg-yellow-400 sm:w-auto"

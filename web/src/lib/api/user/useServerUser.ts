@@ -23,7 +23,7 @@ export async function getCurrentUser(): Promise<SafeUserType | null> {
 
     const user: SafeUserType = {
       id: data.id,
-      nickname: data.name ?? '',
+      nickname: data.nickname ?? '',
       profile_img: data.profile_img ?? '',
       point: data.point ?? null,
       name: data.name ?? '',

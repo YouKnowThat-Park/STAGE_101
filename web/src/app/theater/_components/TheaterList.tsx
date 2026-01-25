@@ -1,7 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { useHeaderScroll } from 'src/hooks/useHeaderScroll';
 import HeaderScroll from 'src/ui/header/HeaderScroll';
 import { THEATER_LIST } from './theaterConfig';
 
@@ -10,8 +9,6 @@ const TheaterList = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [showScrollHint, setShowScrollHint] = useState(false);
 
-  useHeaderScroll(scrollRef, setShowScrollHint, 755);
-
   const handleGoBack = () => {
     router.push('/theater');
   };
@@ -19,7 +16,6 @@ const TheaterList = () => {
   return (
     <div className="px-10 py-14 max-[755px]:px-0">
       <div
-        ref={scrollRef}
         className="
           max-[755px]:overflow-x-auto
           max-[755px]:scroll-smooth

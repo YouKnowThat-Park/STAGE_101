@@ -51,7 +51,7 @@ const ShopPage = () => {
                   />
 
                   <div className="p-4 bg-black">
-                    <p className="text-sm text-[#C9A66B]">{item.point} Point</p>
+                    <p className="text-sm text-[#C9A66B]">{item.point.toLocaleString()} Point</p>
                     <h3 className="mt-1 text-base font-semibold">{item.name}</h3>
                   </div>
                 </div>
