@@ -15,3 +15,13 @@ export const fetchShopById = async (id: string) => {
   if (!res.ok) throw new Error('해당 shop 데이터를 찾을 수 없습니다.');
   return res.json();
 };
+
+export const fetchShopsServer = async () => {
+  const res = await fetch(`${API_BASE}/shops/`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) throw new Error('shop 데이터를 불러오지 못했습니다.');
+
+  return res.json();
+};
