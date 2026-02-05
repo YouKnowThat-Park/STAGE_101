@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import FloorGuideSection from './sections/FloorGuideSection';
 import NoticeSection from './sections/NoticeSection';
@@ -6,41 +7,36 @@ import ContentMenu from './sections/ContentMenu';
 import ProgressBarSection from './sections/ProgressBarSection';
 import Stage101RooftopSection from './sections/Stage101RooftopSection';
 import NowShowingSection from './sections/NowShowingSection';
-import { useTheaterList } from 'src/hooks/theater/useTheaterList';
-import { BannerImage } from 'src/types/common/common-type';
+
 import ReviewListModal from './modal/ReviewListModal';
 import GoodsGraphModal from './modal/GoodsGraphModal';
 import ReviewRankingModal from './modal/ReviewRankingModal';
 import TheaterPopularityModal from './modal/TheaterPopularityModal';
+import { BannerImage } from 'src/types/common/common-type';
+import { HomeClientPageProps } from 'src/types/theater/theater-type';
 
 const INNER = 'max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12';
 
-const HomePage = () => {
+const HomeClientPage = ({ initialData }: HomeClientPageProps) => {
+  /* ===== 모달 상태 ===== */
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [isReviewRankingOpen, setIsReviewRankingOpen] = useState(false);
   const [isGoodsGraphOpen, setIsGoodsGraphOpen] = useState(false);
   const [isPopularityOpen, setIsPopularityOpen] = useState(false);
 
-  // 🔑 캐러셀 컨트롤 (공유)
-  const { data, isPending } = useTheaterList({
-    status: false,
-    limit: 10,
-    offset: 0,
-  });
-
+  /* ===== 이미지 변환 ===== */
   const images: BannerImage[] = useMemo(() => {
-    const items = data?.items ?? [];
-    return items.map((t) => ({
+    return initialData.items.map((t) => ({
       id: String(t.id),
       src: t.main_img,
       alt: t.name,
       pos: 'center 30%',
       theaterKey: t.type,
     }));
-  }, [data]);
+  }, [initialData]);
 
   /* ===== 캐러셀 상태 ===== */
-  const [order, setOrder] = useState<BannerImage[]>([]);
+  const [order, setOrder] = useState<BannerImage[]>(images);
   const [activeIndex, setActiveIndex] = useState(0);
   const [animKey, setAnimKey] = useState(0);
 
@@ -75,30 +71,13 @@ const HomePage = () => {
   };
 
   return (
-    <main className="w-full min-h-screen">
+    <>
+      {/* 캐러셀 섹션 */}
       <section className="relative bg-black text-white">
-        <div className={`${INNER} relative py-10`}>
-          <div className="relative isolate w-full rounded-lg p-2 mt-20 shadow-md">
-            {/* 배경  */}
-            <div className="pointer-events-none absolute inset-0 -z-10">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.18),rgba(0,0,0,0)_55%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
-              <div className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:16px_16px]" />
-            </div>
-
-            {/* 타이틀 */}
-            <div className="relative z-10 flex items-center px-1 mb-2">
-              <h2 className="ml-[100px] text-[#C9A66B] font-semibold">상영작</h2>
-            </div>
-
-            {/* 1. 카드 */}
-            <NowShowingSection order={order} animKey={animKey} isPending={isPending} />
-
-            {/* 2. 진행바 */}
+        <div className={`${INNER} py-10`}>
+          <div className="relative rounded-lg p-2 mt-10 shadow-md">
+            <NowShowingSection order={order} animKey={animKey} isPending={false} />
             <ProgressBarSection images={images} activeIndex={activeIndex} jumpTo={jumpTo} />
-
-            {/* 3. 콘텐츠 메뉴 */}
             <ContentMenu
               setIsReviewOpen={setIsReviewOpen}
               setIsReviewRankingOpen={setIsReviewRankingOpen}
@@ -111,7 +90,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 나머지 섹션들 */}
+      {/* 나머지 섹션 */}
       <section className="bg-white">
         <div className={`${INNER} pb-16`}>
           <Stage101RooftopSection />
@@ -130,12 +109,13 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* 모달 */}
       {isReviewOpen && <ReviewListModal onClose={() => setIsReviewOpen(false)} />}
       {isReviewRankingOpen && <ReviewRankingModal onClose={() => setIsReviewRankingOpen(false)} />}
       {isGoodsGraphOpen && <GoodsGraphModal onClose={() => setIsGoodsGraphOpen(false)} />}
       {isPopularityOpen && <TheaterPopularityModal onClose={() => setIsPopularityOpen(false)} />}
-    </main>
+    </>
   );
 };
 
-export default HomePage;
+export default HomeClientPage;

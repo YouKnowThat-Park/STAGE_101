@@ -15,7 +15,9 @@ export const fetchTheaterList = async (
 
   const url = `${API_BASE}/theaters/list${qs.toString() ? `?${qs.toString()}` : ''}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    cache: 'no-store',
+  });
   if (!res.ok) throw new Error('공연 목록을 불러올 수 없습니다.');
   return res.json();
 };
