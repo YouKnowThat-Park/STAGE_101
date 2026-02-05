@@ -12,7 +12,6 @@ export default async function Page() {
 
   return (
     <main className="w-full min-h-screen">
-      {/* ✅ SEO / SSR 핵심 영역 */}
       <section className="bg-black text-white">
         <div className={`${INNER} py-10`}>
           <h1 className="text-3xl font-semibold text-[#C9A66B]">STAGE101 상영작</h1>
@@ -20,7 +19,6 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* 👇 인터랙션은 Client Component */}
       <HomeClientPage initialData={data} />
     </main>
   );
