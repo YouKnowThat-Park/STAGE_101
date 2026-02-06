@@ -14,6 +14,9 @@ const notoSans = Noto_Sans_KR({
 export const metadata: Metadata = {
   title: 'STAGE_101 | 극장 정보',
   description: 'STAGE_101에서 제공하는 다양한 극장 정보를 확인하세요.',
+  verification: {
+    google: 'TkbL1xalpG1S65t5PjBfve2LZdMIwj0dRgXCRwglfO4',
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
