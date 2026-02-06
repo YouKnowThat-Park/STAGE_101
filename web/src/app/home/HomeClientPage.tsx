@@ -74,7 +74,7 @@ const HomeClientPage = ({ initialData }: HomeClientPageProps) => {
     <>
       {/* 캐러셀 섹션 */}
       <section className="relative bg-black text-white">
-        <div className={`${INNER} py-10`}>
+        <div className={`${INNER} mb-10`}>
           <div className="relative rounded-lg p-2 mt-10 shadow-md">
             <NowShowingSection order={order} animKey={animKey} isPending={false} />
             <ProgressBarSection images={images} activeIndex={activeIndex} jumpTo={jumpTo} />

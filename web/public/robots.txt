@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stage101.shop/sitemap.xml
