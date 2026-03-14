@@ -27,15 +27,6 @@ const NowShowingSection = ({ order, animKey, isPending }: NowShowingSectionProps
 
   return (
     <div className="relative z-10 mt-2 overflow-hidden">
-      {/* left button */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/40 text-white px-3 py-2 rounded"
-      >
-        ←
-      </button>
-
-      {/* carousel */}
       <div className="flex w-max gap-6 items-end mx-auto transition-all duration-300">
         {isPending
           ? Array.from({ length: VISIBLE_COUNT }).map((_, idx) => (
