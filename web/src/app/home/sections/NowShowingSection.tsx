@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BannerImage } from 'src/types/common/common-type';
@@ -11,15 +12,36 @@ interface NowShowingSectionProps {
   isPending: boolean;
 }
 
+const VISIBLE_COUNT = 5;
+
 const NowShowingSection = ({ order, animKey, isPending }: NowShowingSectionProps) => {
+  const [index, setIndex] = useState(0);
+
+  const handlePrev = () => {
+    setIndex((prev) => (prev - 1 + order.length) % order.length);
+  };
+
+  const visibleImages = Array.from({ length: VISIBLE_COUNT }).map(
+    (_, i) => order[(index + i) % order.length],
+  );
+
   return (
     <div className="relative z-10 mt-2 overflow-hidden">
-      <div className="flex w-max gap-6 items-end mx-auto">
+      {/* left button */}
+      <button
+        onClick={handlePrev}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/40 text-white px-3 py-2 rounded"
+      >
+        ←
+      </button>
+
+      {/* carousel */}
+      <div className="flex w-max gap-6 items-end mx-auto transition-all duration-300">
         {isPending
-          ? Array.from({ length: 4 }).map((_, idx) => (
+          ? Array.from({ length: VISIBLE_COUNT }).map((_, idx) => (
               <NowShowingSkeleton key={idx} isFront={idx === 0} />
             ))
-          : order.map((img, idx) => {
+          : visibleImages.map((img, idx) => {
               const isFront = idx === 0;
 
               return (
@@ -37,9 +59,12 @@ const NowShowingSection = ({ order, animKey, isPending }: NowShowingSectionProps
                       src={img.src}
                       alt={img.alt}
                       fill
+                      priority={isFront} // LCP 개선
+                      sizes="(max-width: 640px) 180px, (max-width: 1024px) 210px, 260px"
                       className="object-cover"
                       style={{ objectPosition: img.pos ?? 'center' }}
                     />
+
                     <div className="absolute right-5 bottom-2 rounded bg-black/50 px-2 py-1 text-sm text-white">
                       {img.alt}
                     </div>
