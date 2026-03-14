@@ -71,7 +71,13 @@ const Stage101RooftopSection = () => {
                     className="rounded-2xl bg-white shadow-xl ring-1 ring-black/10 hover:scale-[1.02] transition"
                   >
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">
-                      <Image src={img.src} alt={img.alt} fill className="object-cover" />
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 160px"
+                        className="object-cover"
+                      />
                     </div>
                   </div>
                 ))}
