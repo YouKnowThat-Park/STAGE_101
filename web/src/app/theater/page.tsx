@@ -80,7 +80,7 @@ const TheaterPage = () => {
                   src={it.main_img}
                   alt={it.name}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 48vw, 31vw"
                   className="object-cover transition duration-500 group-hover:scale-[1.04]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/10" />
