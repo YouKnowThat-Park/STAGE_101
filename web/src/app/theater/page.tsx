@@ -80,6 +80,7 @@ const TheaterPage = () => {
                   src={it.main_img}
                   alt={it.name}
                   fill
+                  quality={60}
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 48vw, 31vw"
                   className="object-cover transition duration-500 group-hover:scale-[1.04]"
                 />
