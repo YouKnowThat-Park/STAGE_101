@@ -69,7 +69,7 @@ const TheaterPage = () => {
         />
 
         {/* ✅ 카드 그리드: filtered를 사용 */}
-        <div className="mt-10 grid gap-8 sm:grid-cols-1 lg:grid-cols-3">
+        <div className="mt-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((it) => (
             <div
               key={it.id}
@@ -80,6 +80,7 @@ const TheaterPage = () => {
                   src={it.main_img}
                   alt={it.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transition duration-500 group-hover:scale-[1.04]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/10" />
