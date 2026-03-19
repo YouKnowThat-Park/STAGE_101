@@ -16,7 +16,6 @@ const NoticeSection = () => {
                   fill
                   sizes="(max-width: 768px) 92vw, 420px"
                   className="border"
-                  priority
                 />
               </div>
             </div>

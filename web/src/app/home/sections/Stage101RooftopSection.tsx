@@ -23,7 +23,6 @@ const Stage101RooftopSection = () => {
                 width={340}
                 height={520}
                 className="rounded-2xl shadow-xl"
-                priority
               />
             </a>
           </div>
