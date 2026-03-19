@@ -8,11 +8,12 @@ import React from 'react';
 
 const Footer = () => {
   const pathname = usePathname();
-  const isMypage = pathname?.startsWith('/mypage'); // ✅ `/theater` 여부 체크
-  if (isMypage) return null; // ✅ `/theater`에서는 헤더 숨김
+  const isMypage = pathname?.startsWith('/mypage');
+
+  if (isMypage) return null;
 
   return (
-    <div className=" hidden min-[481px]:block border-t-2 border-t-black py-16 mt-28 ">
+    <footer className="hidden min-[481px]:block border-t-2 border-t-black py-16 mt-28">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* 회사 정보 */}
         <div className="text-center md:text-left">
@@ -22,7 +23,10 @@ const Footer = () => {
         </div>
 
         {/* 네비게이션 링크 */}
-        <nav className="mt-4 md:mt-0 flex flex-col md:flex-row items-center gap-6">
+        <nav
+          aria-label="푸터 메뉴"
+          className="mt-4 md:mt-0 flex flex-col md:flex-row items-center gap-6"
+        >
           <Link href="/notion/TermsOfService" className="text-gray-400 hover:text-white text-sm">
             이용약관
           </Link>
@@ -38,17 +42,25 @@ const Footer = () => {
         <div className="mt-4 md:mt-0 flex gap-4">
           <Link
             href="https://github.com/YouKnowThat-Park"
+            aria-label="GitHub 프로필"
             className="text-gray-400 hover:text-white text-xl"
           >
             <GitHubIcon />
           </Link>
+
           <Link
             href="https://youkn0wthat.tistory.com/"
+            aria-label="기술 블로그"
             className="text-gray-400 hover:text-white text-xl"
           >
             <BlogIcon />
           </Link>
-          <Link href="https://instagram.com" className="text-gray-400 hover:text-white text-xl">
+
+          <Link
+            href="https://instagram.com"
+            aria-label="인스타그램"
+            className="text-gray-400 hover:text-white text-xl"
+          >
             <CvIcon />
           </Link>
         </div>
@@ -58,7 +70,7 @@ const Footer = () => {
       <div className="text-center text-gray-500 text-sm mt-6">
         © 2024 STAGE_101. All Rights Reserved.
       </div>
-    </div>
+    </footer>
   );
 };
 

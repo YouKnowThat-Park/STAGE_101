@@ -37,9 +37,9 @@ const Stage101RooftopSection = () => {
                 aria-label="STAGE101: 루프탑 이야기 보러가기"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-3xl md:text-4xl font-semibold tracking-tight mb-6 text-[#C9A66B]">
+                  <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-6 text-[#C9A66B]">
                     STAGE101: 루프탑 이야기
-                  </h3>
+                  </h2>
 
                   <span className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm md:text-base font-medium text-gray-900 bg-white ring-1 ring-black/10 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:ring-black/20">
                     보러가기
