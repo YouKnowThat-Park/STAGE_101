@@ -6,7 +6,13 @@ const FloorGuideSection = () => {
     <section className="py-20 bg-white/5">
       <div className="max-w-[1100px] mx-auto flex items-center justify-center gap-10">
         <div className="relative w-[300px] h-[420px]">
-          <Image src="/STAGE101_floor_guide.webp" alt="층별 안내" fill className="object-contain" />
+          <Image
+            src="/STAGE101_floor_guide.webp"
+            alt="층별 안내"
+            width={300}
+            height={420}
+            className="object-contain"
+          />
         </div>
         {/* 텍스트 */}
         <div className="flex flex-col gap-3 max-w-md text-[#222]">

@@ -22,6 +22,7 @@ const ProgressBarSection = ({ images, jumpTo, activeIndex }: ProgressBarProps) =
         return (
           <button
             key={idx}
+            aria-label="상영작 슬라이드 인디케이터"
             onClick={() => jumpTo(targetIndex)}
             className={`h-[4px] w-[34px] rounded-full transition-all ${
               idx === activeBarIndex ? 'bg-[#C9A66B]' : 'bg-gray-300'

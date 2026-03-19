@@ -17,10 +17,6 @@ const VISIBLE_COUNT = 5;
 const NowShowingSection = ({ order, animKey, isPending }: NowShowingSectionProps) => {
   const [index, setIndex] = useState(0);
 
-  const handlePrev = () => {
-    setIndex((prev) => (prev - 1 + order.length) % order.length);
-  };
-
   const visibleImages = Array.from({ length: VISIBLE_COUNT }).map(
     (_, i) => order[(index + i) % order.length],
   );
