@@ -1,14 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { BannerImage } from 'src/types/common/common-type';
 import ContentMenu from './ContentMenu';
 import ProgressBarSection from './ProgressBarSection';
-import ReviewListModal from '../modal/ReviewListModal';
-import GoodsGraphModal from '../modal/GoodsGraphModal';
-import ReviewRankingModal from '../modal/ReviewRankingModal';
-import TheaterPopularityModal from '../modal/TheaterPopularityModal';
 import NowShowingCarousel from './NowShowingCarousel';
+
+const ReviewListModal = dynamic(() => import('../modal/ReviewListModal'));
+const GoodsGraphModal = dynamic(() => import('../modal/GoodsGraphModal'));
+const ReviewRankingModal = dynamic(() => import('../modal/ReviewRankingModal'));
+const TheaterPopularityModal = dynamic(() => import('../modal/TheaterPopularityModal'));
 
 interface HomeHeroClientProps {
   images: BannerImage[];
