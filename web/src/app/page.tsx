@@ -1,5 +1,4 @@
-import { fetchTheaterList } from 'src/lib/api/theater/fetchTheaterList';
-import HomeClientPage from './home/HomeClientPage';
+import HomePageContent from './home/HomePageContent';
 
 const INNER = 'max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12';
 
@@ -12,12 +11,6 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const data = await fetchTheaterList({
-    status: false,
-    limit: 10,
-    offset: 0,
-  });
-
   return (
     <main className="w-full min-h-screen">
       <section className="bg-black text-white">
@@ -27,7 +20,7 @@ export default async function Page() {
         </div>
       </section>
 
-      <HomeClientPage initialData={data} />
+      <HomePageContent />
     </main>
   );
 }

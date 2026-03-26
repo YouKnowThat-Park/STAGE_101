@@ -39,7 +39,3 @@ export interface TheaterListParams {
   offset?: number;
   include_stats?: boolean;
 }
-
-export interface HomeClientPageProps {
-  initialData: TheaterListResponse;
-}
