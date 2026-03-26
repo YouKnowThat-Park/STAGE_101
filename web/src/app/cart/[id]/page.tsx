@@ -1,14 +1,31 @@
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import Image from 'next/image';
+import AccessRedirect from 'src/app/_components/AccessRedirect';
 import CartSuccessRedirect from '../_components/CartSuccessRedirect';
 import HomeCountdownText from '../_components/HomeCountdownText';
 import { CartHistoryItem, CartSuccessProps } from 'src/types/cart/cart-history-type';
 import { fetchCartHistoryByIdServer } from 'src/lib/api/cart_history/fetchCartHistoryByIdServer';
 import { fetchCartHistoriesByPaymentKeyServer } from 'src/lib/api/cart_history/fetchCartHistoriesByPaymentKeyServer';
+import { getCurrentUser } from 'src/lib/api/user/useServerUser';
+
+const isAbnormalAccessError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : '';
+  return ['401', '403', '404'].some((status) => message.includes(status));
+};
+
+const isGroupedHistoryMissingError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : '';
+  return message.includes('해당 결제의 히스토리가 없');
+};
 
 export default async function CartSuccessPage({ params }: CartSuccessProps) {
-  //  SSR에서 인증 쿠키를 전달해야 /by-payment가 내 소유만 조회됨
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return <AccessRedirect />;
+  }
+
   const headersList = headers();
   const cookie = headersList.get('cookie') ?? '';
 
@@ -16,13 +33,15 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
   let items: CartHistoryItem[];
 
   try {
-    // 1) 단건 조회 → payment_key 확보
     one = await fetchCartHistoryByIdServer(params.id, { cookie });
-
-    // 2) 같은 payment_key의 전체 히스토리 조회
     items = await fetchCartHistoriesByPaymentKeyServer(one.payment_key, { cookie });
   } catch (err) {
     console.error('장바구니 결제 성공 페이지 데이터 조회 실패:', err);
+
+    if (isAbnormalAccessError(err) || isGroupedHistoryMissingError(err)) {
+      return <AccessRedirect />;
+    }
+
     return notFound();
   }
 
@@ -31,9 +50,9 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
   const displayOrderNo = `STG-${one.payment_key.slice(0, 8).toUpperCase()}-${one.payment_key
     .slice(-4)
     .toUpperCase()}`;
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
-      {/* 배경(무대 조명 + 그리드) */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,166,107,0.16),rgba(0,0,0,0)_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.06),rgba(0,0,0,0)_60%)]" />
@@ -42,44 +61,34 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
       </div>
 
       <div className="relative mx-auto max-w-3xl px-6 py-16 sm:py-20">
-        {/* 상단 헤더 */}
         <div className="flex flex-col gap-3 text-center">
-          <p className="text-sm tracking-[0.25em] text-white/60">STAGE101 • CHECKOUT</p>
-          <h1 className="text-3xl sm:text-4xl font-semibold">
+          <p className="text-sm tracking-[0.25em] text-white/60">STAGE101 CHECKOUT</p>
+          <h1 className="text-3xl font-semibold sm:text-4xl">
             결제가 <span className="text-[#C9A66B]">완료</span>되었습니다
           </h1>
           <p className="text-sm text-white/70">
-            무대의 여운을 담아두었어요. 아래에서 구매 내역을 확인하세요.
+            아래에서 구매 내역을 확인해보세요.
           </p>
         </div>
 
-        {/* 메인 카드 */}
-        <div
-          className="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8
-                     shadow-[0_18px_70px_rgba(0,0,0,0.55)]"
-        >
-          {/* 체크 아이콘 라인 */}
-
-          {/* 주문 요약 */}
+        <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_70px_rgba(0,0,0,0.55)] sm:p-8">
           <div className="mt-6 text-center">
             <p className="text-sm text-white/60">주문번호</p>
-            <p className="mt-2 font-mono text-sm sm:text-base text-[#C9A66B] break-all">
+            <p className="mt-2 break-all font-mono text-sm text-[#C9A66B] sm:text-base">
               {displayOrderNo}
             </p>
 
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm text-white/70">
+            <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm text-white/70 sm:flex-row">
               <span>총 수량 {totalQty}</span>
-              <span className="hidden sm:inline text-white/30">•</span>
-              <span className="text-[#C9A66B] font-semibold">
+              <span className="hidden text-white/30 sm:inline">|</span>
+              <span className="font-semibold text-[#C9A66B]">
                 {totalPrice.toLocaleString()} Point
               </span>
             </div>
           </div>
 
-          {/* 구분선 */}
           <div className="my-8 h-px bg-white/10" />
 
-          {/* 구매 목록 */}
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold">구매한 항목</h2>
             <span className="text-xs text-white/50">결제 성공 내역</span>
@@ -89,8 +98,7 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
             {items.map((it) => (
               <li
                 key={it.id}
-                className="flex items-center gap-4 rounded-xl border border-white/10 bg-black/30 p-4
-                           hover:bg-white/[0.06] transition"
+                className="flex items-center gap-4 rounded-xl border border-white/10 bg-black/30 p-4 transition hover:bg-white/[0.06]"
               >
                 <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/5">
                   {it.image_url ? (
@@ -109,7 +117,7 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{it.name ?? '상품'}</p>
                   <p className="mt-1 text-sm text-white/60">
-                    수량 {it.quantity ?? 0} • {(it.total_price ?? 0).toLocaleString()}P
+                    수량 {it.quantity ?? 0} · {(it.total_price ?? 0).toLocaleString()}P
                   </p>
                 </div>
 
@@ -123,7 +131,6 @@ export default async function CartSuccessPage({ params }: CartSuccessProps) {
             ))}
           </ul>
 
-          {/* 하단 액션 */}
           <div className="mt-8">
             <HomeCountdownText />
             <CartSuccessRedirect />
