@@ -8,12 +8,16 @@ export const fetchAllReviews = async ({
   sort = 'newest',
   order = 'desc',
   userId,
+  theaterId,
+  limit,
 }: FetchAllReviewsParams): Promise<FetchAllReviewsResponse> => {
   const query = new URLSearchParams({
     page: pageParam.toString(),
     sort,
     order,
     ...(userId ? { user_id: userId } : {}),
+    ...(theaterId ? { theater_id: theaterId } : {}),
+    ...(limit ? { limit: limit.toString() } : {}),
   });
 
   const res = await fetch(`${API_BASE}/reviews/?${query.toString()}`, {

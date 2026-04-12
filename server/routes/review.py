@@ -21,6 +21,8 @@ def get_all_reviews(
     sort: str = Query("newest", regex="^(newest|oldest)$"),
     order: str = Query("desc", regex="^(asc|desc)$"),
     user_id: Optional[str] = Query(None),
+    theater_id: Optional[str] = Query(None),
+    limit: int = Query(10, ge=1, le=50),
     db: Session = Depends(get_db),
 ):
 
@@ -30,6 +32,9 @@ def get_all_reviews(
     if user_id:
         query = query.filter(Review.user_id == user_id)
 
+    if theater_id:
+        query = query.filter(Review.theater_id == theater_id)
+
     #  정렬 설정
     if sort == "newest":
         query = query.order_by(Review.created_at.desc())
@@ -37,7 +42,7 @@ def get_all_reviews(
         query = query.order_by(Review.created_at.asc())
 
     #  페이지네이션
-    page_size = 10
+    page_size = limit
     total_count = query.count()
     reviews = query.offset((page - 1) * page_size).limit(page_size).all()
 
