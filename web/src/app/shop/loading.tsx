@@ -8,12 +8,11 @@ export default function Loading() {
       <div className="max-w-6xl mx-auto mb-12 animate-pulse">
         <div className="h-3 w-40 bg-white/20 rounded" />
 
-        <div className="mt-4 space-y-2">
-          <div className="h-8 sm:h-10 w-3/4 bg-white/20 rounded" />
-          <div className="h-8 sm:h-10 w-1/2 bg-white/20 rounded" />
+        <div className="mt-4">
+          <div className="h-8 sm:h-10 w-[320px] sm:w-[420px] bg-white/20 rounded" />
         </div>
 
-        <div className="mt-4 h-4 w-2/3 bg-white/15 rounded" />
+        <div className="mt-4 h-4 w-[280px] sm:w-[360px] bg-white/15 rounded" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
