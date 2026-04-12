@@ -31,6 +31,8 @@ export interface FetchAllReviewsParams {
   sort?: 'newest' | 'oldest';
   order?: 'asc' | 'desc';
   userId?: string;
+  theaterId?: string;
+  limit?: number;
 }
 
 export interface UserReviewRanking {
