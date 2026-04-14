@@ -42,6 +42,14 @@ class UserReviewRanking(BaseModel):
     profile_img: str
     count: int
 
+class PublicUserProfileResponse(BaseModel):
+    id: UUID
+    nickname: str
+    profile_img: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 class UserReviewRow(TypedDict):
     user_id: UUID
     nickname: str | None

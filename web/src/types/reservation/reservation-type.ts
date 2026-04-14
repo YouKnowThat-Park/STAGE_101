@@ -53,6 +53,14 @@ export interface ReservedSeatsMessage {
   seats: string[];
 }
 
+export interface UserReservationRanking {
+  user_id: string;
+  nickname: string;
+  profile_img: string | null;
+  reservation_count: number;
+  rank: number;
+}
+
 export interface UseReservedSeatsSocketOptions {
   enabled: boolean;
   theaterId: string;

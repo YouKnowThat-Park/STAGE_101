@@ -18,7 +18,13 @@ from server.database import get_db
 from server.models.reservation import Reservation
 from server.models.user import User
 from server.models.theater import Theater
-from server.schemas.reservation import ReservationResponse, ReservationCreate, CheckoutSummaryResponse, ReservationRankingItem
+from server.schemas.reservation import (
+    ReservationResponse,
+    ReservationCreate,
+    CheckoutSummaryResponse,
+    ReservationRankingItem,
+    UserReservationRankingResponse,
+)
 from server.models.payment import Payment
 from server.security import verify_access_token
 from server.websocket_manager import manager
@@ -339,3 +345,45 @@ def top_reservations(
     )
 
     return rows
+
+
+@router.get(
+    "/users/{user_id}/ranking",
+    response_model=UserReservationRankingResponse,
+)
+def get_user_reservation_ranking(user_id: UUID, db: Session = Depends(get_db)):
+    ranking_rows = (
+        db.query(
+            User.id.label("user_id"),
+            User.nickname.label("nickname"),
+            User.profile_img.label("profile_img"),
+            func.count(Reservation.id).label("reservation_count"),
+        )
+        .join(Reservation, Reservation.user_id == User.id)
+        .filter(Reservation.status == "confirmed")
+        .group_by(User.id, User.nickname, User.profile_img)
+        .order_by(func.count(Reservation.id).desc(), User.created_at.asc())
+        .all()
+    )
+
+    for index, row in enumerate(ranking_rows, start=1):
+        if row.user_id == user_id:
+            return {
+                "user_id": row.user_id,
+                "nickname": row.nickname,
+                "profile_img": row.profile_img,
+                "reservation_count": row.reservation_count,
+                "rank": index,
+            }
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="?좎?瑜?李얠쓣 ???놁뒿?덈떎.")
+
+    return {
+        "user_id": user.id,
+        "nickname": user.nickname,
+        "profile_img": user.profile_img,
+        "reservation_count": 0,
+        "rank": 0,
+    }
