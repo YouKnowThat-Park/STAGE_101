@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTheaterReviewPreview } from 'src/hooks/review/useTheaterReviewPreview';
@@ -12,6 +13,12 @@ export interface Props {
   theaterId: string;
   data: TheaterDetailResponse;
 }
+
+const formatReviewDate = (dateString: string) => {
+  if (!dateString) return '날짜 정보 없음';
+
+  return new Date(dateString).toISOString().split('T')[0];
+};
 
 const TheaterDetail = ({ theaterId, data }: Props) => {
   const { name, description, main_img, show_time, total_time, price, type } = data;
@@ -25,7 +32,6 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
   );
 
   const lowerType = String(type).toLowerCase();
-
   const label = lowerType.includes('musical')
     ? 'MUSICAL'
     : lowerType.includes('concert')
@@ -41,11 +47,6 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
     sessionStorage.setItem('allowPaymentsAccess', 'true');
     await new Promise((resolve) => setTimeout(resolve, 30));
     router.push(`/payments/${theaterId}`);
-  };
-
-  const formatReviewDate = (dateString: string) => {
-    if (!dateString) return '날짜 정보 없음';
-    return new Date(dateString).toISOString().split('T')[0];
   };
 
   return (
@@ -117,7 +118,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
                   예매하기
                 </button>
                 <div className="text-xs text-white/55">
-                  * 포트폴리오용 테스트 결제입니다. 실제 결제나 예매는 진행되지 않습니다.
+                  현재 결제 플로우는 데모용입니다. 실제 결제는 진행되지 않습니다.
                 </div>
               </div>
             </div>
@@ -152,7 +153,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               <p className="text-[11px] tracking-[0.28em] text-white/45">AUDIENCE NOTES</p>
               <h2 className="mt-1 text-xl font-bold text-white">리뷰 미리보기</h2>
             </div>
-            <p className="text-sm text-white/55">최근 등록된 관람 후기를 먼저 만나보세요.</p>
+            <p className="text-sm text-white/55">최근 등록된 관람 후기를 먼저 만나보세요</p>
           </div>
 
           <div className="mt-4 grid gap-3 lg:grid-cols-2">
@@ -160,7 +161,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               Array.from({ length: 2 }).map((_, index) => (
                 <div
                   key={`preview-skeleton-${index}`}
-                  className="rounded-2xl border border-white/10 bg-black/30 p-4 animate-pulse"
+                  className="animate-pulse rounded-2xl border border-white/10 bg-black/30 p-4"
                 >
                   <div className="h-4 w-24 rounded bg-white/10" />
                   <div className="mt-4 h-3 w-full rounded bg-white/10" />
@@ -190,9 +191,12 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
 
                   <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-3">
                     <div>
-                      <p className="text-sm font-semibold text-white">
+                      <Link
+                        href={`/users/${review.user_id}`}
+                        className="text-sm font-semibold text-white underline decoration-white/65 underline-offset-4 transition hover:text-yellow-200 hover:decoration-yellow-300"
+                      >
                         {review.display_name || '익명 관람객'}
-                      </p>
+                      </Link>
                       <p className="text-xs text-white/45">{name} 관람 후기</p>
                     </div>
 
@@ -215,9 +219,9 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
 
             {!isReviewLoading && previewReviews.length === 0 && (
               <div className="lg:col-span-2 rounded-2xl border border-dashed border-white/15 bg-black/20 px-5 py-8 text-center">
-                <p className="text-base font-semibold text-white">아직 등록된 리뷰가 없어요.</p>
+                <p className="text-base font-semibold text-white">아직 등록된 리뷰가 없어요</p>
                 <p className="mt-2 text-sm text-white/55">
-                  첫 관람 후기를 남기면 이 공연의 분위기를 가장 먼저 전할 수 있어요.
+                  첫 관람 후기를 남기면 공연의 분위기를 더 생생하게 공유할 수 있어요.
                 </p>
               </div>
             )}
@@ -233,7 +237,7 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               <p className="text-[11px] tracking-[0.28em] text-white/45">VISITOR GUIDE</p>
               <h2 className="mt-1 text-2xl font-bold text-white">관람 전 체크 포인트</h2>
             </div>
-            <p className="text-sm text-white/50">현장 관람 전에 알아두면 좋은 안내를 정리했어요.</p>
+            <p className="text-sm text-white/50">현장 방문 전에 알아두면 좋은 내용을 모아두었습니다</p>
           </div>
 
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
@@ -241,25 +245,25 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10">
                 <p className="text-sm font-semibold text-white">입장 시간</p>
                 <p className="mt-2 text-sm leading-6 text-white/70">
-                  공연 시작 이후에는 입장이 제한되거나 지정된 타이밍에만 입장할 수 있어요.
+                  공연 시작 직전에는 입장이 제한될 수 있어요. 여유 있게 도착해 주세요.
                 </p>
               </div>
               <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10">
                 <p className="text-sm font-semibold text-white">촬영 및 기록</p>
                 <p className="mt-2 text-sm leading-6 text-white/70">
-                  공연 중 사진 촬영, 녹음, 영상 촬영은 금지되며 현장 안내에 따라 제재될 수 있어요.
+                  사진 촬영, 녹음, 영상 촬영은 현장 정책에 따라 제한될 수 있습니다.
                 </p>
               </div>
               <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10">
                 <p className="text-sm font-semibold text-white">변경 및 취소</p>
                 <p className="mt-2 text-sm leading-6 text-white/70">
-                  취소와 환불 규정은 기획사 정책 및 공연 운영 상황에 따라 달라질 수 있습니다.
+                  취소 및 환불 규정은 기획 상황과 운영 방식에 따라 달라질 수 있습니다.
                 </p>
               </div>
               <div className="rounded-2xl bg-black/30 p-4 ring-1 ring-white/10">
                 <p className="text-sm font-semibold text-white">운영 변동</p>
                 <p className="mt-2 text-sm leading-6 text-white/70">
-                  모든 공연은 주최 측 사정에 따라 세부 일정이나 진행 방식이 변경될 수 있습니다.
+                  일정과 진행 방식은 현장 사정에 따라 일부 변경될 수 있습니다.
                 </p>
               </div>
             </div>
@@ -270,17 +274,17 @@ const TheaterDetail = ({ theaterId, data }: Props) => {
               </div>
               <h3 className="mt-4 text-xl font-bold text-white">테스트용 예매 페이지 안내</h3>
               <p className="mt-3 text-sm leading-7 text-white/72">
-                현재 페이지는 실제 상용 예매 화면이 아니라 STAGE_101 프로젝트용 데모 콘텐츠입니다.
+                현재 페이지는 STAGE_101 프로젝트의 예매 흐름과 UI를 체험하기 위한 데모
+                콘텐츠입니다.
               </p>
               <p className="mt-3 text-sm leading-7 text-white/72">
-                예매와 결제 흐름은 UI 테스트를 위한 체험용 시나리오이며, 실제 결제나 실거래는
-                발생하지 않습니다.
+                결제와 예매 플로우는 시나리오 테스트용이며 실제 결제나 발권은 발생하지 않습니다.
               </p>
 
               <div className="mt-5 rounded-2xl bg-black/25 px-4 py-3 ring-1 ring-white/10">
                 <p className="text-xs leading-6 text-white/55">
-                  운영 상황에 따라 공연 일정과 세부 안내는 변경될 수 있으니 최종 확인 정보는 별도
-                  기준을 따라주세요.
+                  운영 상황에 따라 공연 일정과 안내는 변경될 수 있으니 최종 정보는 별도 공지를
+                  함께 확인해 주세요.
                 </p>
               </div>
             </div>

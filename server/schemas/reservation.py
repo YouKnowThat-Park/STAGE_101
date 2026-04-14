@@ -63,3 +63,10 @@ class ReservationRankingItem(BaseModel):
     name: str
     type: str
     value: int
+
+class UserReservationRankingResponse(BaseModel):
+    user_id: UUID
+    nickname: str
+    profile_img: Optional[str] = None
+    reservation_count: int
+    rank: int

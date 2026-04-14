@@ -13,12 +13,12 @@ const TheaterPopularityModal = ({ onClose }: { onClose: () => void }) => {
         </button>
         <div className="flex max-[714px]:flex-col">
           <div>
-            <h2 className="text-center mb-4 text-[#C9A66B] font-bold">BAST 작품</h2>
+            <h2 className="text-center mb-4 text-[#C9A66B] font-bold"> 인기 작품</h2>
             <TopReservation />
           </div>
           <div className="border border-l-2" />
           <div>
-            <h2 className="text-center mb-4 text-[#C9A66B] font-bold">BAST 작품</h2>
+            <h2 className="text-center mb-4 text-[#C9A66B] font-bold">리뷰가 많은 작품</h2>
             <TopReviewChart />
           </div>
         </div>

@@ -32,6 +32,12 @@ export interface UpdateUserProfilePayload {
   profile_img: string | null;
 }
 
+export interface PublicUserProfile {
+  id: string;
+  nickname: string;
+  profile_img: string | null;
+}
+
 export type DeleteUserPayload =
   | { password: string; agreement_text?: undefined } // 일반 회원
   | { agreement_text: string; password?: undefined }; // 소셜 회원
