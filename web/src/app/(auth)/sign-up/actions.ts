@@ -79,20 +79,29 @@ export async function signUpAction({
       name,
     };
 
-    // 3) FastAPI가 내려준 __stage__ 쿠키를 브라우저 쿠키로 다시 세팅
+    // 3) FastAPI가 내려준 쿠키를 브라우저 쿠키로 다시 세팅
     const setCookieHeader = res.headers.get('set-cookie');
     if (setCookieHeader) {
-      const match = setCookieHeader.match(/__stage__=([^;]+)/);
-      if (match) {
-        const token = match[1];
-        const cookieStore = cookies();
+      const accessMatch = setCookieHeader.match(/__stage__=([^;]+)/);
+      const refreshMatch = setCookieHeader.match(/__stage_refresh__=([^;]+)/);
+      const cookieStore = cookies();
 
-        cookieStore.set('__stage__', token, {
+      if (accessMatch) {
+        cookieStore.set('__stage__', accessMatch[1], {
           httpOnly: true,
           sameSite: 'lax',
           secure: process.env.NODE_ENV === 'production',
           path: '/',
-          maxAge: 60 * 60, // 1시간
+          maxAge: 30 * 60, // 30분
+        });
+      }
+      if (refreshMatch) {
+        cookieStore.set('__stage_refresh__', refreshMatch[1], {
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          path: '/',
+          maxAge: 60 * 60, // 60분
         });
       }
     }

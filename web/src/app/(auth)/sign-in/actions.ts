@@ -35,9 +35,21 @@ export async function signInAction(email: string, password: string): Promise<Sig
     // 🔥 Set-Cookie 파싱
     const setCookieHeader = res.headers.get('set-cookie');
     if (setCookieHeader) {
-      const match = setCookieHeader.match(/__stage__=([^;]+)/);
-      if (match) {
-        cookies().set('__stage__', match[1], {
+      const accessMatch = setCookieHeader.match(/__stage__=([^;]+)/);
+      const refreshMatch = setCookieHeader.match(/__stage_refresh__=([^;]+)/);
+      const cookieStore = cookies();
+
+      if (accessMatch) {
+        cookieStore.set('__stage__', accessMatch[1], {
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          path: '/',
+          maxAge: 30 * 60,
+        });
+      }
+      if (refreshMatch) {
+        cookieStore.set('__stage_refresh__', refreshMatch[1], {
           httpOnly: true,
           sameSite: 'lax',
           secure: process.env.NODE_ENV === 'production',

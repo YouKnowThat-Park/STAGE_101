@@ -28,9 +28,10 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
 ALGORITHM = "HS256"
 # → HMAC-SHA256 알고리즘으로 JWT 서명?
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 60
-# → 1시간 토큰 / 1시간 리프레쉬 토큰
+# → 30분 액세스 토큰 / 60분 리프레쉬 토큰
+# → 리프레시 토큰으로 30분마다 자동 갱신, 60분 이내 활동하면 로그인 유지
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     """ JWT 토큰 생성 """
@@ -43,6 +44,16 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 # → 만료시간은 현재 UTC 시각 + 1시간을 기준
 # → JWT 만료시간을 exp 필드로 정의
 # → JWT 토큰을 header + payload + signature 구조로 정의
+
+def create_refresh_token(data: dict, expires_delta: timedelta | None = None):
+    """ 리프레시 토큰 생성 """
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire, "type": "refresh"})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+# → 리프레시 토큰도 JWT로 생성 / type 필드로 액세스 토큰과 구분
+# → 액세스 토큰 만료 시 새로운 액세스 토큰 발급에 사용
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
 # → FastAPI 내장 기능 / 엔드포인트에서 발급된 토큰을 Authorization 헤더로 받아 인증 처리
