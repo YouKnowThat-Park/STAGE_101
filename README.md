@@ -441,19 +441,6 @@
 - **Portfolio:** https://www.wooseokbot.com/project/stage101
 ---
 
-## 📝 회고 & 배운 점
-
-[회고]
-[https://stage101.shop/notion/retrospective](https://stage101.shop/notion/retrospective)  
-
-[기능 선택 이유]
-[https://stage101.shop/notion/feature-decisions](https://stage101.shop/notion/feature-decisions)
-
-[기능적 문제]
-[https://stage101.shop/notion/feature-history](https://stage101.shop/notion/feature-history)
-
-[트러블 슈팅]
-[https://stage101.shop/notion/trouble-shooting](https://stage101.shop/notion/trouble-shooting)
 
 
 ---
