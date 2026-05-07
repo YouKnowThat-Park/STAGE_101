@@ -1,11 +1,10 @@
 import { MypageUserResponse } from 'src/types/user/user-type';
+import { fetchWithRefresh } from '../_utils/fetchWithRefresh';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export const fetchMyUser = async (): Promise<MypageUserResponse> => {
-  const res = await fetch(`${API_BASE}/users/me`, {
-    credentials: 'include',
-  });
+  const res = await fetchWithRefresh(`${API_BASE}/users/me`);
 
   if (!res.ok) {
     let serverMessage = '';

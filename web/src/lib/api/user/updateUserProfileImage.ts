@@ -1,9 +1,10 @@
 import { MypageUserResponse, UpdateUserProfilePayload } from 'src/types/user/user-type';
+import { fetchWithRefresh } from '../_utils/fetchWithRefresh';
 
 export const updateUserProfileImage = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
-  const res = await fetch('/bff/users/profile', {
+  const res = await fetchWithRefresh('/bff/users/profile', {
     method: 'POST',
     body: formData,
   });
@@ -20,7 +21,7 @@ export const updateUserProfileImage = async (file: File) => {
 export const updateUserProfileData = async (
   payload: UpdateUserProfilePayload,
 ): Promise<MypageUserResponse> => {
-  const res = await fetch('/bff/users/profile', {
+  const res = await fetchWithRefresh('/bff/users/profile', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

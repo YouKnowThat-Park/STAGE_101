@@ -26,6 +26,7 @@ from server.schemas.user import (
 )
 from server.security import (
     create_access_token,
+    create_refresh_token,
     hash_password,
     verify_access_token,
     verify_password,
@@ -37,6 +38,13 @@ from .helpers import _unlink_kakao, create_default_data_for_new_user
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "stage101")
 S3_PROFILE_PREFIX = os.getenv("S3_PROFILE_PREFIX", "user_profile_img/")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+# 환경에 따라 쿠키 설정값 분리
+IS_PRODUCTION = ENVIRONMENT == "production"
+COOKIE_DOMAIN = ".stage101.shop" if IS_PRODUCTION else ""
+COOKIE_SECURE = True if IS_PRODUCTION else False
+COOKIE_SAMESITE = "none" if IS_PRODUCTION else "lax"
 
 s3_client = boto3.client(
     "s3",
@@ -77,6 +85,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"회원가입 처리 중 DB 오류: {str(e)}")
 
     access_token = create_access_token({"sub": new_user.email})
+    refresh_token = create_refresh_token({"sub": new_user.email})
     response = JSONResponse(
         content={
             "message": "회원가입 및 로그인 성공",
@@ -90,14 +99,27 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
             },
         }
     )
+    
+    # 액세스 토큰 쿠키
     response.set_cookie(
         key="__stage__",
         value=access_token,
         httponly=True,
-        secure=True,
-        samesite="none",
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=30 * 60,
+        domain=COOKIE_DOMAIN if COOKIE_DOMAIN else None,
+    )
+    
+    # 리프레시 토큰 쿠키
+    response.set_cookie(
+        key="__stage_refresh__",
+        value=refresh_token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
         max_age=60 * 60,
-        domain=".stage101.shop",
+        domain=COOKIE_DOMAIN if COOKIE_DOMAIN else None,
     )
     return response
 
@@ -110,6 +132,7 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="이메일 또는 비밀번호가 올바르지 않습니다.")
 
     access_token = create_access_token({"sub": user.email})
+    refresh_token = create_refresh_token({"sub": user.email})
 
     response = JSONResponse(
         content={
@@ -125,13 +148,26 @@ def signin(user_data: UserSignIn, db: Session = Depends(get_db)):
         }
     )
 
+    # 액세스 토큰 쿠키
     response.set_cookie(
         key="__stage__",
         value=access_token,
         httponly=True,
-        secure=True,
-        samesite="none",
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=30 * 60,
+        domain=COOKIE_DOMAIN if COOKIE_DOMAIN else None,
+    )
+    
+    # 리프레시 토큰 쿠키
+    response.set_cookie(
+        key="__stage_refresh__",
+        value=refresh_token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
         max_age=60 * 60,
+        domain=COOKIE_DOMAIN if COOKIE_DOMAIN else None,
     )
 
     return response
@@ -317,3 +353,33 @@ def get_public_user_profile(user_id: str, db: Session = Depends(get_db)):
         "nickname": user.nickname,
         "profile_img": user.profile_img,
     }
+
+
+@router.post("/refresh-token")
+def refresh_access_token(request: Request):
+    """ 리프레시 토큰으로 새 액세스 토큰 발급 """
+    refresh_token = request.cookies.get("__stage_refresh__")
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="리프레시 토큰이 없습니다.")
+
+    payload = verify_access_token(refresh_token)
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="유효한 리프레시 토큰이 아닙니다.")
+
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=401, detail="토큰 정보가 올바르지 않습니다.")
+
+    new_access_token = create_access_token({"sub": email})
+
+    response = JSONResponse(content={"message": "새로운 액세스 토큰 발급 완료"})
+    response.set_cookie(
+        key="__stage__",
+        value=new_access_token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=30 * 60,
+        domain=COOKIE_DOMAIN if COOKIE_DOMAIN else None,
+    )
+    return response
